@@ -1,0 +1,51 @@
+import 'package:cinemarket/features/cart/screen/cart_screen.dart';
+import 'package:cinemarket/features/favorite/screen/favorite_screen.dart';
+import 'package:cinemarket/features/home/screen/home_screen.dart';
+import 'package:cinemarket/features/main/screen/main_screen.dart';
+import 'package:cinemarket/features/movies/screen/movies_screen.dart';
+import 'package:cinemarket/features/mypage/screen/mypage_screen.dart';
+import 'package:cinemarket/features/products/screen/products_screen.dart';
+import 'package:cinemarket/features/search/screen/search_screen.dart';
+import 'package:go_router/go_router.dart';
+
+
+final GoRouter router = GoRouter(
+  initialLocation: '/home',
+  routes: [
+    ShellRoute(
+      builder: (context, state, child) {
+        return MainScreen(child: child);
+      },
+      routes: [
+        GoRoute(
+          path: '/wishlist',
+          builder: (context, state) => const FavoriteScreen(),
+        ),
+        GoRoute(
+          path: '/products',
+          builder: (context, state) => const ProductsScreen(),
+        ),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: '/movies',
+          builder: (context, state) => const MoviesScreen(),
+        ),
+        GoRoute(
+          path: '/mypage',
+          builder: (context, state) => const MyPageScreen(),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/search',
+      builder: (context, state) => const SearchScreen(),
+    ),
+    GoRoute(
+      path: '/cart',
+      builder: (context, state) => const CartScreen(),
+    ),
+  ],
+);
