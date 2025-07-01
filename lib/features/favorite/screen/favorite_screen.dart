@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -5,9 +6,34 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Center(
-        child: Text('찜 목록 화면입니다'),
+    return const DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: Column(
+          children: [
+            Material(
+              color: AppColors.innerWidget,
+              child: TabBar(
+                tabs: [
+                  Tab(child: Text('굿즈', style: TextStyle(fontSize: 20))),
+                  Tab(child: Text('영화', style: TextStyle(fontSize: 20))),
+                ],
+                labelColor: AppColors.textPoint,
+                unselectedLabelColor: AppColors.textPrimary,
+                indicatorColor: AppColors.textPoint,
+              )
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  Center(child: Text('굿즈 탭 (미구현)')),
+                  Center(child: Text('영화 탭 (미구현)')),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
