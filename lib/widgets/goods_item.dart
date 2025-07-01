@@ -1,0 +1,78 @@
+import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:flutter/material.dart';
+
+class GoodsItem extends StatefulWidget {
+  final String imageUrl;
+  final String name;
+  final String price;
+
+  const GoodsItem({
+    super.key,
+    required this.imageUrl,
+    required this.name,
+    required this.price,
+  });
+
+  @override
+  State<GoodsItem> createState() => _GoodsItemState();
+}
+
+class _GoodsItemState extends State<GoodsItem> {
+  bool isFavorite = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Image.network(widget.imageUrl, fit: BoxFit.cover),
+              ),
+            ),
+            IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                setState(() => isFavorite = !isFavorite);
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Text(
+              widget.name,
+              style: const TextStyle(
+                fontSize: 20,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Text(
+              widget.price,
+              style: const TextStyle(
+                fontSize: 20,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
