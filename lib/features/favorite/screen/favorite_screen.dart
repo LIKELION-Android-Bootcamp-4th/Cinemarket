@@ -1,4 +1,5 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -6,30 +7,35 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultTabController(
+    return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: Column(
+      child: Container(
+        color: AppColors.background,
+        child: const Column(
           children: [
             Material(
-              color: AppColors.innerWidget,
+              color: AppColors.widgetBackground,
               child: TabBar(
                 tabs: [
-                  Tab(child: Text('굿즈', style: TextStyle(fontSize: 20))),
+                  // Tab(child: Text('굿즈', style: TextStyle(fontSize: 20))),
                   Tab(child: Text('영화', style: TextStyle(fontSize: 20))),
+                  Tab(child: Text('굿즈', style: AppTextStyle.headline)),  // todo: 커스텀 색상 사용 시 라벨 적용 안댐
+                  // Tab(child: Text('영화', style: AppTextStyle.headline)),
                 ],
                 labelColor: AppColors.textPoint,
                 unselectedLabelColor: AppColors.textPrimary,
-                indicatorColor: AppColors.textPoint,
-              )
+                indicatorColor: AppColors.innerWidget,
+              ),
             ),
             Expanded(
-              child: TabBarView(
-                children: [
-                  Center(child: Text('굿즈 탭 (미구현)')),
-                  Center(child: Text('영화 탭 (미구현)')),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: TabBarView(
+                  children: [
+                    Center(child: Text('영화 탭 (미구현)')),
+                    Center(child: Text('영화 탭 (미구현)')),
+                  ],
+                ),
               ),
             ),
           ],
