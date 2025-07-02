@@ -38,6 +38,10 @@ dependencies:
   go_router: ^15.2.4
   # 테스트용 토스트 메시지
   fluttertoast: ^8.2.12
+  dio: ^5.8.0
+  pretty_dio_logger: ^1.4.0
+  provider: ^6.1.5
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:
