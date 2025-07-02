@@ -1,5 +1,6 @@
 import 'package:cinemarket/features/favorite/widget/item_type.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
+import 'package:cinemarket/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteGridview extends StatelessWidget {
@@ -10,27 +11,38 @@ class FavoriteGridview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final double aspectRatio = switch (itemType) {
+      ItemType.goods => 0.7,
+      ItemType.movie => 0.51,
+    };
+
     return GridView.builder(
       itemCount: items.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 0.7,
+        childAspectRatio: aspectRatio,
         crossAxisSpacing: 8,  // todo: 그리드뷰 내부 패딩값 논의
         mainAxisSpacing: 8,
       ),
       itemBuilder: (context, index) {
-        final product = items[index];
+        final item = items[index];
 
         switch(itemType) {
           case ItemType.goods:
             return GoodsItem(
-              imageUrl: product['imageUrl'],
-              goodsName: product['goodsName'],
-              price: product['price'],
-              isFavorite: product['isFavorite'],
+              imageUrl: item['imageUrl'],
+              goodsName: item['goodsName'],
+              price: item['price'],
+              isFavorite: item['isFavorite'],
             );
           case ItemType.movie:
-            return const Center(child: Text('영화 탭 (미구현)'));
+            return MovieItem(imageUrl: item['imageUrl'],
+                movieName: item['movieName'],
+                cumulativeSales: item['cumulativeSales'],
+                providers: item['providers'],
+                isFavorite: item['isFavorite']
+            );
         }
       },
     );

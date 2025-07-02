@@ -20,18 +20,18 @@ class FavoriteScreen extends StatelessWidget {
     });
     final List<Map<String, dynamic>> dummyMovies = List.generate(10, (i) {
       return {
-        'imageUrl': 'https://image.tmdb.org/t/p/original/cQoCu9KQ0qCeFkWmpwYgWOyWFg2.jpg',
+        'imageUrl':
+            'https://image.tmdb.org/t/p/original/vqBmyAj0Xm9LnS1xe1MSlMAJyHq.jpg',
         'movieName': '영화 ${i + 1}',
-        'cumulativeSales': '${(i + 1) * 100}',
-        'providers': [ // todo: 이미지만 set으로 받아오기 ?
+        'cumulativeSales': (i + 1) * 100,
+        'providers': [
           'https://image.tmdb.org/t/p/original/hPcjSaWfMwEqXaCMu7Fkb529Dkc.jpg',
           'https://image.tmdb.org/t/p/original/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg',
-          'https://image.tmdb.org/t/p/original/97yvRBw1GzX7fXprcF80er19ot.jpg'
+          'https://image.tmdb.org/t/p/original/97yvRBw1GzX7fXprcF80er19ot.jpg',
         ],
         'isFavorite': false,
       };
     });
-
 
     return DefaultTabController(
       length: 2,
@@ -59,8 +59,14 @@ class FavoriteScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TabBarView(
                   children: [
-                    FavoriteGridview(itemType: ItemType.goods, items: dummyGoods),
-                    FavoriteGridview(itemType: ItemType.movie, items: dummyMovies),
+                    FavoriteGridview(
+                      itemType: ItemType.goods,
+                      items: dummyGoods,
+                    ),
+                    FavoriteGridview(
+                      itemType: ItemType.movie,
+                      items: dummyMovies,
+                    ),
                   ],
                 ),
               ),

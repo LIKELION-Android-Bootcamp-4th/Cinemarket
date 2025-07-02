@@ -58,7 +58,7 @@ class _GoodsItemState extends State<GoodsItem> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              widget.name,
+              widget.goodsName,
               style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.textPrimary,
