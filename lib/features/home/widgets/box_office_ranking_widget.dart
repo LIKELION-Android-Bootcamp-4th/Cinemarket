@@ -1,19 +1,35 @@
+import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
-class BoxOfficeRankingWidget extends StatelessWidget {
+class BoxOfficeRankingWidget extends StatefulWidget {
   const BoxOfficeRankingWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final dummyPosters = [
-      'https://picsum.photos/seed/movie1/500/300',
-      'https://picsum.photos/seed/movie2/500/300',
-      'https://picsum.photos/seed/movie3/500/300',
-      'https://picsum.photos/seed/movie4/500/300',
-      'https://picsum.photos/seed/movie5/500/300',
-    ];
+  State<BoxOfficeRankingWidget> createState() => _BoxOfficeRankingWidgetState();
+}
 
+
+class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  final List<String> dummyPosters = [
+    'https://picsum.photos/seed/movie1/500/750',
+    'https://picsum.photos/seed/movie2/500/750',
+    'https://picsum.photos/seed/movie3/500/750',
+    'https://picsum.photos/seed/movie4/500/750',
+    'https://picsum.photos/seed/movie5/500/750',
+  ];
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -22,25 +38,56 @@ class BoxOfficeRankingWidget extends StatelessWidget {
           style: AppTextStyle.headline,
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          height: 300,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: dummyPosters.length,
-            itemBuilder: (context, index) {
-              return Container(
-                width: 200,
-                margin: const EdgeInsets.only(right: 16),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    dummyPosters[index],
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            },
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final height = width * 1.5;
+
+            return SizedBox(
+              height: height,
+              width: width,
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: dummyPosters.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: AspectRatio(
+                      aspectRatio: 2 / 3,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          dummyPosters[index],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(dummyPosters.length, (index) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: _currentPage == index ? 12 : 8,
+              height: _currentPage == index ? 12 : 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _currentPage == index ? AppColors.pointAccent : AppColors.textPrimary,
+              ),
+            );
+          }),
         ),
       ],
     );
