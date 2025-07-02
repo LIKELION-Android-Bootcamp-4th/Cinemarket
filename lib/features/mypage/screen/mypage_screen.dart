@@ -11,7 +11,6 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  //todo 로그인 API
   bool _hasToken = false;
 
   @override
@@ -90,12 +89,13 @@ class _MyPageScreenState extends State<MyPageScreen> {
               builder: (BuildContext dialogContext) {
                 return AlertDialog(
                   backgroundColor: Color(0xFF292929),
-                  title: Text('로그아웃', style: TextStyle(color: Colors.white,
-                      fontSize: 16.0)),
+                  title: Text(
+                    '로그아웃',
+                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  ),
                   content: Text(
                     "로그아웃 하시겠습니까?",
-                    style: TextStyle(color: Colors.white70,
-                    fontSize: 18.0),
+                    style: TextStyle(color: Colors.white70, fontSize: 18.0),
                   ),
                   actions: [
                     Row(
@@ -162,19 +162,14 @@ class _MyPageScreenState extends State<MyPageScreen> {
             });*/
             //todo 로그인 API
             print('로그인하기 클릭');
-            context.push('/login', extra: () {
-              setState(() {
-                _hasToken = true;
-              });
-            });
-            /*Fluttertoast.showToast(
-              msg: "로그인 되었습니다.",
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.grey,
-              textColor: Colors.white,
-              fontSize: 14.0,
-            );*/
-
+            context.push(
+              '/login',
+              extra: () {
+                setState(() {
+                  _hasToken = true;
+                });
+              },
+            );
           },
         ),
       ],
