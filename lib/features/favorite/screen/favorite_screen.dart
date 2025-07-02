@@ -11,12 +11,26 @@ class FavoriteScreen extends StatelessWidget {
     final List<Map<String, dynamic>> dummyGoods = List.generate(10, (i) {
       return {
         'image':
-            'https://image.tmdb.org/t/p/original//lkDYN0whyE82mcM20rwtwjbniKF.jpg',
-        'name': '상품 ${i + 1}',
+            'https://i.ebayimg.com/images/g/64YAAOSwDqhnttak/s-l1200.png',
+        'goodsName': '굿즈 ${i + 1}',
         'price': '${(i + 1) * 1000}원',
         'isFavorite': false,
       };
     });
+    final List<Map<String, dynamic>> dummyMovies = List.generate(10, (i) {
+      return {
+        'image': 'https://image.tmdb.org/t/p/original/cQoCu9KQ0qCeFkWmpwYgWOyWFg2.jpg',
+        'movieName': '영화 ${i + 1}',
+        'cumulativeSales': '${(i + 1) * 100}',
+        'provider': [ // todo: 이미지만 set으로 받아오기 ?
+          'https://image.tmdb.org/t/p/original/hPcjSaWfMwEqXaCMu7Fkb529Dkc.jpg',
+          'https://image.tmdb.org/t/p/original/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg',
+          'https://image.tmdb.org/t/p/original/97yvRBw1GzX7fXprcF80er19ot.jpg'
+        ],
+        'isFavorite': false,
+      };
+    });
+
 
     return DefaultTabController(
       length: 2,
