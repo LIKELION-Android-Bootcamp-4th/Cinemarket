@@ -11,7 +11,7 @@ class FavoriteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> dummyGoods = List.generate(10, (i) {
       return {
-        'image':
+        'imageUrl':
             'https://i.ebayimg.com/images/g/64YAAOSwDqhnttak/s-l1200.png',
         'goodsName': '굿즈 ${i + 1}',
         'price': '${(i + 1) * 1000}원',
@@ -20,7 +20,7 @@ class FavoriteScreen extends StatelessWidget {
     });
     final List<Map<String, dynamic>> dummyMovies = List.generate(10, (i) {
       return {
-        'image': 'https://image.tmdb.org/t/p/original/cQoCu9KQ0qCeFkWmpwYgWOyWFg2.jpg',
+        'imageUrl': 'https://image.tmdb.org/t/p/original/cQoCu9KQ0qCeFkWmpwYgWOyWFg2.jpg',
         'movieName': '영화 ${i + 1}',
         'cumulativeSales': '${(i + 1) * 100}',
         'providers': [ // todo: 이미지만 set으로 받아오기 ?
