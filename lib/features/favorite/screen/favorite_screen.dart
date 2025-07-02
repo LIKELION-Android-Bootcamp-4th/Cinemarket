@@ -2,7 +2,6 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/favorite/widget/favorite_gridview.dart';
 import 'package:cinemarket/features/favorite/widget/item_type.dart';
-import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -24,7 +23,7 @@ class FavoriteScreen extends StatelessWidget {
         'image': 'https://image.tmdb.org/t/p/original/cQoCu9KQ0qCeFkWmpwYgWOyWFg2.jpg',
         'movieName': '영화 ${i + 1}',
         'cumulativeSales': '${(i + 1) * 100}',
-        'provider': [ // todo: 이미지만 set으로 받아오기 ?
+        'providers': [ // todo: 이미지만 set으로 받아오기 ?
           'https://image.tmdb.org/t/p/original/hPcjSaWfMwEqXaCMu7Fkb529Dkc.jpg',
           'https://image.tmdb.org/t/p/original/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg',
           'https://image.tmdb.org/t/p/original/97yvRBw1GzX7fXprcF80er19ot.jpg'
