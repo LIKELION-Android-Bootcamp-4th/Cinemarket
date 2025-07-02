@@ -20,7 +20,7 @@ class FavoriteGridview extends StatelessWidget {
     return GridView.builder(
       itemCount: items.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+        crossAxisCount: 2,
         childAspectRatio: aspectRatio,
         crossAxisSpacing: 8,  // todo: 그리드뷰 내부 패딩값 논의
         mainAxisSpacing: 8,
