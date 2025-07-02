@@ -11,15 +11,43 @@ class BoxOfficeRankingWidget extends StatefulWidget {
 
 
 class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
-  final PageController _pageController = PageController();
+  final PageController _pageController = PageController(viewportFraction: 0.7);
   int _currentPage = 0;
 
   final List<String> dummyPosters = [
-    'https://picsum.photos/seed/movie1/500/750',
-    'https://picsum.photos/seed/movie2/500/750',
-    'https://picsum.photos/seed/movie3/500/750',
-    'https://picsum.photos/seed/movie4/500/750',
-    'https://picsum.photos/seed/movie5/500/750',
+    'https://picsum.photos/seed/movie1/300/450',
+    'https://picsum.photos/seed/movie2/300/450',
+    'https://picsum.photos/seed/movie3/300/450',
+    'https://picsum.photos/seed/movie4/300/450',
+    'https://picsum.photos/seed/movie5/300/450',
+  ];
+
+  final List<Map<String, String>> dummyMovies = [
+    {
+      'title': '영화 제목 1',
+      'releaseDate': '2024.01.01',
+      'poster': 'https://picsum.photos/seed/movie1/300/450',
+    },
+    {
+      'title': '영화 제목 2',
+      'releaseDate': '2023.03.25',
+      'poster': 'https://picsum.photos/seed/movie2/300/450',
+    },
+    {
+      'title': '영화 제목 3',
+      'releaseDate': '2019.01.11',
+      'poster': 'https://picsum.photos/seed/movie3/300/450',
+    },
+    {
+      'title': '영화 제목 4',
+      'releaseDate': '2022.07.08',
+      'poster': 'https://picsum.photos/seed/movie4/300/450',
+    },
+    {
+      'title': '영화 제목 5',
+      'releaseDate': '2024.01.15',
+      'poster': 'https://picsum.photos/seed/movie5/300/450',
+    },
   ];
 
   @override
@@ -30,6 +58,8 @@ class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final double posterWidth = MediaQuery.of(context).size.width * 0.7;
+    final double posterHeight = posterWidth * 1.5;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -38,40 +68,50 @@ class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
           style: AppTextStyle.headline,
         ),
         const SizedBox(height: 12),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final width = constraints.maxWidth;
-            final height = width * 1.5;
-
-            return SizedBox(
-              height: height,
-              width: width,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: dummyPosters.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: AspectRatio(
-                      aspectRatio: 2 / 3,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          dummyPosters[index],
-                          fit: BoxFit.cover,
+        SizedBox(
+          height: posterHeight,
+          child: PageView.builder(
+            controller: PageController(viewportFraction: 0.7),
+            itemCount: dummyPosters.length,
+            onPageChanged: (index) {
+              setState(() => _currentPage = index);
+            },
+            itemBuilder: (context, index) {
+              return AnimatedBuilder(
+                animation: _pageController,
+                builder: (context, child) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Transform.scale(
+                          scale: index == _currentPage ? 1: 0.9,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              dummyMovies[index]['poster']!,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                        const SizedBox(height: 8),
+                        Text(
+                          dummyMovies[index]['title']!,
+                          style: AppTextStyle.body,
+                        ),
+                        Text(
+                          dummyMovies[index]['releaseDate']!,
+                          style: AppTextStyle.point,
+                        ),
+                      ],
+                    )
+
                   );
                 },
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
         const SizedBox(height: 12),
         Row(
