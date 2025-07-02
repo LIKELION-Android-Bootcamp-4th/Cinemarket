@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/widgets/bottom_nav_bar.dart';
 import 'package:cinemarket/widgets/main_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class MainScreen extends StatelessWidget {
           onSearchPressed: () => context.push('/search'),
       ),
       body: child,
+      backgroundColor: AppColors.background,
       bottomNavigationBar: BottomNavBar(
         currentIndex: selectedIndex,
         onTabSelected: (index) => _onTabSelected(context, index),
