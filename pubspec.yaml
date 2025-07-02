@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   go_router: ^15.2.4
+  # 테스트용 토스트 메시지
+  fluttertoast: ^8.2.12
 
 dev_dependencies:
   flutter_test:
