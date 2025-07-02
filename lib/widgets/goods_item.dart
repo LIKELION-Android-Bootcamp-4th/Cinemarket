@@ -1,17 +1,23 @@
-import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
 class GoodsItem extends StatefulWidget {
   final String imageUrl;
   final String goodsName;
+  final String movieName;
   final String price;
+  final double rating;
+  final int reviewCount;
   final bool isFavorite;
 
   const GoodsItem({
     super.key,
     required this.imageUrl,
     required this.goodsName,
+    required this.movieName,
     required this.price,
+    required this.rating,
+    required this.reviewCount,
     required this.isFavorite,
   });
 
@@ -59,10 +65,7 @@ class _GoodsItemState extends State<GoodsItem> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
               widget.goodsName,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.textPrimary,
-              ),
+              style: AppTextStyle.body,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -70,13 +73,28 @@ class _GoodsItemState extends State<GoodsItem> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              widget.price,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.textPrimary,
-              ),
+              widget.movieName,
+              style: AppTextStyle.bodySmall,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Row(
+              children: [
+                Icon(Icons.star_rate, size: 15, color: Colors.yellow,),
+                Text('${widget.rating}(${widget.reviewCount})',
+                style: AppTextStyle.bodySmall,),
+                Spacer(),
+                Text(
+                  widget.price,
+                  style: AppTextStyle.body,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
         ],

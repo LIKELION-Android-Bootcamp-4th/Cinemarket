@@ -33,7 +33,10 @@ class FavoriteGridview extends StatelessWidget {
             return GoodsItem(
               imageUrl: item['imageUrl'],
               goodsName: item['goodsName'],
+              movieName: item['movieName'],
               price: item['price'],
+              rating: item['rating'],
+              reviewCount: item['reviewCount'],
               isFavorite: item['isFavorite'],
             );
           case ItemType.movie:

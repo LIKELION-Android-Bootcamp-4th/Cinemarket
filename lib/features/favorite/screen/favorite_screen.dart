@@ -14,7 +14,10 @@ class FavoriteScreen extends StatelessWidget {
         'imageUrl':
             'https://i.ebayimg.com/images/g/64YAAOSwDqhnttak/s-l1200.png',
         'goodsName': '굿즈 ${i + 1}',
+        'movieName': '관련 영화',
         'price': '${(i + 1) * 1000}원',
+        'rating': 4.5,
+        'reviewCount': 10,
         'isFavorite': false,
       };
     });
@@ -45,7 +48,7 @@ class FavoriteScreen extends StatelessWidget {
                 tabs: [
                   // Tab(child: Text('굿즈', style: TextStyle(fontSize: 20))),
                   Tab(child: Text('굿즈', style: TextStyle(fontSize: 20))),
-                  Tab(child: Text('영화', style: AppTextStyle.headline)),
+                  Tab(child: Text('영화', style: AppTextStyle.section)),
                   // todo: 커스텀 색상 사용 시 라벨 적용 안댐
                   // Tab(child: Text('영화', style: AppTextStyle.headline)),
                 ],

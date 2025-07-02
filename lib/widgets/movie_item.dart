@@ -85,7 +85,7 @@ class _MovieItemState extends State<MovieItem> {
                   color: AppColors.textPrimary,
                 ),
                 const SizedBox(width: 4),
-                Text('${widget.cumulativeSales}', style: AppTextStyle.point),
+                Text('${widget.cumulativeSales}', style: AppTextStyle.bodySmall),
               ],
             ),
           ),
