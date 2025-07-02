@@ -5,12 +5,14 @@ class GoodsItem extends StatefulWidget {
   final String imageUrl;
   final String name;
   final String price;
+  final bool isFavorite;
 
   const GoodsItem({
     super.key,
     required this.imageUrl,
     required this.name,
     required this.price,
+    required this.isFavorite,
   });
 
   @override
