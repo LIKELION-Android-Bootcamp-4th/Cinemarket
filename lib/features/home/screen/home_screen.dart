@@ -1,3 +1,7 @@
+import 'package:cinemarket/features/home/widgets/best_goods_widget.dart';
+import 'package:cinemarket/features/home/widgets/best_movie_widget.dart';
+import 'package:cinemarket/features/home/widgets/box_office_ranking_widget.dart';
+import 'package:cinemarket/features/home/widgets/recommended_goods_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -5,10 +9,17 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Center(
-        child: Text('홈 화면입니다'),
-      ),
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: const [
+        BoxOfficeRankingWidget(),
+        SizedBox(height: 24),
+        BestGoodsWidget(),
+        SizedBox(height: 24),
+        BestMovieWidget(),
+        SizedBox(height: 24),
+        RecommendedGoodsWidget()
+      ],
     );
   }
 }
