@@ -7,6 +7,7 @@ import 'package:cinemarket/features/movies/screen/movies_screen.dart';
 import 'package:cinemarket/features/mypage/screen/mypage_screen.dart';
 import 'package:cinemarket/features/products/screen/products_screen.dart';
 import 'package:cinemarket/features/search/screen/search_screen.dart';
+import 'package:cinemarket/features/signup/screen/sign_up_screen.dart';
 import 'package:go_router/go_router.dart';
 
 
@@ -52,5 +53,10 @@ final GoRouter router = GoRouter(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
     ),
+    GoRoute(
+      path: '/signUp',
+      builder: (context, state) => const SignUpScreen(),
+    ),
+
   ],
 );
