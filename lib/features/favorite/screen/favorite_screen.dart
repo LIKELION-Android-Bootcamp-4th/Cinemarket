@@ -1,5 +1,7 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/favorite/widget/favorite_gridview.dart';
+import 'package:cinemarket/features/favorite/widget/item_type.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
 
@@ -58,25 +60,8 @@ class FavoriteScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TabBarView(
                   children: [
-                    GridView.builder(
-                      itemCount: dummyGoods.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 0.7,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                          ),
-                      itemBuilder: (context, index) {
-                        final product = dummyGoods[index];
-                        return GoodsItem(
-                          imageUrl: product['image'],
-                          name: product['name'],
-                          price: product['price'],
-                        );
-                      },
-                    ),
-                    const Center(child: Text('영화 탭 (미구현)')),
+                    FavoriteGridview(itemType: ItemType.goods, items: dummyGoods),
+                    FavoriteGridview(itemType: ItemType.movie, items: dummyMovies),
                   ],
                 ),
               ),
