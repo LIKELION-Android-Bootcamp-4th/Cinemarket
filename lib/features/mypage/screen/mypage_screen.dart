@@ -11,7 +11,7 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  bool _hasToken = false;
+  bool _hasToken = true;
 
   @override
   Widget build(BuildContext context) {
