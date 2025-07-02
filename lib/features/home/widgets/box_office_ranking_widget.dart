@@ -14,14 +14,6 @@ class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
   final PageController _pageController = PageController(viewportFraction: 0.7);
   int _currentPage = 0;
 
-  final List<String> dummyPosters = [
-    'https://picsum.photos/seed/movie1/300/450',
-    'https://picsum.photos/seed/movie2/300/450',
-    'https://picsum.photos/seed/movie3/300/450',
-    'https://picsum.photos/seed/movie4/300/450',
-    'https://picsum.photos/seed/movie5/300/450',
-  ];
-
   final List<Map<String, String>> dummyMovies = [
     {
       'title': '영화 제목 1',
@@ -72,7 +64,7 @@ class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
           height: posterHeight,
           child: PageView.builder(
             controller: PageController(viewportFraction: 0.7),
-            itemCount: dummyPosters.length,
+            itemCount: dummyMovies.length,
             onPageChanged: (index) {
               setState(() => _currentPage = index);
             },
@@ -116,7 +108,7 @@ class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
         const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(dummyPosters.length, (index) {
+          children: List.generate(dummyMovies.length, (index) {
             return AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               margin: const EdgeInsets.symmetric(horizontal: 4),
