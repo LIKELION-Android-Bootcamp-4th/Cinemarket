@@ -22,7 +22,7 @@ final GoRouter router = GoRouter(
           builder: (context, state) => const FavoriteScreen(),
         ),
         GoRoute(
-          path: '/products',
+          path: '/goods',
           builder: (context, state) => const GoodsScreen(),
         ),
         GoRoute(
