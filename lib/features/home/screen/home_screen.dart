@@ -4,6 +4,7 @@ import 'package:cinemarket/features/home/widgets/box_office_ranking_widget.dart'
 import 'package:cinemarket/features/home/widgets/recommended_goods_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cinemarket/core/network/api_client.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -30,14 +31,17 @@ class HomeScreen extends StatelessWidget {
     _testLogin(); // 홈 진입 시 바로 로그인 요청
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: const [
-        BoxOfficeRankingWidget(),
-        SizedBox(height: 24),
-        BestGoodsWidget(),
-        SizedBox(height: 24),
-        BestMovieWidget(),
-        SizedBox(height: 24),
-        RecommendedGoodsWidget()
+      children: [
+        const BoxOfficeRankingWidget(),
+        const SizedBox(height: 24),
+        const BestGoodsWidget(),
+        ElevatedButton(onPressed: (){
+          context.go('/movies');
+        }, child: const Text('go')),
+        const SizedBox(height: 24),
+        const BestMovieWidget(),
+        const SizedBox(height: 24),
+        const RecommendedGoodsWidget()
       ],
     );
   }

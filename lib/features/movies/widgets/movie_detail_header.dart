@@ -79,24 +79,34 @@ class MovieDetailHeader extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text('영화 제목', style: AppTextStyle.headline),
-                      SizedBox(width: 8),
-                      Icon(Icons.star, color: Colors.amber, size: 20),
-                      SizedBox(width: 4),
-                      Text('4.5'),
-                    ],
-                  ),
-                ],
+
+              // 영화 제목 + 평점
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('영화 제목', style: AppTextStyle.headline),
+                        Expanded(child: SizedBox()), // 오른쪽으로 밀기
+                        Icon(Icons.star_border, color: Color(0xffFF8700), size: 20),
+                        SizedBox(width: 4),
+                        Text(
+                          '4.5',
+                          style: TextStyle(color: Color(0xffFF8700), fontSize: 14),
+                        ),
+                        SizedBox(width: 10),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
+
       ],
     );
   }
