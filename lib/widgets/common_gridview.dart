@@ -1,13 +1,13 @@
-import 'package:cinemarket/features/favorite/widget/item_type.dart';
+import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:cinemarket/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 
-class FavoriteGridview extends StatelessWidget {
+class CommonGridview extends StatelessWidget {
   final List<Map<String, dynamic>> items;
   final ItemType itemType;
 
-  const FavoriteGridview({super.key, required this.itemType, required this.items});
+  const CommonGridview({super.key, required this.itemType, required this.items});
 
   @override
   Widget build(BuildContext context) {
