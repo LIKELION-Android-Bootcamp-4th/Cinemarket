@@ -113,7 +113,11 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push(
+                  '/signUp',
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.widgetBackground,
                 foregroundColor: Colors.black,
