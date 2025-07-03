@@ -1,4 +1,3 @@
-import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/features/favorite/widget/favorite_gridview.dart';
 import 'package:cinemarket/features/favorite/widget/item_type.dart';
 import 'package:cinemarket/widgets/sort_dropdown.dart';
@@ -24,28 +23,25 @@ class MoviesScreen extends StatelessWidget {
       };
     });
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            const Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: EdgeInsets.only(right: 4),
-                child: SortDropdown(itemType: ItemType.movie),
-              ),
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          const Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: EdgeInsets.only(right: 4),
+              child: SortDropdown(itemType: ItemType.movie),
             ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: FavoriteGridview(
-                itemType: ItemType.movie,
-                items: dummyMovies,
-              ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: FavoriteGridview(
+              itemType: ItemType.movie,
+              items: dummyMovies,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
