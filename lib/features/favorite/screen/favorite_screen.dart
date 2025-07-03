@@ -1,7 +1,7 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/features/favorite/widget/favorite_gridview.dart';
-import 'package:cinemarket/features/favorite/widget/item_type.dart';
+import 'package:cinemarket/widgets/common_gridview.dart';
+import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -62,11 +62,11 @@ class FavoriteScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: TabBarView(
                   children: [
-                    FavoriteGridview(
+                    CommonGridview(
                       itemType: ItemType.goods,
                       items: dummyGoods,
                     ),
-                    FavoriteGridview(
+                    CommonGridview(
                       itemType: ItemType.movie,
                       items: dummyMovies,
                     ),
