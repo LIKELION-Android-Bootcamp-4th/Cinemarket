@@ -44,14 +44,14 @@ class _SortDropdownState extends State<SortDropdown> {
         isExpanded: false,
         hint: Text(selected, style: AppTextStyle.bodySmall),
         items:
-        sortOptions
-            .map(
-              (String item) => DropdownMenuItem<String>(
-            value: item,
-            child: Text(item, style: AppTextStyle.bodySmall),
-          ),
-        )
-            .toList(),
+            sortOptions
+                .map(
+                  (String item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item, style: AppTextStyle.bodySmall),
+                  ),
+                )
+                .toList(),
         value: selected,
         onChanged: (String? value) {
           setState(() {
@@ -79,4 +79,3 @@ class _SortDropdownState extends State<SortDropdown> {
     );
   }
 }
-
