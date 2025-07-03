@@ -12,7 +12,7 @@ class MainScreen extends StatelessWidget {
 
   static const List<String> _tabs = [
     '/wishlist',
-    '/products',
+    '/goods',
     '/home',
     '/movies',
     '/mypage',
@@ -20,7 +20,7 @@ class MainScreen extends StatelessWidget {
 
   static const Map<String, String> _tabTitles = {
     '/wishlist': '찜 목록',
-    '/products': '상품',
+    '/goods': '굿즈',
     '/home': '홈',
     '/movies': '영화',
     '/mypage': '마이페이지',

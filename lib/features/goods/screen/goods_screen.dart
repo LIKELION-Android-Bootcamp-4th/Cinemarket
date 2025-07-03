@@ -3,42 +3,40 @@ import 'package:cinemarket/features/favorite/widget/item_type.dart';
 import 'package:cinemarket/widgets/sort_dropdown.dart';
 import 'package:flutter/material.dart';
 
-class MoviesScreen extends StatelessWidget {
-  const MoviesScreen({super.key});
+class GoodsScreen extends StatelessWidget {
+  const GoodsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> dummyMovies = List.generate(10, (i) {
+    final List<Map<String, dynamic>> dummyGoods = List.generate(10, (i) {
       return {
         'imageUrl':
-            'https://image.tmdb.org/t/p/original/vqBmyAj0Xm9LnS1xe1MSlMAJyHq.jpg',
-        'movieName': '영화 ${i + 1}',
-        'cumulativeSales': (i + 1) * 100,
-        'providers': [
-          'https://image.tmdb.org/t/p/original/hPcjSaWfMwEqXaCMu7Fkb529Dkc.jpg',
-          'https://image.tmdb.org/t/p/original/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg',
-          'https://image.tmdb.org/t/p/original/97yvRBw1GzX7fXprcF80er19ot.jpg',
-        ],
+            'https://i.ebayimg.com/images/g/64YAAOSwDqhnttak/s-l1200.png',
+        'goodsName': '굿즈 ${i + 1}',
+        'movieName': '관련 영화',
+        'price': '${(i + 1) * 1000}원',
+        'rating': 4.5,
+        'reviewCount': 10,
         'isFavorite': false,
       };
     });
 
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           const Align(
             alignment: Alignment.centerRight,
             child: Padding(
               padding: EdgeInsets.only(right: 4),
-              child: SortDropdown(itemType: ItemType.movie),
+              child: SortDropdown(itemType: ItemType.goods),
             ),
           ),
           const SizedBox(height: 10),
           Expanded(
             child: FavoriteGridview(
-              itemType: ItemType.movie,
-              items: dummyMovies,
+              itemType: ItemType.goods,
+              items: dummyGoods,
             ),
           ),
         ],
