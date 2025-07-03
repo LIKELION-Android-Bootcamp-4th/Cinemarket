@@ -1,5 +1,5 @@
-import 'package:cinemarket/features/favorite/widget/favorite_gridview.dart';
-import 'package:cinemarket/features/favorite/widget/item_type.dart';
+import 'package:cinemarket/core/constants/enums/item_type.dart';
+import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/widgets/sort_dropdown.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +36,7 @@ class MoviesScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: FavoriteGridview(
+            child: CommonGridview(
               itemType: ItemType.movie,
               items: dummyMovies,
             ),
