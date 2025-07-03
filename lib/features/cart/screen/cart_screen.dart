@@ -72,7 +72,9 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
+        child: cartItems.isEmpty
+            ? const CartEmptyView()
+            : Column(
           children: [
             // 상단 바
             Padding(
