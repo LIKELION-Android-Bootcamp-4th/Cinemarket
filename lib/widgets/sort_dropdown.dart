@@ -1,6 +1,7 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/favorite/widget/item_type.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class SortDropdown extends StatefulWidget {
@@ -16,13 +17,6 @@ class _SortDropdownState extends State<SortDropdown> {
   late List<String> sortOptions;
   late String selected;
 
-  @override
-  void initState() {
-    super.initState();
-    sortOptions = _getSortOptions(widget.itemType);
-    selected = sortOptions.first;
-  }
-
   List<String> _getSortOptions(ItemType itemType) {
     switch (itemType) {
       case ItemType.goods:
@@ -33,41 +27,56 @@ class _SortDropdownState extends State<SortDropdown> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.widgetBackground,
-        borderRadius: BorderRadius.circular(8),
-      ),
+  void initState() {
+    super.initState();
+    sortOptions = _getSortOptions(widget.itemType);
+    selected = sortOptions.first;
+  }
 
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          padding: const EdgeInsets.only(left: 10),
-          isDense: true,
-          style: AppTextStyle.bodySmall,
-          dropdownColor: AppColors.widgetBackground,
-          value: selected,
-          icon: const Padding(
-            padding: EdgeInsets.only(left: 0),
-            child: const Icon(
-              Icons.arrow_drop_down,
-              color: AppColors.textSecondary,
-            ),
+
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2<String>(
+        isExpanded: false,
+        hint: Text(selected, style: AppTextStyle.bodySmall),
+        items:
+        sortOptions
+            .map(
+              (String item) => DropdownMenuItem<String>(
+            value: item,
+            child: Text(item, style: AppTextStyle.bodySmall),
           ),
-          items:
-          sortOptions.map((option) {
-            return DropdownMenuItem<String>(
-              value: option,
-              child: Text(option),
-            );
-          }).toList(),
-          onChanged: (value) {
-            if (value != null) {
-              setState(() => selected = value);
-            }
-          },
+        )
+            .toList(),
+        value: selected,
+        onChanged: (String? value) {
+          setState(() {
+            selected = value!;
+          });
+        },
+        buttonStyleData: ButtonStyleData(
+          padding: const EdgeInsets.only(left: 0, right: 4),
+          height: 30,
+          decoration: BoxDecoration(
+            color: AppColors.widgetBackground,
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
+
+        dropdownStyleData: DropdownStyleData(
+          decoration: BoxDecoration(
+            color: AppColors.widgetBackground,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 2,
+        ),
+        menuItemStyleData: const MenuItemStyleData(height: 40),
       ),
     );
   }
 }
+
