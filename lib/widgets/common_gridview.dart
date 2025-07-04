@@ -25,6 +25,8 @@ class CommonGridview extends StatelessWidget {
         crossAxisSpacing: 8,  // todo: 그리드뷰 내부 패딩값 논의
         mainAxisSpacing: 8,
       ),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final item = items[index];
 
