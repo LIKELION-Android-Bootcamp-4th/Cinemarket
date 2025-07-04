@@ -29,24 +29,18 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // _testLogin();
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+    return const SingleChildScrollView(
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const BoxOfficeRankingWidget(),
-          const SizedBox(height: 24),
-          const BestGoodsWidget(),
-          ElevatedButton(
-            onPressed: () {
-              context.go('/movies/123');
-            },
-            child: const Text('go'),
-          ),
-          const SizedBox(height: 24),
-          const BestMovieWidget(),
-          const SizedBox(height: 24),
-          const RecommendedGoodsWidget(),
+          BoxOfficeRankingWidget(),
+          SizedBox(height: 24),
+          BestGoodsWidget(),
+          SizedBox(height: 24),
+          BestMovieWidget(),
+          SizedBox(height: 24),
+          RecommendedGoodsWidget(),
         ],
       ),
     );
