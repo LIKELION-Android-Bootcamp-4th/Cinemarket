@@ -1,5 +1,5 @@
-import 'package:cinemarket/features/detail/screen/GoodsDetailScreen.dart';
-import 'package:cinemarket/features/detail/screen/MoviesDetailScreen.dart';
+// import 'package:cinemarket/features/detail/screen/GoodsDetailScreen.dart';
+// import 'package:cinemarket/features/detail/screen/MoviesDetailScreen.dart';
 import 'package:flutter/material.dart';
 
 class ItemBox extends StatefulWidget {
@@ -26,19 +26,19 @@ class _ItemBoxState extends State<ItemBox> {
 
   void _goToDetail(BuildContext context) {
     if (widget.label == '굿즈') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GoodsDetailScreen(title: widget.title),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => GoodsDetailScreen(title: widget.title),
+      //   ),
+      // );
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MoviesDetailScreen(title: widget.title),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => MoviesDetailScreen(title: widget.title),
+      //   ),
+      // );
     }
   }
 
