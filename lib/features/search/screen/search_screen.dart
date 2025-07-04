@@ -1,108 +1,108 @@
-import 'package:cinemarket/features/search/widgets/grid_widgets.dart';
-import 'package:cinemarket/features/search/widgets/search_field_widgets.dart';
-import 'package:cinemarket/features/search/widgets/search_result_widgets.dart';
-import 'package:cinemarket/features/search/widgets/section_title_widgets.dart';
+import 'package:cinemarket/core/constants/enums/item_type.dart';
+import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:cinemarket/features/search/widgets/search_app_bar.dart';
+import 'package:cinemarket/features/search/widgets/search_empty_result_widgets.dart';
+import 'package:cinemarket/features/search/widgets/search_section_title_widgets.dart';
+import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _SearchScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
+
 class _SearchScreenState extends State<SearchScreen> {
-  final TextEditingController _controller = TextEditingController();
-  String keyword = '';
+  final TextEditingController _searchController = TextEditingController();
   bool hasSearched = false;
 
-  final dummyGoods = <Map<String, String>>[
-    {
-      'title' : '아이언맨 피규어',
-      'image' : 'https://img4.tmon.kr/cdn3/deals/2019/11/09/2687495970/front_beea5_g1fgn.png',
-    },
-    {
-      'title' : '아이언맨 스마트폰 케이스',
-    },
-    {
-      'title' : '어벤져스 피규어',
-    },
-    {
-      'title' : '캡티 아메리카 텀블러'
-    },
-  ];
-  final dummyMovies = <Map<String, String>>[
-    {
-      'title' : '아이언맨1',
-      'image' : 'https://i.namu.wiki/i/GfTPJRwpWhsAsxaUTxBRYI8vLSZr06T3roet7iM-9GKRWPQhxNt712gV24CdnaiWnmjn-ravxLO6_GwWsyghUQ.webp'
-    },
-    {
-      'title' : '아이언맨2',
-    },
-    {
-    'title' : '아이언맨3',
-    },
-    {
-      'title' : '어벤져스',
-    },
-    {
-    'title' : '캡틴 아메리카'
-    },
-  ];
+  final List<Map<String, dynamic>> dummyGoods = List.generate(10, (i) {
+    return {
+      'imageUrl':
+      'https://i.ebayimg.com/images/g/64YAAOSwDqhnttak/s-l1200.png',
+      'goodsName': '굿즈 ${i + 1}',
+      'movieName': '관련 영화',
+      'price': '${(i + 1) * 1000}원',
+      'rating': 4.5,
+      'reviewCount': 10,
+      'isFavorite': false,
+    };
+  });
+
+  final List<Map<String, dynamic>> dummyMovies = List.generate(10, (i) {
+    return {
+      'imageUrl':
+      'https://image.tmdb.org/t/p/original/vqBmyAj0Xm9LnS1xe1MSlMAJyHq.jpg',
+      'movieName': '영화 ${i + 1}',
+      'cumulativeSales': (i + 1) * 100,
+      'providers': [
+        'https://image.tmdb.org/t/p/original/hPcjSaWfMwEqXaCMu7Fkb529Dkc.jpg',
+        'https://image.tmdb.org/t/p/original/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg',
+        'https://image.tmdb.org/t/p/original/97yvRBw1GzX7fXprcF80er19ot.jpg',
+      ],
+      'isFavorite': false,
+    };
+  });
+
+  List<Map<String, dynamic>> goodsResults = [];
+  List<Map<String, dynamic>> movieResults = [];
+
+  void _handleSearch(String query) {
+    setState(() {
+      hasSearched = true;
+
+      goodsResults = dummyGoods
+          .where((item) => item['goodsName']
+          .toString()
+          .toLowerCase()
+          .contains(query.toLowerCase()))
+          .toList();
+
+      movieResults = dummyMovies
+          .where((item) => item['movieName']
+          .toString()
+          .toLowerCase()
+          .contains(query.toLowerCase()))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final GoodsResults = dummyGoods.where((p) => p['title']!.toLowerCase().contains(keyword.toLowerCase())).toList();
-    final movieResults = dummyMovies.where((m) => m['title']!.toLowerCase().contains(keyword.toLowerCase())).toList();
-
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            // 검색창
-            SearchField(
-              controller: _controller,
-              onChanged: (val) {
-                setState(() {
-                  keyword = val;
-                  hasSearched = val.trim().isNotEmpty;
-                });
-              },
+            SearchAppBar(
+              controller: _searchController,
+              onSearch: _handleSearch,
             ),
-
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: ListView(
+                  padding: const EdgeInsets.only(bottom: 32),
                   children: [
-                    const SectionTitle("굿즈"),
-                    const SizedBox(height: 12),
+                    const SearchSectionTitle(title: '굿즈'),
+                    if (!hasSearched || goodsResults.isEmpty)
+                      const SearchEmptyResultText()
+                    else
+                      CommonGridview(
+                        items: goodsResults,
+                        itemType: ItemType.goods,
+                      ),
 
-                    if (!hasSearched) ...[
-                      const SearchResult(),
-                    ] else if (GoodsResults.isEmpty) ...[
-                      const SearchResult(),
-                    ] else ...[
-                      ResultGrid(label: "굿즈", items: GoodsResults),
-                    ],
-
-                    const SizedBox(height: 32),
-
-                    const SectionTitle("영화"),
-                    const SizedBox(height: 12),
-
-                    if (!hasSearched) ...[
-                      const SearchResult(),
-                    ] else if (movieResults.isEmpty) ...[
-                      const SearchResult(),
-                    ] else ...[
-                      ResultGrid(label: "영화", items: movieResults),
-                    ],
+                    const SearchSectionTitle(title: '영화'),
+                    if (!hasSearched || movieResults.isEmpty)
+                      const SearchEmptyResultText()
+                    else
+                      CommonGridview(
+                        items: movieResults,
+                        itemType: ItemType.movie,
+                      ),
                   ],
                 ),
-              ),
             ),
           ],
         ),
