@@ -60,16 +60,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
           textStyle: AppTextStyle.body,
           onTap: () {
             print('회원 정보 수정 클릭');
+            context.push('/mypage/detail', extra: 'edit_profile');
           },
         ),
         _buildMenuItem(
           title: '주문 내역',
           textStyle: AppTextStyle.body,
           onTap: () {
-            setState(() {
-              _hasToken = true;
-            });
             print('주문 내역 클릭');
+            context.push('/mypage/detail', extra: 'order_history');
           },
         ),
         _buildMenuItem(
@@ -77,6 +76,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
           textStyle: AppTextStyle.body,
           onTap: () {
             print('리뷰 목록 클릭');
+            context.push('/mypage/detail', extra: 'my_review');
           },
         ),
         _buildMenuItem(
