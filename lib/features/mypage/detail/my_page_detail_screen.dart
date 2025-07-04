@@ -25,7 +25,7 @@ class MyPageDetailScreen extends StatelessWidget {
         bodyWidget = const OrderHistoryComponent();
         break;
       case 'my_review':
-        title = '리뷰 목록';
+        title = '나의 리뷰';
         bodyWidget = const MyReviewComponent();
         break;
         
