@@ -49,7 +49,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/cart',
-      builder: (context, state) => const CartScreen(items: [],)
+      builder: (context, state) => const CartScreen()
     ),
     GoRoute(
       path: '/login',
