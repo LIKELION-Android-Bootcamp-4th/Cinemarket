@@ -26,12 +26,12 @@ class _ItemBoxState extends State<ItemBox> {
 
   void _goToDetail(BuildContext context) {
     if (widget.label == '굿즈') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GoodsDetailScreen(title: widget.title),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => GoodsDetailScreen(title: widget.title),
+      //   ),
+      // );
     } else {
       Navigator.push(
         context,
