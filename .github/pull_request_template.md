@@ -30,3 +30,4 @@
 ## 📸 스크린샷 
 > ✋ 이미지 태그를 이용해 올려주세요 !
 > ex) `<img src="your_image_url" width="45%" />`
+> <img src="![Screenshot_20250706_002446.png](../../../Pictures/Screenshots/Screenshot_20250706_002446.png)" width="45%" />
