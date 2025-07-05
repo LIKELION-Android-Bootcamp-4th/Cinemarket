@@ -3,7 +3,6 @@ import 'package:cinemarket/features/movies/widgets/cast_grid_view.dart';
 import 'package:cinemarket/features/movies/widgets/movie_detail_header.dart';
 import 'package:cinemarket/features/movies/widgets/movie_info_row.dart';
 import 'package:cinemarket/features/movies/widgets/synopsis_text.dart';
-import 'package:cinemarket/features/search/widgets/goods_item_widgets.dart';
 import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/widgets/common_tab_view.dart';
 import 'package:flutter/material.dart';
