@@ -101,7 +101,6 @@ class _MyReviewComponentState extends State<MyReviewComponent> {
 
   @override
   Widget build(BuildContext context) {
-    // 상태 변수인 _reviews를 사용하여 목록을 빌드
     return ListView.builder(
       itemCount: _reviews.length,
       itemBuilder: (context, index) {
@@ -166,7 +165,6 @@ class _MyReviewComponentState extends State<MyReviewComponent> {
                                 type: ToastificationType.success,
                               );
                               setState(() {
-                                // 리스트에서 해당 인덱스의 리뷰를 제거하고 화면을 다시 그림
                                 _reviews.removeAt(index);
                               });
                             },

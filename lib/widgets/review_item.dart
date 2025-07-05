@@ -123,7 +123,6 @@ class _ReviewItemState extends State<ReviewItem> {
     return Row(
       children: List.generate(5, (index) {
         return GestureDetector(
-          //별점 조절 기능을 삭제하여 추후 수정 예정
           child: Icon(
             index < _currentRating ? Icons.star : Icons.star_border,
             color: Colors.amberAccent,
