@@ -1,5 +1,8 @@
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:cinemarket/widgets/review_item.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 // 데이터 모델 클래스
 class Review {
@@ -45,36 +48,37 @@ class _MyReviewComponentState extends State<MyReviewComponent> {
         photoUrls: [
           'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
-              'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
+          'https://www.chosun.com/resizer/v2/WZNZSQFOJBBVHGMMLIW3G6VOVY.jpg?auth=fecf0fda94e45389c73e77a19b63d0d795c468b8f95f5b2656f1e1d58741902a&width=616',
           'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
         ],
       ),
       Review(
         productName: '스파이더맨: 어크로스 더 유니버스',
         movieTitle: 'Spider-Man: Across the Spider-Verse',
-        productImage: 'https://i.namu.wiki/i/F9cqDEW8kjADTsB9czIdFIRGvOEWgB9Qx3pAEpnvtHzjWcFE7zW-LItvgqB7yRUyfY-mKa5D8HsHoayRIqcUmg.webp',
+        productImage:
+            'https://i.namu.wiki/i/F9cqDEW8kjADTsB9czIdFIRGvOEWgB9Qx3pAEpnvtHzjWcFE7zW-LItvgqB7yRUyfY-mKa5D8HsHoayRIqcUmg.webp',
         initialRating: 4,
         initialReviewText: '전편을 뛰어넘는 속편. 비주얼과 스토리가 정말 완벽했습니다. 다음 편이 너무 기대되네요.',
         photoUrls: [
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwzcCAWL-xhnoN4VUC4CD5DqJK0ZEzrOKguQ&s'
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwzcCAWL-xhnoN4VUC4CD5DqJK0ZEzrOKguQ&s',
         ],
       ),
       Review(
@@ -82,7 +86,8 @@ class _MyReviewComponentState extends State<MyReviewComponent> {
         movieTitle: 'Oppenheimer',
         productImage: 'https://placehold.co/100x100/000000/ffffff?text=Oppen',
         initialRating: 2,
-        initialReviewText: '크리스토퍼 놀란 감독의 또 다른 걸작. 몰입감이 엄청나고 배우들의 연기도 훌륭합니다.'
+        initialReviewText:
+            '크리스토퍼 놀란 감독의 또 다른 걸작. 몰입감이 엄청나고 배우들의 연기도 훌륭합니다.'
             '크리스토퍼 놀란 감독의 또 다른 걸작. 몰입감이 엄청나고 배우들의 연기도 훌륭합니다.'
             '크리스토퍼 놀란 감독의 또 다른 걸작. 몰입감이 엄청나고 배우들의 연기도 훌륭합니다.'
             '크리스토퍼 놀란 감독의 또 다른 걸작. 몰입감이 엄청나고 배우들의 연기도 훌륭합니다.'
@@ -109,17 +114,70 @@ class _MyReviewComponentState extends State<MyReviewComponent> {
           initialReviewText: review.initialReviewText,
           photoUrls: review.photoUrls,
           isEditing: false,
+          //첫 번째 onClick 기능 부여
           onClick1: () {
+            context.push('/mypage/detail', extra: 'fix_review');
             print('${review.productName} 리뷰 수정');
             // TODO: 실제 수정 로직 구현 (예: 수정 화면으로 이동)
           },
+          //두 번째 onClick 기능 부여
           onClick2: () {
             print('${review.productName} 리뷰 삭제');
-            // 삭제 확인 다이얼로그를 띄우는 것이 더 안전한 방법입니다.
-            setState(() {
-              // 리스트에서 해당 인덱스의 리뷰를 제거하고 화면을 다시 그림
-              _reviews.removeAt(index);
-            });
+            showDialog(
+              context: context,
+              builder: (BuildContext dialogContext) {
+                return AlertDialog(
+                  backgroundColor: Color(0xFF292929),
+                  title: Text(
+                    '리뷰삭제',
+                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  ),
+                  content: Text(
+                    "리뷰를 삭제 하시겠습니까?",
+                    style: TextStyle(color: Colors.white70, fontSize: 18.0),
+                  ),
+                  actions: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            child: Text(
+                              '유지하기',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onPressed: () {
+                              Navigator.of(dialogContext).pop();
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            child: Text(
+                              '삭제하기',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              Navigator.of(dialogContext).pop();
+                              setState(() {});
+                              //todo 삭제 API
+                              CommonToast.show(
+                                context: context,
+                                message: "리뷰가 삭제 되었습니다.",
+                                type: ToastificationType.success,
+                              );
+                              setState(() {
+                                // 리스트에서 해당 인덱스의 리뷰를 제거하고 화면을 다시 그림
+                                _reviews.removeAt(index);
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
           },
         );
       },
