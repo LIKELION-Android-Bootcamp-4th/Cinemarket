@@ -66,6 +66,8 @@ class _SearchScreenState extends State<SearchScreen> {
           .toLowerCase()
           .contains(query.toLowerCase()))
           .toList();
+
+      print('goodsResults: ${goodsResults.length}');
     });
   }
 
@@ -81,28 +83,36 @@ class _SearchScreenState extends State<SearchScreen> {
               onSearch: _handleSearch,
             ),
             Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.only(bottom: 32),
-                  children: [
-                    const SearchSectionTitle(title: '굿즈'),
-                    if (!hasSearched || goodsResults.isEmpty)
-                      const SearchEmptyResultText()
-                    else
-                      CommonGridview(
+              child: ListView(
+                padding: const EdgeInsets.only(bottom: 32),
+                children: [
+                  const SearchSectionTitle(title: '굿즈'),
+                  if (!hasSearched || goodsResults.isEmpty)
+                    const SearchEmptyResultText()
+                  else
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: CommonGridview(
                         items: goodsResults,
                         itemType: ItemType.goods,
+                        isInScrollView: true,
                       ),
+                    ),
 
-                    const SearchSectionTitle(title: '영화'),
-                    if (!hasSearched || movieResults.isEmpty)
-                      const SearchEmptyResultText()
-                    else
-                      CommonGridview(
+                  const SizedBox(height: 24),
+                  const SearchSectionTitle(title: '영화'),
+                  if (!hasSearched || movieResults.isEmpty)
+                    const SearchEmptyResultText()
+                  else
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: CommonGridview(
                         items: movieResults,
                         itemType: ItemType.movie,
                       ),
-                  ],
-                ),
+                    ),
+                ],
+              ),
             ),
           ],
         ),
