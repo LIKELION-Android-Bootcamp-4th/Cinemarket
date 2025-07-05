@@ -1,4 +1,5 @@
 import 'package:cinemarket/features/mypage/detail/component/edit_profile_component.dart';
+import 'package:cinemarket/features/mypage/detail/component/fix_review_component.dart';
 import 'package:cinemarket/features/mypage/detail/component/my_review_component.dart';
 import 'package:cinemarket/features/mypage/detail/component/order_history_component.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
@@ -28,7 +29,10 @@ class MyPageDetailScreen extends StatelessWidget {
         title = '나의 리뷰';
         bodyWidget = const MyReviewComponent();
         break;
-        
+      case 'fix_review' :
+        title = '리뷰 수정';
+        bodyWidget = const FixReviewComponent();
+        break;
       default:
         title = '에러';
         bodyWidget = const Center(child: Text('에러 페이지입니다.', style: TextStyle(color: Colors.white)));
