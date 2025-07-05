@@ -1,48 +1,82 @@
+import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:flutter/material.dart';
 
 class CartBottomBar extends StatelessWidget {
-  final int itemCount;
-  final int totalPrice;
+  final List<CartItem> items;
+  final ValueChanged<bool> onSelectAll;
 
   const CartBottomBar({
-    super.key,
-    required this.itemCount,
-    required this.totalPrice,
-  });
+    Key? key,
+    required this.items,
+    required this.onSelectAll,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      child: Row(
-        children: [
-          Text('합계 $itemCount개', style: const TextStyle(color: Colors.white)),
-          const Spacer(),
-          Text('₩${totalPrice.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ",")}',
-              style: const TextStyle(color: Colors.white)),
-          const SizedBox(width: 20),
+    int total = items
+        .where((item) => item.isSelected)
+        .fold(0, (sum, item) => sum + item.price * item.quantity);
+    int selectedCount = items.where((item) => item.isSelected).length;
 
-          SizedBox(
-            width: 250, // 너비 늘림
-            height: 40, // 높이 늘림
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+    return SafeArea(
+      top: false,
+      child: Container(
+        color: Colors.black,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // 상단 정렬!
+          children: [
+            Checkbox(
+              value: selectedCount == items.length && items.isNotEmpty,
+              onChanged: (value) => onSelectAll(value!),
+              activeColor: Colors.red,
+            ),
+            const SizedBox(width: 4),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '합계 $selectedCount개',
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${total.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}원',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            SizedBox(
+              height: 48,
+              width: 250,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (selectedCount > 0) {
+
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  '결제하기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   // MaterialPageRoute(builder: (_) => const GoodsDetailScreen(title: '',)),
-                // );
-              },
-              child: const Text('결제하기'),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
