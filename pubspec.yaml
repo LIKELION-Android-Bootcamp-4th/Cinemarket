@@ -44,7 +44,10 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   toastification: ^3.0.3
   dropdown_button2: ^2.3.8
-  
+  flutter_dotenv: ^5.2.1
+  shimmer: ^3.0.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -86,6 +89,8 @@ flutter:
   assets:
     - assets/fonts/
     - assets/images/
+    - .env
+
 
 flutter_icons:
   android: true
