@@ -1,8 +1,10 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -69,13 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ElevatedButton(
               onPressed: () {
                 context.go('/home');
-                Fluttertoast.showToast(
-                  msg: "회원가입을 성공했습니다.",
-                  gravity: ToastGravity.BOTTOM,
-                  backgroundColor: Colors.grey,
-                  textColor: Colors.white,
-                  fontSize: 14.0,
-                );
+                CommonToast.show(context: context, message: "회원가입을 성공했습니다.", type: ToastificationType.success);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.widgetBackground,
