@@ -1,3 +1,4 @@
+import 'package:cinemarket/features/purchase/screen/purchase_screen.dart';
 import 'package:flutter/material.dart';
 
 class CartBottomBar extends StatelessWidget {
@@ -34,10 +35,10 @@ class CartBottomBar extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   // MaterialPageRoute(builder: (_) => const GoodsDetailScreen(title: '',)),
-                // );
+                 Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PurchaseScreen()),
+                );
               },
               child: const Text('결제하기'),
             ),
