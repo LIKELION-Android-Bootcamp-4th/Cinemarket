@@ -11,7 +11,7 @@ class GoodsScreen extends StatelessWidget {
     final List<Map<String, dynamic>> dummyGoods = List.generate(10, (i) {
       return {
         'imageUrl':
-            'https://i.ebayimg.com/images/g/64YAAOSwDqhnttak/s-l1200.png',
+            'https://i.ebayimg.com/images/g/BzAAAeSweMtn22-l/s-l1200.png',
         'goodsName': '굿즈 ${i + 1}',
         'movieName': '관련 영화',
         'price': '${(i + 1) * 1000}원',
