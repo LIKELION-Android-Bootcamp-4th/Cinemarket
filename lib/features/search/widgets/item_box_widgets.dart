@@ -1,5 +1,5 @@
-import 'package:cinemarket/features/detail/screen/GoodsDetailScreen.dart';
-import 'package:cinemarket/features/detail/screen/MoviesDetailScreen.dart';
+// import 'package:cinemarket/features/detail/screen/GoodsDetailScreen.dart';
+// import 'package:cinemarket/features/detail/screen/MoviesDetailScreen.dart';
 import 'package:flutter/material.dart';
 
 class ItemBox extends StatefulWidget {
@@ -24,6 +24,7 @@ class ItemBox extends StatefulWidget {
 class _ItemBoxState extends State<ItemBox> {
   bool isWishedLocal = false;
 
+  /*
   void _goToDetail(BuildContext context) {
     if (widget.label == '굿즈') {
       // Navigator.push(
@@ -41,6 +42,7 @@ class _ItemBoxState extends State<ItemBox> {
       );
     }
   }
+   */
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,7 @@ class _ItemBoxState extends State<ItemBox> {
           Stack(
             children: [
               GestureDetector(
-                onTap: () => _goToDetail(context),
+                // onTap: () => _goToDetail(context),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
