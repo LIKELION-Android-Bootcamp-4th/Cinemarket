@@ -1,6 +1,7 @@
 import 'package:cinemarket/features/cart/screen/cart_screen.dart';
 import 'package:cinemarket/features/favorite/screen/favorite_screen.dart';
 import 'package:cinemarket/features/goods/screen/goods_screen.dart';
+import 'package:cinemarket/features/goods/screen/review/goods_review_screen.dart';
 import 'package:cinemarket/features/home/screen/home_screen.dart';
 import 'package:cinemarket/features/login/screen/login_screen.dart';
 import 'package:cinemarket/features/main/screen/main_screen.dart';
@@ -66,6 +67,10 @@ final GoRouter router = GoRouter(
         final movieId = state.pathParameters['movieId']!;
         return MovieDetailScreen(movieId: movieId);
       },
+    ),
+    GoRoute(
+        path: '/goods/detail/review',
+      builder: (context, state) => const GoodsReviewScreen(),
     ),
     GoRoute(
       path: '/mypage/detail',
