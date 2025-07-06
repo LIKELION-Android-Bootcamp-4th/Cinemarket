@@ -1,7 +1,12 @@
-import 'package:cinemarket/core/router/router.dart';
+import 'package:provider/provider.dart';
+import 'package:cinemarket/features/home/viewModel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cinemarket/core/router/router.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -10,9 +15,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'CineMarket',
-      routerConfig: router,
+    return ChangeNotifierProvider(
+      create: (_) => HomeViewModel(),
+      child: MaterialApp.router(
+        title: 'CineMarket',
+        routerConfig: router,
+      ),
     );
   }
 }
