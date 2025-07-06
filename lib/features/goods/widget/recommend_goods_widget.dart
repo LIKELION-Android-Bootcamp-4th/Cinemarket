@@ -37,6 +37,7 @@ class RecommendGoodsWidget extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
+                    SizedBox(height: 8,),
                     Text(item['goodsName'], style: AppTextStyle.bodySmall,),
                     Text(item['price'], style: AppTextStyle.bodySmall,),
                   ],
