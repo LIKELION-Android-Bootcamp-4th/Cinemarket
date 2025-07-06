@@ -1,5 +1,3 @@
-import 'package:cinemarket/features/detail/screen/GoodsDetailScreen.dart';
-import 'package:cinemarket/features/detail/screen/MoviesDetailScreen.dart';
 import 'package:flutter/material.dart';
 
 class ItemBox extends StatefulWidget {
@@ -25,6 +23,7 @@ class _ItemBoxState extends State<ItemBox> {
   bool isWishedLocal = false;
 
   void _goToDetail(BuildContext context) {
+    /*
     if (widget.label == '굿즈') {
       Navigator.push(
         context,
@@ -40,6 +39,7 @@ class _ItemBoxState extends State<ItemBox> {
         ),
       );
     }
+     */
   }
 
   @override
