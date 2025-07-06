@@ -5,8 +5,11 @@ import 'package:cinemarket/features/goods/screen/goods_screen.dart';
 import 'package:cinemarket/features/home/screen/home_screen.dart';
 import 'package:cinemarket/features/login/screen/login_screen.dart';
 import 'package:cinemarket/features/main/screen/main_screen.dart';
+import 'package:cinemarket/features/movies/screen/movie_detail_screen.dart';
 import 'package:cinemarket/features/movies/screen/movies_screen.dart';
-import 'package:cinemarket/features/mypage/screen/mypage_screen.dart';
+import 'package:cinemarket/features/mypage/detail/component/fix_review_component.dart';
+import 'package:cinemarket/features/mypage/detail/my_page_detail_screen.dart';
+import 'package:cinemarket/features/mypage/screen/my_page_screen.dart';
 import 'package:cinemarket/features/search/screen/search_screen.dart';
 import 'package:cinemarket/features/signup/screen/sign_up_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +30,10 @@ final GoRouter router = GoRouter(
           path: '/goods',
           builder: (context, state) => const GoodsScreen(),
         ),
-        GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const HomeScreen(),
+        ),
         GoRoute(
           path: '/movies',
           builder: (context, state) => const MoviesScreen(),
@@ -43,14 +49,35 @@ final GoRouter router = GoRouter(
       path: '/cart',
       builder: (context, state) => const CartScreen(items: []),
     ),
-    GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-    GoRoute(path: '/signUp', builder: (context, state) => const SignUpScreen()),
     GoRoute(
       path: '/goods/detail',
       builder: (context, state) {
         final item = state.extra as Map<String, dynamic>;
         return GoodsDetailScreen(item: item);
       },
+    ),
+    GoRoute(
+      path: '/movies/:movieId',
+      builder: (context, state) {
+        final movieId = state.pathParameters['movieId']!;
+        return MovieDetailScreen(movieId: movieId);
+      },
+    ),
+    GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen()
+    ),
+    GoRoute(
+        path: '/signUp',
+        builder: (context, state) => const SignUpScreen()
+    ),
+    GoRoute(
+      path: '/mypage/detail',
+      builder: (context, state) => const MyPageDetailScreen(),
+    ),
+    GoRoute(
+      path: '/widget',
+      builder: (context, state) => const FixReviewComponent(),
     ),
   ],
 );

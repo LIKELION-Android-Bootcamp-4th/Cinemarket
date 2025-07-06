@@ -7,8 +7,16 @@ import 'package:go_router/go_router.dart';
 class CommonGridview extends StatelessWidget {
   final List<Map<String, dynamic>> items;
   final ItemType itemType;
+  final bool isInScrollView;
 
-  const CommonGridview({super.key, required this.itemType, required this.items});
+  const CommonGridview({
+    super.key,
+    required this.itemType,
+    required this.items,
+    this.isInScrollView = false,
+  });
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +27,10 @@ class CommonGridview extends StatelessWidget {
     };
 
     return GridView.builder(
+      shrinkWrap: isInScrollView,
+      physics: isInScrollView
+          ? const NeverScrollableScrollPhysics()
+          : null,
       itemCount: items.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

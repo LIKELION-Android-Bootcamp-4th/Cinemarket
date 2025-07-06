@@ -1,7 +1,9 @@
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -60,16 +62,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
           textStyle: AppTextStyle.body,
           onTap: () {
             print('회원 정보 수정 클릭');
+            context.push('/mypage/detail', extra: 'edit_profile');
           },
         ),
         _buildMenuItem(
           title: '주문 내역',
           textStyle: AppTextStyle.body,
           onTap: () {
-            setState(() {
-              _hasToken = true;
-            });
             print('주문 내역 클릭');
+            context.push('/mypage/detail', extra: 'order_history');
           },
         ),
         _buildMenuItem(
@@ -77,6 +78,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
           textStyle: AppTextStyle.body,
           onTap: () {
             print('리뷰 목록 클릭');
+            context.push('/mypage/detail', extra: 'my_review');
           },
         ),
         _buildMenuItem(
@@ -125,13 +127,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               //todo 로그아웃 API
                               if (_hasToken == false) {
                                 print("로그아웃 로직");
-                                Fluttertoast.showToast(
-                                  msg: "로그아웃 되었습니다.",
-                                  gravity: ToastGravity.BOTTOM,
-                                  backgroundColor: Colors.grey,
-                                  textColor: Colors.white,
-                                  fontSize: 14.0,
-                                );
+                                CommonToast.show(context: context, message: "로그아웃 되었습니다.", type: ToastificationType.success);
                               }
                               print('로그아웃 클릭');
                             },
