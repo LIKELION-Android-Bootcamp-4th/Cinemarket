@@ -44,10 +44,13 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-    GoRoute(path: '/search', builder: (context, state) => const SearchScreen()),
     GoRoute(
-      path: '/cart',
-      builder: (context, state) => const CartScreen(items: []),
+      path: '/search',
+      builder: (context, state) => const SearchScreen(),
+    ),
+    GoRoute(
+        path: '/cart',
+        builder: (context, state) => const CartScreen(items: [],)
     ),
     GoRoute(
       path: '/goods/detail',
