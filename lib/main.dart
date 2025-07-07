@@ -1,3 +1,4 @@
+import 'package:cinemarket/features/goods/viewmodel/goods_all_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:cinemarket/features/home/viewModel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
+
+  await GoodsAllViewModel().getAllGoods();
 }
 
 class MyApp extends StatelessWidget {
@@ -15,12 +18,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => HomeViewModel(),
-      child: MaterialApp.router(
-        title: 'CineMarket',
-        routerConfig: router,
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => GoodsAllViewModel()),
+      ],
+      child: MaterialApp.router(title: 'CineMarket', routerConfig: router),
     );
   }
 }

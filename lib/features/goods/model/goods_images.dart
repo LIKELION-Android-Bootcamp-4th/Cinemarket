@@ -1,0 +1,16 @@
+class GoodsImages {
+  final String main;
+  final List<String> sub;
+
+  GoodsImages({
+    required this.main,
+    required this.sub,
+  });
+
+  factory GoodsImages.fromJson(Map<String, dynamic> json) {
+    return GoodsImages(
+      main: json['main'],
+      sub: List<String>.from(json['sub']),
+    );
+  }
+}

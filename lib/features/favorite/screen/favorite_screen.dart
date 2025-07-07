@@ -64,11 +64,13 @@ class FavoriteScreen extends StatelessWidget {
                   children: [
                     CommonGridview(
                       itemType: ItemType.goods,
-                      items: dummyGoods,
+                      // items: dummyGoods,
+                      items: [],
                     ),
                     CommonGridview(
                       itemType: ItemType.movie,
-                      items: dummyMovies,
+                      // items: dummyMovies,
+                      items: [],
                     ),
                   ],
                 ),

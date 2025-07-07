@@ -1,11 +1,13 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
+import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:cinemarket/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CommonGridview extends StatelessWidget {
-  final List<Map<String, dynamic>> items;
+  // final List<Map<String, dynamic>> items;
+  final List<Goods> items;
   final ItemType itemType;
   final bool isInScrollView;
 
@@ -46,24 +48,25 @@ class CommonGridview extends StatelessWidget {
                 );
               },
               child: GoodsItem(
-                imageUrl: item['imageUrl'],
-                goodsName: item['goodsName'],
-                movieName: item['movieName'],
-                price: item['price'],
-                rating: item['rating'],
-                reviewCount: item['reviewCount'],
-                isFavorite: item['isFavorite'],
+                imageUrl: 'https://i.ebayimg.com/images/g/~NEAAOSw8iBoK2Z9/s-l1600.webp',
+                goodsName: item.name,
+                movieName: item.id,
+                price: '${item.price} 원',
+                rating: item.reviewStats.averageRating,
+                reviewCount: item.reviewCount,
+                isFavorite: item.isFavorite,
               ),
             );
 
           case ItemType.movie:
-            return MovieItem(
-              imageUrl: item['imageUrl'],
-              movieName: item['movieName'],
-              cumulativeSales: item['cumulativeSales'],
-              providers: item['providers'],
-              isFavorite: item['isFavorite'],
-            );
+            // return
+              // MovieItem(
+              // imageUrl: item['imageUrl'],
+              // movieName: item['movieName'],
+              // cumulativeSales: item['cumulativeSales'],
+              // providers: item['providers'],
+              // isFavorite: item['isFavorite'],
+            // );
         }
       },
     );
