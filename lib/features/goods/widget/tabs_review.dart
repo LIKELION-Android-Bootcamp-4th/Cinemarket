@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/mypage/detail/component/my_review_component.dart' show Review;
 import 'package:cinemarket/widgets/review_item.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,16 @@ import 'package:flutter/material.dart';
  * UI는 기존 리뷰 목록과 동일하지만 하단의 좋아요/싫어요 버튼만 제거
  */
 List<Widget> getTabsReviewWidgets() {
-  return
-    List.generate(
+  return[
+    const Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('리뷰', style: AppTextStyle.headline),
+        Spacer(),
+        Text('더보기', style: AppTextStyle.point,)
+      ],
+    ),
+    ...List.generate(
     10, (_) => _reviews.map(
       (review) => ReviewItem(
         productName: review.productName,
@@ -19,7 +28,8 @@ List<Widget> getTabsReviewWidgets() {
         initialReviewText: review.initialReviewText,
       ),
     ),
-  ).expand((e) => e).toList();
+  ).expand((e) => e),
+  ];
 }
 
 List<Review> _reviews = [
