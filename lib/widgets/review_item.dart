@@ -94,7 +94,7 @@ class _ReviewItemState extends State<ReviewItem> {
                       width: 100.0,
                       height: 100.0,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF292929),
+                        color: AppColors.widgetBackground,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8.0),
                         ),
