@@ -94,7 +94,7 @@ class _ReviewItemState extends State<ReviewItem> {
                       width: 100.0,
                       height: 100.0,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF292929),
+                        color: AppColors.widgetBackground,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8.0),
                         ),
@@ -195,6 +195,19 @@ class _ReviewItemState extends State<ReviewItem> {
   }
 
   Widget _buildActionButtons() {
+    String button1;
+    String button2;
+
+    if (widget.title == '나의 리뷰') {
+      button1 = '수정';
+      button2 = '삭제';
+    } else if (widget.title == '리뷰 목록') {
+      button1 = '좋아요';
+      button2 = '싫어요';
+    } else {
+      return const SizedBox.shrink();
+    }
+
     return Row(
       children: [
         Expanded(
@@ -208,7 +221,7 @@ class _ReviewItemState extends State<ReviewItem> {
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
-            child: Text(widget.title == '나의 리뷰'? '수정' : '좋아요', style: AppTextStyle.bodySmall),
+            child: Text(button1, style: AppTextStyle.bodySmall),
           ),
         ),
         const SizedBox(width: 16.0),
@@ -223,7 +236,7 @@ class _ReviewItemState extends State<ReviewItem> {
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
-            child: Text(widget.title == '나의 리뷰'? '삭제' : '싫어요', style: AppTextStyle.bodySmall),
+            child: Text(button2, style: AppTextStyle.bodySmall),
           ),
         ),
       ],

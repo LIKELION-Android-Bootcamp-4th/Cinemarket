@@ -2,6 +2,7 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
 class OrderItem {
@@ -166,7 +167,7 @@ class _OrderHistoryComponentState extends State<OrderHistoryComponent> {
                     const SizedBox(width: 8.0),
                     TextButton(
                       onPressed: () {
-                        //todo
+                        context.push('/mypage/detail', extra: 'order_detail');
                       },
                       child: Text("주문상세", style: TextStyle(
                         fontSize: 14,
@@ -228,7 +229,12 @@ class _OrderHistoryComponentState extends State<OrderHistoryComponent> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: 리뷰쓰기/보기 화면으로 이동
+                  if(order.reviewStatus == '리뷰쓰기') {
+                    context.push(
+                      '/mypage/detail',
+                      extra: {'where': 'fix_review',},
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:

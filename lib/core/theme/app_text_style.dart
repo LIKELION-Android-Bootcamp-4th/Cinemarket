@@ -40,4 +40,12 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.textPoint,
   );
+
+  static const TextStyle bodySmallLink = TextStyle(
+    decoration: TextDecoration.underline,
+    fontFamily: _fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textSecondary,
+  );
 }

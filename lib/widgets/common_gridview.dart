@@ -25,12 +25,14 @@ class CommonGridview extends StatelessWidget {
 
     return GridView.builder(
       shrinkWrap: isInScrollView,
-      physics: isInScrollView ? const NeverScrollableScrollPhysics() : null,
+      physics: isInScrollView
+          ? const NeverScrollableScrollPhysics()
+          : null,
       itemCount: items.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: aspectRatio,
-        crossAxisSpacing: 8, // todo: 그리드뷰 내부 패딩값 논의
+        crossAxisSpacing: 8,  // todo: 그리드뷰 내부 패딩값 논의
         mainAxisSpacing: 8,
       ),
       itemBuilder: (context, index) {
@@ -54,6 +56,25 @@ class CommonGridview extends StatelessWidget {
                 isFavorite: item['isFavorite'],
               ),
             );
+            return
+              GestureDetector(
+                onTap: () {
+                  context.push(
+                      '/goods/detail',
+                    extra: item  // dummyGoods[index]
+                  );
+                },
+                child: GoodsItem(
+                  imageUrl: item['imageUrl'],
+                  goodsName: item['goodsName'],
+                  movieName: item['movieName'],
+                  price: item['price'],
+                  rating: item['rating'],
+                  reviewCount: item['reviewCount'],
+                  isFavorite: item['isFavorite'],
+                ),
+              );
+
           case ItemType.movie:
             return MovieItem(
               imageUrl: item['imageUrl'],
