@@ -9,6 +9,7 @@ import 'package:cinemarket/features/movies/screen/movies_screen.dart';
 import 'package:cinemarket/features/mypage/detail/component/fix_review_component.dart';
 import 'package:cinemarket/features/mypage/detail/my_page_detail_screen.dart';
 import 'package:cinemarket/features/mypage/screen/my_page_screen.dart';
+import 'package:cinemarket/features/purchase/screen/purchase_screen.dart';
 import 'package:cinemarket/features/search/screen/search_screen.dart';
 import 'package:cinemarket/features/signup/screen/sign_up_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -50,7 +51,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/cart',
-      builder: (context, state) => const CartScreen(items: [],)
+      builder: (context, state) => const CartScreen()
     ),
     GoRoute(
       path: '/login',
@@ -76,6 +77,9 @@ final GoRouter router = GoRouter(
       path: '/widget',
       builder: (context, state) => const FixReviewComponent(),
     ),
-
+    GoRoute(
+      path: '/purchase',
+      builder: (context, state) => const PurchaseScreen(),
+    ),
   ],
 );
