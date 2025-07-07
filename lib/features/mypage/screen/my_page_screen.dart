@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
+import 'package:cinemarket/features/auth/repository/auth_repository.dart';
+import 'package:cinemarket/core/storage/token_storage.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -84,8 +86,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
         _buildMenuItem(
           title: '로그아웃',
           textStyle: AppTextStyle.body.copyWith(color: Colors.grey),
-          onTap: () {
-            //로그아웃 눌렀을 때 dialog로 더블체크
+          onTap: () async {
             showDialog(
               context: context,
               builder: (BuildContext dialogContext) {
@@ -119,17 +120,19 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               '로그아웃',
                               style: TextStyle(color: Colors.white),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               Navigator.of(dialogContext).pop();
-                              setState(() {
-                                _hasToken = false;
-                              });
-                              //todo 로그아웃 API
-                              if (_hasToken == false) {
-                                print("로그아웃 로직");
+                              try {
+                                final repo = AuthRepository();
+                                await repo.logout();
+                                await TokenStorage.clearTokens();
+                                setState(() {
+                                  _hasToken = false;
+                                });
                                 CommonToast.show(context: context, message: "로그아웃 되었습니다.", type: ToastificationType.success);
+                              } catch (e) {
+                                CommonToast.show(context: context, message: "로그아웃 실패: $e", type: ToastificationType.error);
                               }
-                              print('로그아웃 클릭');
                             },
                           ),
                         ),

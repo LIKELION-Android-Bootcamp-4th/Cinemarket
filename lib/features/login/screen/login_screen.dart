@@ -77,18 +77,40 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 90),
             ElevatedButton(
-              onPressed: () {
-                print('로그인 시도');
-                if (onLoginSuccess != null) {
-                  onLoginSuccess!();
+              onPressed: () async {
+                // 1. 입력값 가져오기
+                final email = emailController.text.trim();
+                final password = passwordController.text.trim();
+
+                // 2. 입력값이 비었는지 확인
+                if (email.isEmpty || password.isEmpty) {
+                  // 입력값이 없으면 에러 토스트 출력 후 함수 종료
+                  CommonToast.show(context: context, message: "이메일과 비밀번호를 입력하세요.", type: ToastificationType.error);
+                  return;
                 }
-                if (extra != null) {
-                  extra();
+                try {
+                  // 3. LoginViewModel 인스턴스 생성 (Provider 등 상태관리 미사용 예시)
+                  final loginViewModel = LoginViewModel();
+                  // 4. 로그인 시도 (아래 login 함수에서 실제 API 요청)
+                  await loginViewModel.login(email, password);
+                  // 5. 에러가 있으면 에러 토스트 출력
+                  if (loginViewModel.error != null) {
+                    CommonToast.show(context: context, message: loginViewModel.error!, type: ToastificationType.error);
+                  } else {
+                    // 6. 로그인 성공 시 콜백 및 토스트, 화면 이동
+                    if (onLoginSuccess != null) {
+                      onLoginSuccess!();
+                    }
+                    if (extra != null) {
+                      extra();
+                    }
+                    CommonToast.show(context: context, message: "로그인 되었습니다.", type: ToastificationType.success);
+                    context.pop();
+                  }
+                } catch (e) {
+                  // 7. 예외 발생 시 에러 토스트 출력
+                  CommonToast.show(context: context, message: "로그인 중 오류가 발생했습니다.", type: ToastificationType.error);
                 }
-                // 로그인 성공 시 토스트 메시지 표시
-                CommonToast.show(context: context, message: "로그인 되었습니다.", type: ToastificationType.success);
-                // 로그인 성공 시 마이페이지로 돌아가기
-                context.pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.widgetBackground,
