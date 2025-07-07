@@ -22,4 +22,9 @@ class AppColors {
   // 포인트 색상 3 (결제하기 버튼 등)
   static const Color pointAccent = Color(0xFFD95B5B);
 
+  // ──────────────────────────────────────────────
+  // Icon
+  // ──────────────────────────────────────────────
+  static const Color selectedStar = Color(0xFFFFFF00);
+  static const Color unselectedStar = Color(0xFF8F8F8F);
 }
