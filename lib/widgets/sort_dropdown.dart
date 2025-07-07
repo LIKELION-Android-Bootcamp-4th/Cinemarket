@@ -6,8 +6,15 @@ import 'package:flutter/material.dart';
 
 class SortDropdown extends StatefulWidget {
   final ItemType itemType;
+  final String? selectedValue;
+  final void Function(String)? onSelected;
 
-  const SortDropdown({super.key, required this.itemType});
+  const SortDropdown({
+    super.key,
+    required this.itemType,
+    this.selectedValue,
+    this.onSelected,
+  });
 
   @override
   State<SortDropdown> createState() => _SortDropdownState();
@@ -35,6 +42,16 @@ class _SortDropdownState extends State<SortDropdown> {
 
 
 
+  @override
+  void didUpdateWidget(covariant SortDropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedValue != null && widget.selectedValue != selected) {
+      setState(() {
+        selected = widget.selectedValue!;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +74,7 @@ class _SortDropdownState extends State<SortDropdown> {
           setState(() {
             selected = value!;
           });
+          widget.onSelected?.call(value!); // 외부에 콜백 발행
         },
         buttonStyleData: ButtonStyleData(
           padding: const EdgeInsets.only(left: 0, right: 4),
