@@ -24,7 +24,7 @@ class Review {
 }
 
 class MyReviewComponent extends StatefulWidget {
-  const MyReviewComponent({super.key});
+  const MyReviewComponent({super.key,});
 
   @override
   State<MyReviewComponent> createState() => _MyReviewComponentState();
@@ -106,6 +106,7 @@ class _MyReviewComponentState extends State<MyReviewComponent> {
       itemBuilder: (context, index) {
         final review = _reviews[index];
         return ReviewItem(
+          title: '나의 리뷰',
           productName: review.productName,
           movieTitle: review.movieTitle,
           productImage: review.productImage,
@@ -115,7 +116,10 @@ class _MyReviewComponentState extends State<MyReviewComponent> {
           isEditing: false,
           //첫 번째 onClick 기능 부여
           onClick1: () {
-            context.push('/mypage/detail', extra: 'fix_review');
+            context.push(
+              '/mypage/detail',
+              extra: {'where': 'fix_review', 'productId': review.productName},
+            );
             print('${review.productName} 리뷰 수정');
             // TODO: 실제 수정 로직 구현 (예: 수정 화면으로 이동)
           },

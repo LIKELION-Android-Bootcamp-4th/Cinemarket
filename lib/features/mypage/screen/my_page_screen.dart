@@ -77,7 +77,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
           title: '리뷰 목록',
           textStyle: AppTextStyle.body,
           onTap: () {
-            print('리뷰 목록 클릭');
+            print('나의 리뷰 목록 클릭');
             context.push('/mypage/detail', extra: 'my_review');
           },
         ),
