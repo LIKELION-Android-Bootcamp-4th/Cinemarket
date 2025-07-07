@@ -64,6 +64,10 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
+      path: '/goods/detail/review',
+      builder: (context, state) => const GoodsReviewScreen(),
+    ),
+    GoRoute(
       path: '/movies/:movieId',
       builder: (context, state) {
         final movieId = state.pathParameters['movieId']!;
@@ -77,10 +81,6 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/signUp',
         builder: (context, state) => const SignUpScreen()
-    ),
-    GoRoute(
-        path: '/goods/detail/review',
-      builder: (context, state) => const GoodsReviewScreen(),
     ),
     GoRoute(
       path: '/mypage/detail',
