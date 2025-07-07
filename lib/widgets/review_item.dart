@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class ReviewItem extends StatefulWidget {
   const ReviewItem({
     super.key,
+    this.title = '',
     required this.productName,
     required this.movieTitle,
     this.productImage,
@@ -16,6 +17,7 @@ class ReviewItem extends StatefulWidget {
     this.isEditing = false,
   });
 
+  final String title;
   final String productName;
   final String movieTitle;
   final String? productImage;
@@ -199,14 +201,14 @@ class _ReviewItemState extends State<ReviewItem> {
           child: ElevatedButton(
             onPressed: widget.onClick1,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF292929),
+              backgroundColor: AppColors.widgetBackground,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 50.0),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
-            child: Text('수정', style: AppTextStyle.bodySmall),
+            child: Text(widget.title == '나의 리뷰'? '수정' : '좋아요', style: AppTextStyle.bodySmall),
           ),
         ),
         const SizedBox(width: 16.0),
@@ -214,14 +216,14 @@ class _ReviewItemState extends State<ReviewItem> {
           child: ElevatedButton(
             onPressed: widget.onClick2,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF292929),
+              backgroundColor: AppColors.widgetBackground,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 50.0),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
-            child: const Text('삭제', style: AppTextStyle.bodySmall),
+            child: Text(widget.title == '나의 리뷰'? '삭제' : '싫어요', style: AppTextStyle.bodySmall),
           ),
         ),
       ],
