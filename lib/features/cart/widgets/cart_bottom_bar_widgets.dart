@@ -86,7 +86,8 @@ class CartBottomBarWidgets extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     if (selectedCount > 0) {
-                      context.go('/purchase');
+                      final selectedItems = items.where((item) => item.isSelected).toList();
+                      context.push('/purchase', extra: selectedItems); //데이터 전달
                     }
                   },
                   style: ElevatedButton.styleFrom(
