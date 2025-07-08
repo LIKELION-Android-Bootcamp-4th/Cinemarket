@@ -1,7 +1,6 @@
 import 'package:cinemarket/features/search/model/search_goods_model.dart';
 import 'package:cinemarket/features/search/model/search_tmdb_model.dart';
 import 'package:cinemarket/features/search/service/search_service.dart';
-import 'package:cinemarket/features/search/service/search_tmdb_service.dart';
 
 class SearchRepository {
   final SearchService _searchService;
