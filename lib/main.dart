@@ -1,3 +1,6 @@
+import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
+import 'package:cinemarket/features/favorite/service/favorite_service.dart';
+import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:cinemarket/features/search/viewmodel/search_view_model.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_all_viewmodel.dart';
 import 'package:cinemarket/features/movies/viewmodel/movies_viewmodel.dart';
@@ -24,6 +27,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GoodsAllViewModel()),
         ChangeNotifierProvider(create: (_) => MoviesViewModel()),
         ChangeNotifierProvider(create: (_) => SearchViewModel()),
+        ChangeNotifierProvider(
+          create:
+              (_) => FavoriteViewModel(
+                favoriteRepository: FavoriteRepository(
+                  favoriteService: FavoriteService(),
+                ),
+              ),
+        ),
       ],
       child: MaterialApp.router(title: 'CineMarket', routerConfig: router),
     );

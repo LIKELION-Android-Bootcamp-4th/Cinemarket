@@ -56,6 +56,6 @@ class Goods {
   // 로그용 모델 출력
   @override
   String toString() {
-    return 'Goods(name: $name, price: $price, isFavorite: $isFavorite)';
+    return 'Goods(id: $id, name: $name, price: $price, isFavorite: $isFavorite)';
   }
 }

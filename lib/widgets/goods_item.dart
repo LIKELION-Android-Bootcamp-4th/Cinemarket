@@ -1,4 +1,7 @@
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
+import 'package:cinemarket/features/favorite/service/favorite_service.dart';
+import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class GoodsItem extends StatefulWidget {
@@ -55,6 +58,11 @@ class _GoodsItemState extends State<GoodsItem> {
                   ),
                   onPressed: () {
                     setState(() => isFavorite = !isFavorite);
+                    FavoriteViewModel(
+                      favoriteRepository: FavoriteRepository(
+                        favoriteService: FavoriteService(),
+                      ),
+                    ).toggleFavorite(goodsId: widget.movieName);  // todo: movieName이 goodsId임 !!  // 변경 필수 !!
                   },
                 ),
               ],
@@ -84,9 +92,11 @@ class _GoodsItemState extends State<GoodsItem> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Row(
               children: [
-                Icon(Icons.star_rate, size: 15, color: Colors.yellow,),
-                Text('${widget.rating}(${widget.reviewCount})',
-                style: AppTextStyle.bodySmall,),
+                Icon(Icons.star_rate, size: 15, color: Colors.yellow),
+                Text(
+                  '${widget.rating}(${widget.reviewCount})',
+                  style: AppTextStyle.bodySmall,
+                ),
                 Spacer(),
                 Text(
                   widget.price,
