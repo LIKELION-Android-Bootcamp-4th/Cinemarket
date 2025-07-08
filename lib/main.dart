@@ -1,4 +1,6 @@
 import 'package:cinemarket/features/search/viewmodel/search_view_model.dart';
+import 'package:cinemarket/features/goods/viewmodel/goods_all_viewmodel.dart';
+import 'package:cinemarket/features/movies/viewmodel/movies_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:cinemarket/features/home/viewModel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +21,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => GoodsAllViewModel()),
+        ChangeNotifierProvider(create: (_) => MoviesViewModel()),
         ChangeNotifierProvider(create: (_) => SearchViewModel()),
       ],
-      child: MaterialApp.router(
-        title: 'CineMarket',
-        routerConfig: router,
-      ),
+      child: MaterialApp.router(title: 'CineMarket', routerConfig: router),
     );
   }
 }
