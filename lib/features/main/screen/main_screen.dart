@@ -14,7 +14,7 @@ class MainScreen extends StatelessWidget {
     '/wishlist',
     '/goods',
     '/home',
-    '/movies',
+    '/movieslist',
     '/mypage',
   ];
 
@@ -22,7 +22,7 @@ class MainScreen extends StatelessWidget {
     '/wishlist': '찜 목록',
     '/goods': '굿즈',
     '/home': '홈',
-    '/movies': '영화',
+    '/movieslist': '영화',
     '/mypage': '마이페이지',
   };
 
