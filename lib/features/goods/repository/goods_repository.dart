@@ -1,5 +1,5 @@
 import 'package:cinemarket/features/goods/model/goods.dart';
-import 'package:cinemarket/features/goods/services/goods_all_service.dart';
+import 'package:cinemarket/features/goods/services/goods_service.dart';
 
 class GoodsAllRepository {
   final GoodsAllService _goodsAllService;
