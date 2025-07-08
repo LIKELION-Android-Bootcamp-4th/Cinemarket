@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/features/goods/model/goods.dart';
+import 'package:cinemarket/features/home/model/tmdb_movie.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:cinemarket/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class CommonGridview<T> extends StatelessWidget {
         if (item is Goods) {
           return GestureDetector(
             onTap: () {
-              context.push('/goods/detail', extra: item);
+              context.push('/movies/${item.id}');
             },
             child: GoodsItem(
               imageUrl: item.images.main,
@@ -55,7 +56,21 @@ class CommonGridview<T> extends StatelessWidget {
           );
         }
 
-        // if (item is Movie) {}  // 추후 Movie 클래스 생성 이후
+        if (item is TmdbMovie) {
+          print(' movieName: ${item.title} , providers: ${item.providers}');
+          return GestureDetector(
+            onTap: () {
+              context.push('/goods/detail', extra: item);
+            },
+            child: MovieItem(
+              imageUrl: 'https://image.tmdb.org/t/p/w500${item.posterPath}',
+              movieName: item.title,
+              cumulativeSales: 0, //추후 판매량 데이터 연결
+              providers: item.providers,
+              isFavorite: false, //추후 즐겨찾기 연동?
+            ),
+          );
+        }
         return const SizedBox.shrink(); // 기본값
       },
     );

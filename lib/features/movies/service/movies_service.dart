@@ -15,7 +15,14 @@ class MoviesService {
       'page': 1,
     });
 
-    return _mapResults(response.data['results']);
+    final movies = _mapResults(response.data['results']);
+
+    return Future.wait(
+      movies.map((movie) async {
+        final providers = await fetchProviders(movie.id);
+        return movie.copyWithProviders(providers);
+      }),
+    );
   }
 
   Future<List<TmdbMovie>> fetchTopRatedMovies() async {
@@ -26,7 +33,14 @@ class MoviesService {
       'page': 1,
     });
 
-    return _mapResults(response.data['results']);
+    final movies = _mapResults(response.data['results']);
+
+    return Future.wait(
+      movies.map((movie) async {
+        final providers = await fetchProviders(movie.id);
+        return movie.copyWithProviders(providers);
+      }),
+    );
   }
 
   List<TmdbMovie> _mapResults(List<dynamic>? results) {
@@ -34,6 +48,34 @@ class MoviesService {
     return results
         .map((json) => TmdbMovie.fromJson(json))
         .where((movie) => movie.posterPath.isNotEmpty)
+        .toList();
+  }
+
+  Future<List<Map<String,String>>> fetchProviders(int movieId) async {
+    final response = await _dio.get(
+      '/movie/$movieId/watch/providers',
+      queryParameters: {
+        'api_key': _apiKey,
+      },
+    );
+
+    print('Providers API response for movieId=$movieId: ${response.data}');
+
+    final results = response.data['results'];
+    final krData = results?['KR'];
+
+    if (krData == null || krData['flatrate'] == null) return [];
+
+    (krData['flatrate'] as List).forEach((item) {
+      print('Provider name: ${item['provider_name']}, logo_path: ${item['logo_path']}');
+    });
+
+    return (krData['flatrate'] as List)
+        .where((item) => item['logo_path'] != null && item['provider_name'] != null)
+        .map<Map<String, String>>((item) => {
+      'providerName': item['provider_name'] as String,
+      'logoUrl': 'https://image.tmdb.org/t/p/w500${item['logo_path']}',
+    })
         .toList();
   }
 }

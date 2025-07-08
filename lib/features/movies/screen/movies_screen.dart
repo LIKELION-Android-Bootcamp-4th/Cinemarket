@@ -66,15 +66,7 @@ class MoviesScreenState extends State<MoviesScreen> {
               Expanded(
                 child: CommonGridview(
                   itemType: ItemType.movie,
-                  items: vm.movies.map((movie) {
-                    return {
-                      'imageUrl': 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                      'movieName': movie.title,
-                      'cumulativeSales': 0,
-                      'providers': <String>[],
-                      'isFavorite': false,
-                    };
-                  }).toList(),
+                  items: movies
                 ),
               ),
             ],

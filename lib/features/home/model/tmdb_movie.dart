@@ -6,6 +6,7 @@ class TmdbMovie {
   final String releaseDate;
   final double voteAverage;
   final double popularity;
+  final List<Map<String, String>> providers;
 
   TmdbMovie({
     required this.id,
@@ -15,6 +16,7 @@ class TmdbMovie {
     required this.releaseDate,
     required this.voteAverage,
     required this.popularity,
+    this.providers = const [],
   });
 
   factory TmdbMovie.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,20 @@ class TmdbMovie {
       releaseDate: json['release_date'] as String? ?? '',
       voteAverage: (json['vote_average'] ?? 0).toDouble(),
       popularity: (json['popularity'] ?? 0).toDouble(),
+      providers: [],
+    );
+  }
+
+  TmdbMovie copyWithProviders(List<Map<String, String>> newProviders) {
+    return TmdbMovie(
+      id: id,
+      title: title,
+      overview: overview,
+      posterPath: posterPath,
+      releaseDate: releaseDate,
+      voteAverage: voteAverage,
+      popularity: popularity,
+      providers: newProviders,
     );
   }
 }

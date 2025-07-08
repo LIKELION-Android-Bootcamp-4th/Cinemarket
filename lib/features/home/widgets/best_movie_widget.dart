@@ -108,7 +108,7 @@ class BestMovieWidget extends StatelessWidget {
                       imageUrl: movie['imageUrl'] as String,
                       movieName: movie['movieName'] as String,
                       cumulativeSales: movie['cumulativeSales'] as int,
-                      providers: movie['providers'] as List<String>,
+                      providers: movie['providers'] as List<Map<String,String>>,
                       isFavorite: movie['isFavorite'] as bool,
                     ),
                   ),
