@@ -19,19 +19,15 @@ class MoviesScreenState extends State<MoviesScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      if (mounted) {
-        final vm = Provider.of<MoviesViewModel>(context, listen: false);
-        vm.loadMovies();
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = context.read<MoviesViewModel>();
+      vm.loadMovies();
     });
+
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final isAvailable = Provider.of<MoviesViewModel?>(context, listen: false) != null;
-    debugPrint("✅ MoviesViewModel available in context? $isAvailable");
 
     return Consumer<MoviesViewModel>(
       builder: (context, vm, child) {
