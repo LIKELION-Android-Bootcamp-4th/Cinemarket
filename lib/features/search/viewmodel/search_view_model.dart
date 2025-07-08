@@ -1,65 +1,72 @@
 import 'package:cinemarket/features/search/model/search_goods_model.dart';
+import 'package:cinemarket/features/search/model/search_tmdb_model.dart';
 import 'package:cinemarket/features/search/repository/search_repository.dart';
-import 'package:cinemarket/features/search/service/search_goods_service.dart';
-import 'package:cinemarket/features/search/service/search_tmdb_service.dart';
+
 import 'package:flutter/material.dart';
 
 class SearchViewModel extends ChangeNotifier {
-  final SearchTmdbService _searchTmdbService;
+  final SearchRepository _repository;
 
-  final SearchGoodsService _searchGoodsService;
-
-  SearchViewModel({
-    SearchTmdbService? searchTmdbService,
-    SearchGoodsService? searchGoodsService
-  })
-      :
-        _searchTmdbService = searchTmdbService ?? SearchTmdbService(),
-        _searchGoodsService = searchGoodsService ?? SearchGoodsService();
+  SearchViewModel({SearchRepository? repository})
+      : _repository = repository ?? SearchRepository();
 
 
   bool _isLoading = false;
-  List<SearchItem> _results = [];
-  List<SearchItem> get results => _results;
-
   bool get isLoading => _isLoading;
 
-  List<SearchMovie> _tmdbResults = [];
-  List<SearchMovie> get tmdbResults => _tmdbResults;
+  List<SearchTmdbModel> _tmdbResults = [];
+  List<SearchTmdbModel> get tmdbResults => _tmdbResults;
+
+  List<SearchItem> _goodsResults = [];
+  List<SearchItem> get goodsResults => _goodsResults;
+
+
 
   Future<void> search(String keyword) async {
     _isLoading = true;
     notifyListeners();
 
-    List<SearchMovie> tmdbMovies = [];
+    List<SearchItem> fromContentId = [];
+    List<SearchItem> fromKeyword = [];
 
     try {
-      tmdbMovies = await _searchTmdbService.searchMovies(keyword);
-      _tmdbResults = tmdbMovies;
-      print('TMDB 검색 결과: ${tmdbMovies.length}개');
+      //영화 검색
+      _tmdbResults = await _repository.searchMovies(keyword);
     } catch (e) {
-      print('TMDB API 실패: $e');
+      print('TMDB 검색 실패: $e');
       _tmdbResults = [];
     }
 
     try {
-      List<SearchItem> allGoods = [];
-      for (final movie in tmdbMovies) {
+      //영화ID로  굿즈 검색
+      for (final movie in _tmdbResults) {
+        if (movie.id ==0) {
+          print('없는 movie id');
+          continue;
+        }
         try {
-          final goods = await _searchGoodsService.fetchGoodsByContentId(
-              movie.id);
-          print('🛒 ${movie.title} 굿즈 ${goods.length}개');
-          allGoods.addAll(goods);
+          final goods = await _repository.searchMovieByContentId(movie.id);
+          fromContentId.addAll(goods);
         } catch (e) {
-          print(' 굿즈 실패 (movieId: ${movie.id}): $e');
+          print('굿즈 검색 실패 (movie.id: ${movie.id}) -> 무시하고 다음');
         }
       }
-      _results = allGoods;
     } catch (e) {
       print(' 전체 굿즈 처리 실패: $e');
-      _results = [];
     }
 
+    try {
+      //키워드 기반 검색
+      fromKeyword = await _repository.searchGoodsByKeyword(keyword);
+    } catch (e) {
+      print('키워드 검색 실패 : $e');
+    }
+
+    final allGods = {
+      for (var item in [...fromContentId, ...fromKeyword]) item.id : item
+    }.values.toList();
+
+    _goodsResults = allGods;
     _isLoading = false;
     notifyListeners();
   }
