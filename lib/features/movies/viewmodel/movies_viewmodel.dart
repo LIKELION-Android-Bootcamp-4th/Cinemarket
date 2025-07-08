@@ -34,31 +34,45 @@ class MoviesViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
+  int _currentPage = 1;
+  bool _hasMore = true;
+
   List<TmdbMovie> get movies => _movies;
   MovieSortType get sortType => _sortType;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-
+  bool get hasMore => _hasMore;
   String get sortLabel => _sortType.label;
 
   void changeSortTypeFromLabel(String label) {
     final newSortType = MovieSortTypeExtension.fromLabel(label);
     if (newSortType == _sortType) return;
 
-    print('🔁 sort type changing: $_sortType → $newSortType');
-
     _sortType = newSortType;
+
+    _movies.clear();
+    _currentPage = 1;
+    _hasMore = true;
+
     loadMovies();
   }
 
   Future<void> loadMovies() async {
+    if (_isLoading || !_hasMore) {
+      return;
+    }
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final result = await _repository.fetchMovies(_sortType);
-      _movies = result;
+      final result = await _repository.fetchMovies(_sortType, page: _currentPage);
+      if (result.isEmpty) {
+        _hasMore = false;
+      } else {
+        _movies.addAll(result);
+        _currentPage++;
+      }
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

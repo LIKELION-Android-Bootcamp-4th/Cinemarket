@@ -10,12 +10,12 @@ class MoviesService {
   final String _apiKey = dotenv.env['TMDB_API_KEY'] ?? '';
 
   //최신순 데이터 통신
-  Future<List<TmdbMovie>> fetchNowPlayingMovies() async {
+  Future<List<TmdbMovie>> fetchNowPlayingMovies({int page = 1}) async {
     final response = await _dio.get('/movie/now_playing', queryParameters: {
       'api_key': _apiKey,
       'language': 'ko-KR',
       'region': 'KR',
-      'page': 1,
+      'page': page,
     });
 
     final movies = _mapResults(response.data['results']);
@@ -29,7 +29,7 @@ class MoviesService {
   }
 
   //평점순 데이터 통신
-  Future<List<TmdbMovie>> fetchTopRatedMovies() async {
+  Future<List<TmdbMovie>> fetchTopRatedMovies({int page = 1}) async {
     final response = await _dio.get('/discover/movie', queryParameters: {
       'api_key': _apiKey,
       'language': 'ko-KR',
@@ -37,7 +37,7 @@ class MoviesService {
       'sort_by': 'vote_average.desc',
       'vote_count.gte': 10000, //1000표 이상 받은 인기 영화만 필터링.
       'primary_release_date.gte': '${DateTime.now().year - 10}-01-01',
-      'page': 1,
+      'page': page,
     });
     print(response.data['results']);
 

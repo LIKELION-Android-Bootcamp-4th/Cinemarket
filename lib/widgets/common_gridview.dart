@@ -11,12 +11,14 @@ class CommonGridview<T> extends StatelessWidget {
   final List<T> items;
   final ItemType itemType;
   final bool isInScrollView;
+  final ScrollController? scrollController;
 
   const CommonGridview({
     super.key,
     required this.itemType,
     required this.items,
     this.isInScrollView = false,
+    this.scrollController, // ✅ 추가
   });
 
   @override
@@ -27,6 +29,7 @@ class CommonGridview<T> extends StatelessWidget {
     };
 
     return GridView.builder(
+      controller: scrollController,
       shrinkWrap: isInScrollView,
       physics: isInScrollView ? const NeverScrollableScrollPhysics() : null,
       itemCount: items.length,
