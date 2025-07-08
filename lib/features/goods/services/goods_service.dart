@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/network/api_client.dart';
-import 'package:cinemarket/features/goods/model/goods_response.dart';
+import 'package:cinemarket/features/goods/model/goods_all_response.dart';
+import 'package:cinemarket/features/goods/model/goods_detail_response.dart';
 import 'package:dio/dio.dart';
 
 class GoodsService {
@@ -13,7 +14,7 @@ class GoodsService {
     String? search,
     String? sortBy,
     String sortOrder = 'desc',
-}) async {
+  }) async {
     try {
       final response = await _dio.get(
         '/api/products',
@@ -32,6 +33,20 @@ class GoodsService {
     } on DioException catch (e) {
       final message = e.response?.data['message'] ?? e.message;
       throw Exception('상품 조회 실패: $message');
+    }
+  }
+
+  Future<GoodsDetailResponse> getDetailGoods({required String? goodsId}) async {
+    try {
+      final respones = await _dio.get(
+        '/api/products/$goodsId',
+      );
+
+      return GoodsDetailResponse.fromJson(respones.data);
+    } on DioException catch (e, stackTrace) {
+      final message = e.response?.data['message'] ?? e.message;
+
+      Error.throwWithStackTrace(Exception('상품상세 조회 실패: $message'), stackTrace);
     }
   }
 }

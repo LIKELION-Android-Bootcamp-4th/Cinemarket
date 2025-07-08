@@ -1,11 +1,11 @@
 import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/services/goods_service.dart';
 
-class GoodsAllRepository {
-  final GoodsAllService _goodsAllService;
+class GoodsRepository {
+  final GoodsService _goodsService;
 
-  GoodsAllRepository({GoodsAllService? goodsAllService})
-    : _goodsAllService = goodsAllService ?? GoodsAllService();
+  GoodsRepository({GoodsService? goodsAllService})
+    : _goodsService = goodsAllService ?? GoodsService();
 
   Future<List<Goods>> getAllGoodsList({
     int page = 1,
@@ -16,7 +16,7 @@ class GoodsAllRepository {
     String? sortBy,
     String sortOrder = 'desc',
   }) async {
-    final result = await _goodsAllService.getAllGoods(
+    final result = await _goodsService.getAllGoods(
       page: page,
       limit: limit,
       categoryId: categoryId,
@@ -27,5 +27,13 @@ class GoodsAllRepository {
     );
 
     return result.items;
+  }
+
+  Future<Goods> getDetailGoods({
+    required String goodsId,
+  }) async {
+    final result = await _goodsService.getDetailGoods(goodsId: goodsId,);
+
+    return result.data;
   }
 }
