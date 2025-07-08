@@ -9,7 +9,7 @@ class ApiClient {
       receiveTimeout: const Duration(seconds: 5),
       headers: {
         'Content-Type': 'application/json',
-        'X-Company-Code': '685f69fc439922c09c21aef0',
+        'X-Company-Code': '6866fd245b230f5dc709bdf3',
       },
     )
   )..interceptors.addAll([
@@ -22,14 +22,14 @@ class ApiClient {
         return handler.next(options);
       },
     ),
-    PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-      error: true,
-      compact: true,
-      maxWidth: 120,
-    ),
+    // PrettyDioLogger(
+    //   requestHeader: true,
+    //   requestBody: true,
+    //   responseBody: true,
+    //   responseHeader: false,
+    //   error: true,
+    //   compact: true,
+    //   maxWidth: 120,
+    // ),
   ]);
 }

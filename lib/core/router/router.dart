@@ -2,7 +2,7 @@ import 'package:cinemarket/features/cart/screen/cart_screen.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/features/favorite/screen/favorite_screen.dart';
 import 'package:cinemarket/features/goods/screen/goods_detail_screen.dart';
-import 'package:cinemarket/features/goods/screen/goods_screen.dart';
+import 'package:cinemarket/features/goods/screen/goods_all_screen.dart';
 import 'package:cinemarket/features/goods/screen/goods_review_screen.dart';
 import 'package:cinemarket/features/home/screen/home_screen.dart';
 import 'package:cinemarket/features/login/screen/login_screen.dart';
@@ -33,7 +33,7 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: '/goods',
-          builder: (context, state) => const GoodsScreen(),
+          builder: (context, state) => const GoodsAllScreen(),
         ),
         GoRoute(
           path: '/home',
