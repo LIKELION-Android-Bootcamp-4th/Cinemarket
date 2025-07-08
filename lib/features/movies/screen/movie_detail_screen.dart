@@ -78,7 +78,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     ),
                     CommonGridview(
                       itemType: ItemType.goods,
-                      items: dummyGoods,
+                      // items: dummyGoods,
+                      items: [],
                     ),
                     const CastGridView(
                       castList: [

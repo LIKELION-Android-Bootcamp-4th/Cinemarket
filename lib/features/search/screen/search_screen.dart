@@ -51,7 +51,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _handleSearch(String query) {
     setState(() {
-      if (query.trim().isEmpty) {
+      if (query
+          .trim()
+          .isEmpty) {
         hasSearched = false;
         goodsResults = [];
         movieResults = [];
@@ -61,17 +63,19 @@ class _SearchScreenState extends State<SearchScreen> {
       hasSearched = true;
 
       goodsResults = dummyGoods
-          .where((item) => item['goodsName']
-          .toString()
-          .toLowerCase()
-          .contains(query.toLowerCase()))
+          .where((item) =>
+          item['goodsName']
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase()))
           .toList();
 
       movieResults = dummyMovies
-          .where((item) => item['movieName']
-          .toString()
-          .toLowerCase()
-          .contains(query.toLowerCase()))
+          .where((item) =>
+          item['movieName']
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase()))
           .toList();
 
       print('goodsResults: ${goodsResults.length}');
@@ -113,20 +117,22 @@ class _SearchScreenState extends State<SearchScreen> {
                       height: 100,
                       child: SearchEmptyResultText(),
                     )
-                  else if (goodsResults.isEmpty)
-                    const SizedBox(
-                      height: 100,
-                      child: SearchEmptyResultText(),
-                    )
                   else
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: CommonGridview(
-                        items: goodsResults,
-                        itemType: ItemType.goods,
-                        isInScrollView: true,
+                    if (goodsResults.isEmpty)
+                      const SizedBox(
+                        height: 100,
+                        child: SearchEmptyResultText(),
+                      )
+                    else
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: CommonGridview(
+                          // items: goodsResults,
+                          items: [],
+                          itemType: ItemType.goods,
+                          isInScrollView: true,
+                        ),
                       ),
-                    ),
 
                   const SizedBox(height: 24),
 
@@ -136,20 +142,22 @@ class _SearchScreenState extends State<SearchScreen> {
                       height: 100,
                       child: SearchEmptyResultText(),
                     )
-                  else if (movieResults.isEmpty)
-                    const SizedBox(
-                      height: 100,
-                      child: SearchEmptyResultText(),
-                    )
                   else
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: CommonGridview(
-                        items: movieResults,
-                        itemType: ItemType.movie,
-                        isInScrollView: true,
+                    if (movieResults.isEmpty)
+                      const SizedBox(
+                        height: 100,
+                        child: SearchEmptyResultText(),
+                      )
+                    else
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: CommonGridview(
+                          // items: movieResults,
+                          items: [],
+                          itemType: ItemType.movie,
+                          isInScrollView: true,
+                        ),
                       ),
-                    ),
                 ],
               ),
             )

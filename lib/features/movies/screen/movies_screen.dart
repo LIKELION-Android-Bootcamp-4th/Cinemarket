@@ -38,7 +38,8 @@ class MoviesScreen extends StatelessWidget {
           Expanded(
             child: CommonGridview(
               itemType: ItemType.movie,
-              items: dummyMovies,
+              // items: dummyMovies,
+              items: [],
             ),
           ),
         ],
