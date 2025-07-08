@@ -1,5 +1,4 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
-import 'package:cinemarket/features/movies/repository/movies_repository.dart';
 import 'package:cinemarket/features/movies/viewmodel/movies_viewmodel.dart';
 import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/widgets/sort_dropdown.dart';
@@ -9,23 +8,33 @@ import 'package:provider/provider.dart';
 class MoviesScreen extends StatefulWidget {
   const MoviesScreen({super.key});
 
+
   @override
-  State<MoviesScreen> createState() => _MoviesScreenState();
+  State<MoviesScreen> createState() => MoviesScreenState();
 }
 
-class _MoviesScreenState extends State<MoviesScreen> {
+class MoviesScreenState extends State<MoviesScreen> {
+
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<MoviesViewModel>().loadMovies();
+    Future.delayed(Duration.zero, () {
+      if (mounted) {
+        final vm = Provider.of<MoviesViewModel>(context, listen: false);
+        vm.loadMovies();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    final isAvailable = Provider.of<MoviesViewModel?>(context, listen: false) != null;
+    debugPrint("✅ MoviesViewModel available in context? $isAvailable");
+
     return Consumer<MoviesViewModel>(
-      builder: (context, vm, _) {
+      builder: (context, vm, child) {
         if (vm.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -38,6 +47,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
           return const Center(child: Text('영화 데이터가 없습니다.'));
         }
 
+        final movies = vm.movies;
         return Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -65,7 +75,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                       'imageUrl': 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                       'movieName': movie.title,
                       'cumulativeSales': 0,
-                      'providers': [],
+                      'providers': <String>[],
                       'isFavorite': false,
                     };
                   }).toList(),

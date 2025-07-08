@@ -74,7 +74,7 @@ class _SortDropdownState extends State<SortDropdown> {
           setState(() {
             selected = value!;
           });
-          widget.onSelected?.call(value!); // 외부에 콜백 발행
+          widget.onSelected?.call(value!);
         },
         buttonStyleData: ButtonStyleData(
           padding: const EdgeInsets.only(left: 0, right: 4),

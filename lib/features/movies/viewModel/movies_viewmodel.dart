@@ -28,7 +28,7 @@ extension MovieSortTypeExtension on MovieSortType {
 class MoviesViewModel extends ChangeNotifier {
   final MoviesRepository _repository = MoviesRepository();
 
-  // 상태는 private으로 관리하고, getter만 공개
+
   List<TmdbMovie> _movies = [];
   MovieSortType _sortType = MovieSortType.latest;
   bool _isLoading = false;
