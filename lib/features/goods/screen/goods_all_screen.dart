@@ -12,7 +12,7 @@ class GoodsAllScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final viewModel = context.watch<GoodsAllViewModel>();
+    final viewModel = context.read<GoodsAllViewModel>();
     viewModel.getAllGoods();
 
     return Padding(
