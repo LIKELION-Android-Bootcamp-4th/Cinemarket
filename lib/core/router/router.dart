@@ -1,6 +1,7 @@
 import 'package:cinemarket/features/cart/screen/cart_screen.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/features/favorite/screen/favorite_screen.dart';
+import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/screen/goods_detail_screen.dart';
 import 'package:cinemarket/features/goods/screen/goods_all_screen.dart';
 import 'package:cinemarket/features/goods/screen/goods_review_screen.dart';
@@ -57,10 +58,10 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const CartScreen()
     ),
     GoRoute(
-      path: '/goods/detail',
+      path: '/goods/:goodsId',
       builder: (context, state) {
-        final item = state.extra as Map<String, dynamic>;
-        return GoodsDetailScreen(item: item);
+        final goodsId = state.pathParameters['goodsId']!;
+        return GoodsDetailScreen(goodsId: goodsId,);
       },
     ),
     GoRoute(
