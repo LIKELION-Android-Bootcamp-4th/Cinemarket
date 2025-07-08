@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class SearchItem {
   final String id;
   final String name;
