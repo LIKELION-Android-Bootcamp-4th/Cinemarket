@@ -9,16 +9,13 @@ class LoginViewModel extends ChangeNotifier {
   LoginViewModel({AuthRepository? authRepository})
       : _authRepository = authRepository ?? AuthRepository();
 
-  bool _isLoading = false;
   String? _error;
   Map<String, dynamic>? _loginResult;
 
-  bool get isLoading => _isLoading;
   String? get error => _error;
   Map<String, dynamic>? get loginResult => _loginResult;
 
   Future<void> login(String email, String password) async {
-    _isLoading = true;
     _error = null;
     notifyListeners();
 
@@ -34,7 +31,6 @@ class LoginViewModel extends ChangeNotifier {
     } catch (e) {
       _error = '이메일이나 비밀번호가 일치하지 않습니다.';
     } finally {
-      _isLoading = false;
       notifyListeners();
     }
   }

@@ -8,14 +8,12 @@ class MyPageViewModel extends ChangeNotifier {
   MyPageViewModel({AuthRepository? authRepository})
       : _authRepository = authRepository ?? AuthRepository();
 
-  bool _isLoading = false;
   bool _hasToken = false;
   String? _nickname;
   String? _email;
   String? _profileImage;
   String? _error;
 
-  bool get isLoading => _isLoading;
   bool get hasToken => _hasToken;
   String? get nickname => _nickname;
   String? get email => _email;
@@ -29,7 +27,6 @@ class MyPageViewModel extends ChangeNotifier {
 
   // 토큰 확인 및 프로필 로드
   Future<void> _checkTokenAndLoadProfile() async {
-    _isLoading = true;
     notifyListeners();
 
     try {
@@ -44,7 +41,6 @@ class MyPageViewModel extends ChangeNotifier {
       _error = '토큰 확인 중 오류가 발생했습니다.';
       print('토큰 확인 실패: $e');
     } finally {
-      _isLoading = false;
       notifyListeners();
     }
   }
@@ -63,7 +59,6 @@ class MyPageViewModel extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    _isLoading = true;
     notifyListeners();
 
     try {
@@ -77,7 +72,6 @@ class MyPageViewModel extends ChangeNotifier {
       _error = '로그아웃 중 오류가 발생했습니다.';
       print('로그아웃 실패: $e');
     } finally {
-      _isLoading = false;
       notifyListeners();
     }
   }
