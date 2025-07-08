@@ -19,6 +19,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nickNameController = TextEditingController();
   bool _hasSignUp = false;
+  bool _hasVaildEmail = false;
+  //테스트용 true
+  bool _hasVaildNickName = true;
 
   @override
   void dispose() {
@@ -173,6 +176,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       type: ToastificationType.info,
                     );
                   } else {
+                    _hasVaildEmail = true;
                     CommonToast.show(
                       context: context,
                       message: "사용 가능한 이메일 입니다.",
@@ -271,6 +275,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       type: ToastificationType.info,
                     );
                   } else {
+                    _hasVaildNickName = true;
                     CommonToast.show(
                       context: context,
                       message: "사용 가능한 닉네임 입니다.",
@@ -300,9 +305,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  _hasSignUp = true;
-                });
+                if (_hasVaildEmail && _hasVaildNickName) {
+                  setState(() {
+                    _hasSignUp = true;
+                  });
+                } else {
+                  CommonToast.show(
+                    context: context,
+                    message: "이메일과 닉네임 중복체크를 해주세요.",
+                    type: ToastificationType.info,
+                  );
+                }
+
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.widgetBackground,
