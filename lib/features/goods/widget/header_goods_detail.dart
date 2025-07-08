@@ -53,7 +53,7 @@ class HeaderGoodsDetail extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.star_rate, color: Colors.yellow, size: 16),
-                    Text("${item['rating']}", style: AppTextStyle.bodySmall),
+                    Text('${item.reviewStats?.averageRating}', style: AppTextStyle.bodySmall),
                   ],
                 ),
 

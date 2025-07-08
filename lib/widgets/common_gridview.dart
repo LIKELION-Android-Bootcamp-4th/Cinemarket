@@ -48,7 +48,7 @@ class CommonGridview<T> extends StatelessWidget {
               goodsName: item.name,
               movieName: item.id,
               price: '${item.price} 원',
-              rating: item.reviewStats.averageRating,
+              rating: item.reviewStats!.averageRating,
               reviewCount: item.reviewCount,
               isFavorite: item.isFavorite,
             ),
