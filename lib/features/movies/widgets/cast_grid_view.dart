@@ -1,8 +1,9 @@
+import 'package:cinemarket/features/movies/model/cast_member.dart';
 import 'package:cinemarket/features/movies/widgets/cast_item.dart';
 import 'package:flutter/material.dart';
 
 class CastGridView extends StatelessWidget {
-  final List<Map<String, String>> castList;
+  final List<CastMember> castList;
 
   const CastGridView({super.key, required this.castList});
 
@@ -20,8 +21,9 @@ class CastGridView extends StatelessWidget {
       itemBuilder: (context, index) {
         final cast = castList[index];
         return CastItem(
-          imageUrl: cast['imageUrl'] ?? '',
-          name: cast['name'] ?? '',
+          imageUrl: 'https://image.tmdb.org/t/p/w500${cast.profilePath}',
+          name: cast.name,
+          character: cast.character,
         );
       },
     );

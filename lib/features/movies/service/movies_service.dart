@@ -1,5 +1,7 @@
 import 'package:cinemarket/core/network/tmdb_client.dart';
 import 'package:cinemarket/features/home/model/tmdb_movie.dart';
+import 'package:cinemarket/features/movies/model/cast_member.dart';
+import 'package:cinemarket/features/movies/model/tmdb_movie_detail.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -7,6 +9,7 @@ class MoviesService {
   final Dio _dio = TmdbClient.dio;
   final String _apiKey = dotenv.env['TMDB_API_KEY'] ?? '';
 
+  //최신순 데이터 통신
   Future<List<TmdbMovie>> fetchNowPlayingMovies() async {
     final response = await _dio.get('/movie/now_playing', queryParameters: {
       'api_key': _apiKey,
@@ -25,6 +28,7 @@ class MoviesService {
     );
   }
 
+  //평점순 데이터 통신
   Future<List<TmdbMovie>> fetchTopRatedMovies() async {
     final response = await _dio.get('/movie/top_rated', queryParameters: {
       'api_key': _apiKey,
@@ -51,6 +55,7 @@ class MoviesService {
         .toList();
   }
 
+  //OTT 제공 이미지 통신
   Future<List<Map<String,String>>> fetchProviders(int movieId) async {
     final response = await _dio.get(
       '/movie/$movieId/watch/providers',
@@ -72,4 +77,33 @@ class MoviesService {
     })
         .toList();
   }
+
+  //영화 상세 관련 통신
+  Future<TmdbMovieDetail> fetchMovieDetail(int movieId) async {
+    final response = await _dio.get(
+      '/movie/$movieId',
+      queryParameters: {
+        'api_key': _apiKey,
+        'language': 'ko-KR',
+      },
+    );
+
+    return TmdbMovieDetail.fromJson(response.data);
+  }
+
+  //출연진 정보
+  Future<List<CastMember>> fetchMovieCredits(int movieId) async {
+    final response = await _dio.get(
+      '/movie/$movieId/credits',
+      queryParameters: {
+        'api_key': _apiKey,
+        'language': 'ko-KR',
+      },
+    );
+
+    final castList = response.data['cast'] as List;
+    return castList.map((json) => CastMember.fromJson(json)).toList();
+  }
+
+
 }
