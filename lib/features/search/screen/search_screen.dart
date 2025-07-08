@@ -127,7 +127,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: CommonGridview(
-                          items: goodsResults,
+                          // items: goodsResults,
+                          items: [],
                           itemType: ItemType.goods,
                           isInScrollView: true,
                         ),
@@ -151,7 +152,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: CommonGridview(
-                          items: movieResults,
+                          // items: movieResults,
+                          items: [],
                           itemType: ItemType.movie,
                           isInScrollView: true,
                         ),

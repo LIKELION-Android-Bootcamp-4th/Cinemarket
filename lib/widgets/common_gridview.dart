@@ -1,11 +1,13 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
+import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:cinemarket/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class CommonGridview extends StatelessWidget {
-  final List<Map<String, dynamic>> items;
+class CommonGridview<T> extends StatelessWidget {
+  // final List<Map<String, dynamic>> items;
+  final List<T> items;
   final ItemType itemType;
   final bool isInScrollView;
 
@@ -36,35 +38,25 @@ class CommonGridview extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items[index];
 
-        switch (itemType) {
-          case ItemType.goods:
-            return GestureDetector(
-              onTap: () {
-                context.push(
-                  '/goods/detail',
-                  extra: item, // dummyGoods[index]
-                );
-              },
-              child: GoodsItem(
-                imageUrl: item['imageUrl'],
-                goodsName: item['goodsName'],
-                movieName: item['movieName'],
-                price: item['price'],
-                rating: item['rating'],
-                reviewCount: item['reviewCount'],
-                isFavorite: item['isFavorite'],
-              ),
-            );
-
-          case ItemType.movie:
-            return MovieItem(
-              imageUrl: item['imageUrl'],
-              movieName: item['movieName'],
-              cumulativeSales: item['cumulativeSales'],
-              providers: item['providers'],
-              isFavorite: item['isFavorite'],
-            );
+        if (item is Goods) {
+          return GestureDetector(
+            onTap: () {
+              context.push('/goods/detail', extra: item);
+            },
+            child: GoodsItem(
+              imageUrl: item.images.main,
+              goodsName: item.name,
+              movieName: item.id,
+              price: '${item.price} 원',
+              rating: item.reviewStats.averageRating,
+              reviewCount: item.reviewCount,
+              isFavorite: item.isFavorite,
+            ),
+          );
         }
+
+        // if (item is Movie) {}  // 추후 Movie 클래스 생성 이후
+        return const SizedBox.shrink(); // 기본값
       },
     );
   }
