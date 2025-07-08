@@ -20,6 +20,7 @@ import 'package:go_router/go_router.dart';
 
 
 final GoRouter router = GoRouter(
+  debugLogDiagnostics: true,
   initialLocation: '/home',
   routes: [
     ShellRoute(
@@ -40,7 +41,7 @@ final GoRouter router = GoRouter(
           builder: (context, state) => const HomeScreen(),
         ),
         GoRoute(
-          path: '/movies',
+          path: '/movieslist',
           builder: (context, state) => const MoviesScreen(),
         ),
         GoRoute(

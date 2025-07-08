@@ -1,10 +1,13 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:cinemarket/features/search/model/search_tmdb_model.dart';
+import 'package:cinemarket/features/search/viewmodel/search_view_model.dart';
 import 'package:cinemarket/features/search/widgets/search_app_bar.dart';
 import 'package:cinemarket/features/search/widgets/search_empty_result.dart';
 import 'package:cinemarket/features/search/widgets/search_section_title.dart';
 import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,81 +16,24 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool hasSearched = false;
 
-  final List<Map<String, dynamic>> dummyGoods = List.generate(10, (i) {
-    return {
-      'imageUrl':
-      'https://i.ebayimg.com/images/g/64YAAOSwDqhnttak/s-l1200.png',
-      'goodsName': '굿즈 ${i + 1}',
-      'movieName': '관련 영화',
-      'price': '${(i + 1) * 1000}원',
-      'rating': 4.5,
-      'reviewCount': 10,
-      'isFavorite': false,
-    };
-  });
+  void _handleSearch(String query) async {
+    if (query.trim().isEmpty) {
+      setState(() => hasSearched = false);
+      return;
+    }
 
-  final List<Map<String, dynamic>> dummyMovies = List.generate(10, (i) {
-    return {
-      'imageUrl':
-      'https://image.tmdb.org/t/p/original/vqBmyAj0Xm9LnS1xe1MSlMAJyHq.jpg',
-      'movieName': '영화 ${i + 1}',
-      'cumulativeSales': (i + 1) * 100,
-      'providers': [
-        'https://image.tmdb.org/t/p/original/hPcjSaWfMwEqXaCMu7Fkb529Dkc.jpg',
-        'https://image.tmdb.org/t/p/original/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg',
-        'https://image.tmdb.org/t/p/original/97yvRBw1GzX7fXprcF80er19ot.jpg',
-      ],
-      'isFavorite': false,
-    };
-  });
-
-  List<Map<String, dynamic>> goodsResults = [];
-  List<Map<String, dynamic>> movieResults = [];
-
-  void _handleSearch(String query) {
-    setState(() {
-      if (query
-          .trim()
-          .isEmpty) {
-        hasSearched = false;
-        goodsResults = [];
-        movieResults = [];
-        return;
-      }
-
-      hasSearched = true;
-
-      goodsResults = dummyGoods
-          .where((item) =>
-          item['goodsName']
-              .toString()
-              .toLowerCase()
-              .contains(query.toLowerCase()))
-          .toList();
-
-      movieResults = dummyMovies
-          .where((item) =>
-          item['movieName']
-              .toString()
-              .toLowerCase()
-              .contains(query.toLowerCase()))
-          .toList();
-
-      print('goodsResults: ${goodsResults.length}');
-    });
+    setState(() => hasSearched = true);
+    await context.read<SearchViewModel>().search(query);
   }
 
   void _handleBack() {
     if (hasSearched) {
       setState(() {
         hasSearched = false;
-        goodsResults = [];
-        movieResults = [];
         _searchController.clear();
       });
     } else {
@@ -97,6 +43,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<SearchViewModel>();
+    final movieResults = viewModel.tmdbResults;
+    final goodsResults = viewModel.goodsResults;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -108,59 +58,63 @@ class _SearchScreenState extends State<SearchScreen> {
               onBack: _handleBack,
             ),
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: 32),
-                children: [
-                  const SearchSectionTitle(title: '굿즈'),
-                  if (!hasSearched)
-                    const SizedBox(
-                      height: 100,
-                      child: SearchEmptyResultText(),
-                    )
-                  else
-                    if (goodsResults.isEmpty)
-                      const SizedBox(
-                        height: 100,
-                        child: SearchEmptyResultText(),
-                      )
-                    else
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: CommonGridview(
-                          // items: goodsResults,
-                          items: [],
-                          itemType: ItemType.goods,
-                          isInScrollView: true,
+              child:
+                  viewModel.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
                         ),
+                        children: [
+                          const SearchSectionTitle(title: '굿즈'),
+                          if (!hasSearched || goodsResults.isEmpty)
+                            const SearchEmptyResultText()
+                          else
+                            CommonGridview(
+                              items:
+                                  goodsResults
+                                      .map(
+                                        (item) => {
+                                          'imageUrl': item.mainImage,
+                                          'goodsName': item.name,
+                                          'movieName': item.description,
+                                          'price': '${item.price}원',
+                                          'rating': 0.0,
+                                          'reviewCount': 0,
+                                          'isFavorite': false,
+                                        },
+                                      )
+                                      .toList(),
+                              itemType: ItemType.goods,
+                              isInScrollView: true,
+                            ),
+                          const SizedBox(height: 24),
+                          const SearchSectionTitle(title: '영화'),
+                          if (!hasSearched || movieResults.isEmpty)
+                            const SearchEmptyResultText()
+                          else
+                            CommonGridview(
+                              items:
+                                  movieResults.map(
+                                        (movie) => {
+                                          'imageUrl':
+                                              movie.posterPath.isNotEmpty
+                                                  ? 'https://image.tmdb.org/t/p/original/${movie.posterPath}'
+                                                  : '',
+                                          'movieName': movie.title,
+                                          'cumulativeSales': 0,
+                                          'providers': <String>[],
+                                          'isFavorite': false,
+                                        },
+                                      )
+                                      .toList(),
+                              itemType: ItemType.movie,
+                              isInScrollView: true,
+                            ),
+                        ],
                       ),
-
-                  const SizedBox(height: 24),
-
-                  const SearchSectionTitle(title: '영화'),
-                  if (!hasSearched)
-                    const SizedBox(
-                      height: 100,
-                      child: SearchEmptyResultText(),
-                    )
-                  else
-                    if (movieResults.isEmpty)
-                      const SizedBox(
-                        height: 100,
-                        child: SearchEmptyResultText(),
-                      )
-                    else
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: CommonGridview(
-                          // items: movieResults,
-                          items: [],
-                          itemType: ItemType.movie,
-                          isInScrollView: true,
-                        ),
-                      ),
-                ],
-              ),
-            )
+            ),
           ],
         ),
       ),

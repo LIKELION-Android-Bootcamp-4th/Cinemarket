@@ -1,49 +1,78 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
+import 'package:cinemarket/features/movies/viewmodel/movies_viewmodel.dart';
 import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/widgets/sort_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MoviesScreen extends StatelessWidget {
+class MoviesScreen extends StatefulWidget {
   const MoviesScreen({super.key});
+
+
+  @override
+  State<MoviesScreen> createState() => MoviesScreenState();
+}
+
+class MoviesScreenState extends State<MoviesScreen> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = context.read<MoviesViewModel>();
+      vm.loadMovies();
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> dummyMovies = List.generate(10, (i) {
-      return {
-        'imageUrl':
-            'https://image.tmdb.org/t/p/original/vqBmyAj0Xm9LnS1xe1MSlMAJyHq.jpg',
-        'movieName': '영화 ${i + 1}',
-        'cumulativeSales': (i + 1) * 100,
-        'providers': [
-          'https://image.tmdb.org/t/p/original/hPcjSaWfMwEqXaCMu7Fkb529Dkc.jpg',
-          'https://image.tmdb.org/t/p/original/8z7rC8uIDaTM91X0ZfkRf04ydj2.jpg',
-          'https://image.tmdb.org/t/p/original/97yvRBw1GzX7fXprcF80er19ot.jpg',
-        ],
-        'isFavorite': false,
-      };
-    });
 
-    return Padding(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: [
-          const Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.only(right: 4),
-              child: SortDropdown(itemType: ItemType.movie),
-            ),
+    return Consumer<MoviesViewModel>(
+      builder: (context, vm, child) {
+        if (vm.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (vm.errorMessage != null) {
+          return Center(child: Text('에러 발생: ${vm.errorMessage}'));
+        }
+
+        if (vm.movies.isEmpty) {
+          return const Center(child: Text('영화 데이터가 없습니다.'));
+        }
+
+        final movies = vm.movies;
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: SortDropdown(
+                  itemType: ItemType.movie,
+                  selectedValue: vm.sortType.label,
+                  onSelected: (sortType) {
+                    if (sortType == '최신순') {
+                      vm.changeSortTypeFromLabel('최신순');
+                    } else if (sortType == '평점순') {
+                      vm.changeSortTypeFromLabel('평점순');
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: CommonGridview(
+                  itemType: ItemType.movie,
+                  items: movies
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: CommonGridview(
-              itemType: ItemType.movie,
-              // items: dummyMovies,
-              items: [],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
