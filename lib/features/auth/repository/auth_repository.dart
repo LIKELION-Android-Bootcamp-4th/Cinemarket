@@ -9,11 +9,10 @@ class AuthRepository {
       : _authService = authService ?? AuthService();
 
   Future<Response> login(LoginRequest request) async {
-    // 1. AuthService의 login 메서드 호출 (실제 네트워크 요청)
     return await _authService.login(request);
   }
 
-  Future<Response> logout() async {
-    return await _authService.logout();
+  Future<Response> getProfile(String accessToken) async {
+    return await _authService.getProfile(accessToken);
   }
 }

@@ -1,11 +1,11 @@
+import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
-import 'package:cinemarket/features/auth/repository/auth_repository.dart';
-import 'package:cinemarket/core/storage/token_storage.dart';
+import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -15,7 +15,26 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  bool _hasToken = true;
+  late MyPageViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = MyPageViewModel();
+    _viewModel.addListener(_onViewModelChanged);
+    _viewModel.initialize();
+  }
+
+  @override
+  void dispose() {
+    _viewModel.removeListener(_onViewModelChanged);
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  void _onViewModelChanged() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +49,10 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   horizontal: 24.0,
                   vertical: 32.0,
                 ),
-                //_hasToken 값에 따라 보여지는 뷰 선택
-                child: _hasToken ? _buildLoggedInView() : _buildLoggedOutView(),
+                child:
+                    _viewModel.hasToken
+                        ? _buildLoggedInView()
+                        : _buildLoggedOutView(),
               ),
             ),
           ],
@@ -44,16 +65,68 @@ class _MyPageScreenState extends State<MyPageScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Row(
+        Row(
           children: [
-            CircleAvatar(radius: 40, backgroundColor: Color(0xFF292929)),
-            SizedBox(width: 20),
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.widgetBackground,
+              ),
+              child:
+                  _viewModel.profileImage != null &&
+                          _viewModel.profileImage!.isNotEmpty
+                      ? ClipOval(
+                        child: Image.network(
+                          _viewModel.profileImage!,
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.widgetBackground,
+                              ),
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 40,
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                      : Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.widgetBackground,
+                        ),
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+            ),
+            const SizedBox(width: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('nickName', style: AppTextStyle.headline),
-                SizedBox(height: 4),
-                Text('user@example.com', style: AppTextStyle.headline),
+                Text(
+                  _viewModel.nickname ?? 'nickName',
+                  style: AppTextStyle.headline,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _viewModel.email ?? 'user@example.com',
+                  style: AppTextStyle.headline,
+                ),
               ],
             ),
           ],
@@ -91,7 +164,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
               context: context,
               builder: (BuildContext dialogContext) {
                 return AlertDialog(
-                  backgroundColor: Color(0xFF292929),
+                  backgroundColor: AppColors.widgetBackground,
                   title: Text(
                     '로그아웃',
                     style: TextStyle(color: Colors.white, fontSize: 16.0),
@@ -123,15 +196,18 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             onPressed: () async {
                               Navigator.of(dialogContext).pop();
                               try {
-                                final repo = AuthRepository();
-                                await repo.logout();
-                                await TokenStorage.clearTokens();
-                                setState(() {
-                                  _hasToken = false;
-                                });
-                                CommonToast.show(context: context, message: "로그아웃 되었습니다.", type: ToastificationType.success);
+                                await _viewModel.logout();
+                                CommonToast.show(
+                                  context: context,
+                                  message: "로그아웃 되었습니다.",
+                                  type: ToastificationType.success,
+                                );
                               } catch (e) {
-                                CommonToast.show(context: context, message: "로그아웃 실패: $e", type: ToastificationType.error);
+                                CommonToast.show(
+                                  context: context,
+                                  message: "로그아웃 실패: $e",
+                                  type: ToastificationType.error,
+                                );
                               }
                             },
                           ),
@@ -156,17 +232,11 @@ class _MyPageScreenState extends State<MyPageScreen> {
           title: '로그인하기',
           textStyle: AppTextStyle.headline,
           onTap: () {
-            /*setState(() {
-              _hasToken = true;
-            });*/
-            //todo 로그인 API
             print('로그인하기 클릭');
             context.push(
               '/login',
               extra: () {
-                setState(() {
-                  _hasToken = true;
-                });
+                _viewModel.onLoginSuccess();
               },
             );
           },

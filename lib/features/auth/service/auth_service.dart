@@ -1,4 +1,5 @@
 import 'package:cinemarket/core/network/api_client.dart';
+import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/features/auth/model/login_request.dart';
 import 'package:dio/dio.dart';
 
@@ -7,7 +8,6 @@ class AuthService {
 
   Future<Response> login(LoginRequest request) async {
     try {
-      // 1. Dio를 사용해 /api/auth/login으로 POST 요청 (email, password 전달)
       final response = await _dio.post(
         '/api/auth/login',
         data: request.toJson(),
@@ -24,14 +24,14 @@ class AuthService {
     }
   }
 
-  Future<Response> logout() async {
+  Future<Response> getProfile(String accessToken) async {
     try {
-      final response = await _dio.post(
-        '/api/auth/logout',
+      final response = await _dio.get(
+        '/api/mypage/profile',
         options: Options(
           headers: {
-            'X-Company-Code': '685f69fc439922c09c21aef0',
-            'Content-Type': 'application/json',
+            /*'X-Company-Code': '685f69fc439922c09c21aef0',
+            'Content-Type': 'application/json',*/
           },
         ),
       );
