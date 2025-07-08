@@ -22,14 +22,14 @@ class ApiClient {
         return handler.next(options);
       },
     ),
-    PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-      error: true,
-      compact: true,
-      maxWidth: 120,
-    ),
+    // PrettyDioLogger(
+    //   requestHeader: true,
+    //   requestBody: true,
+    //   responseBody: true,
+    //   responseHeader: false,
+    //   error: true,
+    //   compact: true,
+    //   maxWidth: 120,
+    // ),
   ]);
 }

@@ -9,6 +9,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
+
+  await GoodsAllViewModel().getAllGoods();
 }
 
 class MyApp extends StatelessWidget {
