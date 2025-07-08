@@ -11,4 +11,8 @@ class AuthRepository {
   Future<Response> login(LoginRequest request) async {
     return await _authService.login(request);
   }
+
+  Future<Response> getProfile(String accessToken) async {
+    return await _authService.getProfile(accessToken);
+  }
 }
