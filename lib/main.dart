@@ -2,7 +2,7 @@ import 'package:cinemarket/features/search/viewmodel/search_view_model.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_all_viewmodel.dart';
 import 'package:cinemarket/features/movies/viewmodel/movies_viewmodel.dart';
 import 'package:provider/provider.dart';
-import 'package:cinemarket/features/home/viewModel/home_viewmodel.dart';
+import 'package:cinemarket/features/home/viewmodel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cinemarket/core/router/router.dart';

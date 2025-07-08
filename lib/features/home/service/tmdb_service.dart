@@ -5,12 +5,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TmdbService {
   final Dio _dio = TmdbClient.dio;
+  final _apiKey = dotenv.env['TMDB_API_KEY'] ?? '';
+
 
   Future<TmdbMovie?> searchMovieByTitle(String title) async {
-    final apiKey = dotenv.env['TMDB_API_KEY'] ?? '';
     try {
       final response = await _dio.get('/search/movie', queryParameters: {
-        'api_key': apiKey,
+        'api_key': _apiKey,
         'query': title,
         'language': 'ko-KR',
         'page': 1,
@@ -47,5 +48,48 @@ class TmdbService {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<List<TmdbMovie>> fetchTrendingMovies({String timeWindow = 'week'}) async {
+    final response = await _dio.get('/trending/movie/$timeWindow', queryParameters: {
+      'api_key': _apiKey,
+      'language': 'ko-KR',
+    });
+
+    final movies = _mapResults(response.data['results']);
+
+    return Future.wait(
+      movies.map((movie) async {
+        final providers = await fetchProviders(movie.id);
+        return movie.copyWithProviders(providers);
+      }),
+    );
+  }
+
+  List<TmdbMovie> _mapResults(List<dynamic>? results) {
+    if (results == null) return [];
+    return results
+        .map((json) => TmdbMovie.fromJson(json))
+        .where((movie) => movie.posterPath.isNotEmpty)
+        .toList();
+  }
+
+  Future<List<Map<String,String>>> fetchProviders(int movieId) async {
+    final response = await _dio.get(
+      '/movie/$movieId/watch/providers',
+      queryParameters: {
+        'api_key': _apiKey,
+      },
+    );
+    final results = response.data['results'];
+    final krData = results?['KR'];
+    if (krData == null || krData['flatrate'] == null) return [];
+    return (krData['flatrate'] as List)
+        .where((item) => item['logo_path'] != null && item['provider_name'] != null)
+        .map<Map<String, String>>((item) => {
+      'providerName': item['provider_name'] as String,
+      'logoUrl': 'https://image.tmdb.org/t/p/w500${item['logo_path']}',
+    })
+        .toList();
   }
 }
