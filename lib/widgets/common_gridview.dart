@@ -42,7 +42,7 @@ class CommonGridview<T> extends StatelessWidget {
         if (item is Goods) {
           return GestureDetector(
             onTap: () {
-              context.push('/movies/${item.id}');
+              context.push('/goods/detail', extra: item);
             },
             child: GoodsItem(
               imageUrl: item.images.main,
@@ -57,10 +57,9 @@ class CommonGridview<T> extends StatelessWidget {
         }
 
         if (item is TmdbMovie) {
-          print(' movieName: ${item.title} , providers: ${item.providers}');
           return GestureDetector(
             onTap: () {
-              context.push('/goods/detail', extra: item);
+              context.push('/movies/${item.id}');
             },
             child: MovieItem(
               imageUrl: 'https://image.tmdb.org/t/p/w500${item.posterPath}',

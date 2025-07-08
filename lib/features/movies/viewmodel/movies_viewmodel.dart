@@ -44,6 +44,9 @@ class MoviesViewModel extends ChangeNotifier {
   void changeSortTypeFromLabel(String label) {
     final newSortType = MovieSortTypeExtension.fromLabel(label);
     if (newSortType == _sortType) return;
+
+    print('🔁 sort type changing: $_sortType → $newSortType');
+
     _sortType = newSortType;
     loadMovies();
   }

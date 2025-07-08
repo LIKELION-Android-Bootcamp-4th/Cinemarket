@@ -4,7 +4,7 @@ import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
-class SortDropdown extends StatefulWidget {
+class SortDropdown extends StatelessWidget {
   final ItemType itemType;
   final String? selectedValue;
   final void Function(String)? onSelected;
@@ -16,14 +16,6 @@ class SortDropdown extends StatefulWidget {
     this.onSelected,
   });
 
-  @override
-  State<SortDropdown> createState() => _SortDropdownState();
-}
-
-class _SortDropdownState extends State<SortDropdown> {
-  late List<String> sortOptions;
-  late String selected;
-
   List<String> _getSortOptions(ItemType itemType) {
     switch (itemType) {
       case ItemType.goods:
@@ -34,47 +26,24 @@ class _SortDropdownState extends State<SortDropdown> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    sortOptions = _getSortOptions(widget.itemType);
-    selected = sortOptions.first;
-  }
-
-
-
-  @override
-  void didUpdateWidget(covariant SortDropdown oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedValue != null && widget.selectedValue != selected) {
-      setState(() {
-        selected = widget.selectedValue!;
-      });
-    }
-  }
-
-
-  @override
   Widget build(BuildContext context) {
+    final sortOptions = _getSortOptions(itemType);
 
     return DropdownButtonHideUnderline(
       child: DropdownButton2<String>(
         isExpanded: false,
-        hint: Text(selected, style: AppTextStyle.bodySmall),
-        items:
-            sortOptions
-                .map(
-                  (String item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item, style: AppTextStyle.bodySmall),
-                  ),
-                )
-                .toList(),
-        value: selected,
+        value: selectedValue,
+        items: sortOptions
+            .map((String item) =>
+            DropdownMenuItem<String>(
+              value: item,
+              child: Text(item, style: AppTextStyle.bodySmall),
+            ))
+            .toList(),
         onChanged: (String? value) {
-          setState(() {
-            selected = value!;
-          });
-          widget.onSelected?.call(value!);
+          if (value != null) {
+            onSelected?.call(value);
+          }
         },
         buttonStyleData: ButtonStyleData(
           padding: const EdgeInsets.only(left: 0, right: 4),
@@ -84,7 +53,6 @@ class _SortDropdownState extends State<SortDropdown> {
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-
         dropdownStyleData: DropdownStyleData(
           decoration: BoxDecoration(
             color: AppColors.widgetBackground,

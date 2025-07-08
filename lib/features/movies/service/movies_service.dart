@@ -59,16 +59,10 @@ class MoviesService {
       },
     );
 
-    print('Providers API response for movieId=$movieId: ${response.data}');
-
     final results = response.data['results'];
     final krData = results?['KR'];
 
     if (krData == null || krData['flatrate'] == null) return [];
-
-    (krData['flatrate'] as List).forEach((item) {
-      print('Provider name: ${item['provider_name']}, logo_path: ${item['logo_path']}');
-    });
 
     return (krData['flatrate'] as List)
         .where((item) => item['logo_path'] != null && item['provider_name'] != null)
