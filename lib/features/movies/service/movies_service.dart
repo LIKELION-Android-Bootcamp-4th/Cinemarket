@@ -30,12 +30,16 @@ class MoviesService {
 
   //평점순 데이터 통신
   Future<List<TmdbMovie>> fetchTopRatedMovies() async {
-    final response = await _dio.get('/movie/top_rated', queryParameters: {
+    final response = await _dio.get('/discover/movie', queryParameters: {
       'api_key': _apiKey,
       'language': 'ko-KR',
       'region': 'KR',
+      'sort_by': 'vote_average.desc',
+      'vote_count.gte': 10000, //1000표 이상 받은 인기 영화만 필터링.
+      'primary_release_date.gte': '${DateTime.now().year - 10}-01-01',
       'page': 1,
     });
+    print(response.data['results']);
 
     final movies = _mapResults(response.data['results']);
 
