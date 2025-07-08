@@ -6,8 +6,8 @@ import 'package:cinemarket/widgets/sort_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class GoodsScreen extends StatelessWidget {
-  const GoodsScreen({super.key});
+class GoodsAllScreen extends StatelessWidget {
+  const GoodsAllScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

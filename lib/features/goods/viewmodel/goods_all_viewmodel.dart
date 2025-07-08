@@ -1,5 +1,5 @@
 import 'package:cinemarket/features/goods/model/goods.dart';
-import 'package:cinemarket/features/goods/repository/goods_all_repository.dart';
+import 'package:cinemarket/features/goods/repository/goods_repository.dart';
 import 'package:flutter/material.dart';
 
 class GoodsAllViewModel extends ChangeNotifier {
