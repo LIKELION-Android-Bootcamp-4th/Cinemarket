@@ -41,7 +41,6 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
   @override
   void initState() {
     super.initState();
-    print("@@@");
     _viewModel.fetchOrders(
       page: 1,
       limit: 20,
@@ -51,7 +50,6 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
       sort: 'createdAt',
       order: 'desc',
     );
-    print("@@@");
 
     _orders = [
       OrderItem(
@@ -63,27 +61,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
         quantity: '??개',
         price: '??,???원',
         reviewStatus: '리뷰완료',
-      ),
-      OrderItem(
-        date: '25.06.24',
-        status: '구매 확정',
-        productName: '제품명',
-        movieTitle: '영화명',
-        productImage: 'https://placehold.co/100x100/292929/ffffff?text=Product',
-        quantity: '??개',
-        price: '??,???원',
-        reviewStatus: '리뷰쓰기',
-      ),
-      OrderItem(
-        date: '25.06.23',
-        status: '구매 확정',
-        productName: '제품명',
-        movieTitle: '영화명',
-        productImage: 'https://placehold.co/100x100/292929/ffffff?text=Product',
-        quantity: '??개',
-        price: '??,???원',
-        reviewStatus: '리뷰쓰기',
-      ),
+      )
     ];
   }
 
