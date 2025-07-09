@@ -3,6 +3,7 @@ import 'package:cinemarket/features/mypage/detail/widget/fix_review_widget.dart'
 import 'package:cinemarket/features/mypage/detail/widget/my_review_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/order_detail_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/order_history_widget.dart';
+import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -14,11 +15,11 @@ class MyPageDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dynamic extraData = GoRouterState.of(context).extra;
     String menu = '';
-    int? reviewId;
+    Review? review;
 
-    if(extraData is Map<String, dynamic>) {
+    if (extraData is Map<String, dynamic>) {
       menu = extraData['where'] as String? ?? '';
-      reviewId = extraData['reviewId'] as int? ?? 0;
+      review = extraData['review'] as Review?;
     } else if (extraData is String) {
       menu = extraData;
     }
@@ -46,7 +47,7 @@ class MyPageDetailScreen extends StatelessWidget {
         bodyWidget = const MyReviewWidget();
       case 'fix_review' :
         title = '리뷰 수정';
-        bodyWidget = FixReviewWidget(int: reviewId);
+        bodyWidget = FixReviewWidget(review: review!);
         break;
       default:
         title = '에러';

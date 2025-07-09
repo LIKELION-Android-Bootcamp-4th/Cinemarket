@@ -1,9 +1,11 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:flutter/material.dart';
 
 class FixReviewWidget extends StatefulWidget {
-  const FixReviewWidget({super.key, int? int});
+  final Review review;
+  const FixReviewWidget({super.key, required this.review});
 
   @override
   State<StatefulWidget> createState() => _FixReviewWidgetState();

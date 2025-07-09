@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
-class Review {
+class ReviewData {
   final String productName;
   final String movieTitle;
   final String productImage;
@@ -14,7 +14,7 @@ class Review {
   final String initialReviewText;
   final List<String> photoUrls;
 
-  Review({
+  ReviewData({
     required this.productName,
     required this.movieTitle,
     required this.productImage,
@@ -64,8 +64,12 @@ class _MyReviewWidgetState extends State<MyReviewWidget> {
                 onClick1: () {
                   context.push(
                     '/mypage/detail',
-                    extra: {'where': 'fix_review', 'productId': review.product.name},
+                    extra: {
+                      'where': 'fix_review',
+                      'review': review,
+                    },
                   );
+
                 },
                 //두 번째 onClick -> 리뷰 삭제 기능.
                 onClick2: () async {

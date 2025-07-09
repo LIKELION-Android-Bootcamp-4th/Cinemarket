@@ -46,7 +46,7 @@ class ReviewService {
           'api_key': _apiKey,
           'language': 'ko-KR',
         },
-      ); // TMDB 공식 API 경로
+      );
       return response.data['title'] as String?;
     } catch (e) {
       print('Error fetching movie title from TMDB: $e');
