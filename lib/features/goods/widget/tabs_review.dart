@@ -1,6 +1,6 @@
 import 'package:cinemarket/core/router/router.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/features/mypage/detail/component/my_review_component.dart'
+import 'package:cinemarket/features/mypage/detail/widget//my_review_widget.dart'
     show Review;
 import 'package:cinemarket/widgets/review_item.dart';
 import 'package:flutter/material.dart';

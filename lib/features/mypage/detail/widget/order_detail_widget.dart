@@ -2,16 +2,16 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
-class OrderDetailComponent extends StatefulWidget {
-  const OrderDetailComponent({super.key});
+class OrderDetailWidget extends StatefulWidget {
+  const OrderDetailWidget({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _OrderDetailComponentState();
+    return _OrderDetailWidgetState();
   }
 }
 
-class _OrderDetailComponentState extends State<OrderDetailComponent> {
+class _OrderDetailWidgetState extends State<OrderDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -23,14 +23,14 @@ class Review {
   });
 }
 
-class MyReviewComponent extends StatefulWidget {
-  const MyReviewComponent({super.key,});
+class MyReviewWidget extends StatefulWidget {
+  const MyReviewWidget({super.key,});
 
   @override
-  State<MyReviewComponent> createState() => _MyReviewComponentState();
+  State<MyReviewWidget> createState() => _MyReviewWidgetState();
 }
 
-class _MyReviewComponentState extends State<MyReviewComponent> {
+class _MyReviewWidgetState extends State<MyReviewWidget> {
   late List<Review> _reviews;
 
   @override
