@@ -1,4 +1,5 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/movies/viewmodel/movies_viewmodel.dart';
 import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/widgets/sort_dropdown.dart';
@@ -15,6 +16,7 @@ class MoviesScreen extends StatefulWidget {
 
 class MoviesScreenState extends State<MoviesScreen> {
 
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -24,6 +26,21 @@ class MoviesScreenState extends State<MoviesScreen> {
       vm.loadMovies();
     });
 
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+        final vm = context.read<MoviesViewModel>();
+        if (!vm.isLoading && vm.hasMore) {
+          vm.loadMovies();
+        }
+      }
+    });
+
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,7 +48,7 @@ class MoviesScreenState extends State<MoviesScreen> {
 
     return Consumer<MoviesViewModel>(
       builder: (context, vm, child) {
-        if (vm.isLoading) {
+        if (vm.movies.isEmpty && vm.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -66,9 +83,21 @@ class MoviesScreenState extends State<MoviesScreen> {
               Expanded(
                 child: CommonGridview(
                   itemType: ItemType.movie,
-                  items: movies
+                  items: movies,
+                  scrollController: _scrollController,
                 ),
               ),
+              if (vm.isLoading && vm.hasMore)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+              // 더 이상 불러올 데이터가 없을 때 메시지 표시
+              if (!vm.hasMore && vm.movies.isNotEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(child: Text('더 이상 불러올 영화가 없습니다.',style: AppTextStyle.body,)),
+                ),
             ],
           ),
         );
