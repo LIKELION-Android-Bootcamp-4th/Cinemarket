@@ -1,5 +1,4 @@
 import 'package:cinemarket/core/network/api_client.dart';
-import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/features/auth/model/login_request.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -21,7 +20,8 @@ class AuthService {
 
   Future<Response> getProfile(String accessToken) async {
     try {
-      final response = await _dio.get('/api/mypage/profile');
+      final response = await _dio.get(
+          '/api/mypage/profile');
       return response;
     } catch (e) {
       rethrow;
@@ -30,7 +30,8 @@ class AuthService {
 
   Future<Response> checkValidEmail(String email) async {
     try {
-      final response = await _dio.get('/api/auth/check-email?email=$email');
+      final response = await _dio.get(
+          '/api/auth/check-email?email=$email');
       return response;
     } catch (e) {
       rethrow;
@@ -40,7 +41,7 @@ class AuthService {
   Future<Response> checkValidNickName(String nickName) async {
     try {
       final response = await _dio.get(
-        '/api/auth/check-nickname?nickName=$nickName',
+        '/api/auth/check-nickname?nickname=$nickName',
       );
       return response;
     } catch (e) {
