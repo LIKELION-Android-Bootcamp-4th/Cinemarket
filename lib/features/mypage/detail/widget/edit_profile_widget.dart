@@ -13,14 +13,14 @@ import 'package:kpostal/kpostal.dart';
 import 'package:toastification/toastification.dart';
 import 'dart:convert';
 
-class EditProfileComponent extends StatefulWidget {
-  const EditProfileComponent({super.key});
+class EditProfileWidget extends StatefulWidget {
+  const EditProfileWidget({super.key});
 
   @override
-  State<EditProfileComponent> createState() => _EditProfileComponentState();
+  State<EditProfileWidget> createState() => _EditProfileWidgetState();
 }
 
-class _EditProfileComponentState extends State<EditProfileComponent> {
+class _EditProfileWidgetState extends State<EditProfileWidget> {
   final MyPageViewModel _viewModel = MyPageViewModel();
 
   late final TextEditingController _nicknameController;

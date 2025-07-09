@@ -27,14 +27,14 @@ class OrderItem {
   });
 }
 
-class OrderHistoryComponent extends StatefulWidget {
-  const OrderHistoryComponent({super.key});
+class OrderHistoryWidget extends StatefulWidget {
+  const OrderHistoryWidget({super.key});
 
   @override
-  State<OrderHistoryComponent> createState() => _OrderHistoryComponentState();
+  State<OrderHistoryWidget> createState() => _OrderHistoryWidgetState();
 }
 
-class _OrderHistoryComponentState extends State<OrderHistoryComponent> {
+class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
   late List<OrderItem> _orders;
 
   @override
