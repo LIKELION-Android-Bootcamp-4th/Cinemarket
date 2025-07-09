@@ -14,7 +14,7 @@ class FavoriteRepository {
     int limit = 20,
     String sort = 'createdAt',
     String order = 'desc',
-}) {
+  }) {
     return favoriteService.getAllFavoriteItems(
       page: page,
       limit: limit,
@@ -28,7 +28,8 @@ class FavoriteRepository {
     List<FavoriteItem> favoriteItems = await getAllFavoriteItems();
 
     for (final item in favoriteItems) {
-      final response = await goodsService.getDetailGoods(goodsId: item.favoriteGoods.id);
+      final response = await goodsService.getDetailGoods(
+          goodsId: item.favoriteGoods.id);
       Goods goods = response.data;
       favoriteGoods.add(goods);
     };
@@ -39,3 +40,4 @@ class FavoriteRepository {
   Future<bool> toggleFavorite({required String goodsId,}) async {
     return await favoriteService.toggleFavorite(goodsId: goodsId);
   }
+}
