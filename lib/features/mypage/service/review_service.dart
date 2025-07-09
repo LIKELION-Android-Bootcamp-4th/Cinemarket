@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cinemarket/core/network/api_client.dart';
 import 'package:cinemarket/core/network/tmdb_client.dart';
 import 'package:dio/dio.dart';
@@ -60,6 +63,33 @@ class ReviewService {
       return response.data['success'] == true;
     } catch (e) {
       print('Error deleting review: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateReview({
+    required String reviewId,
+    required int rating,
+    required String comment,
+    required List<String> keepImageIds,
+    required List<File> newImages,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'rating': rating,
+        'comment': comment,
+        'keepImageIds': jsonEncode(keepImageIds),
+        'newImages': [
+          for (final image in newImages)
+            await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
+        ]
+      });
+
+      final response = await _dio.put('/api/reviews/$reviewId', data: formData);
+
+      return response.data['success'] == true;
+    } catch (e) {
+      print('리뷰 수정 실패: $e');
       return false;
     }
   }

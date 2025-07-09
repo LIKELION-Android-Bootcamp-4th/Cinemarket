@@ -60,18 +60,20 @@ class _MyReviewWidgetState extends State<MyReviewWidget> {
                 initialReviewText: review.comment,
                 photoUrls: review.images.map((e) => e.url).toList(),
                 isEditing: false,
-                //첫 번째 onClick 기능 부여
-                onClick1: () {
-                  context.push(
+                //리뷰 수정 페이지로 이동..
+                onClick1: () async {
+                  final result = await context.push<bool>(
                     '/mypage/detail',
                     extra: {
                       'where': 'fix_review',
                       'review': review,
                     },
                   );
-
+                  if (result == true) {
+                    vm.loadReviews();
+                  }
                 },
-                //두 번째 onClick -> 리뷰 삭제 기능.
+                //리뷰 삭제 기능.
                 onClick2: () async {
                   final confirm = await showDialog<bool>(
                     context: context,
@@ -90,42 +92,6 @@ class _MyReviewWidgetState extends State<MyReviewWidget> {
                             child: const Text('삭제하기', style: TextStyle(color: Colors.white)),
                           ),
                         ],
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: TextButton(
-                        //         child: Text(
-                        //           '유지하기',
-                        //           style: TextStyle(color: Colors.red),
-                        //         ),
-                        //         onPressed: () {
-                        //           Navigator.of(dialogContext).pop();
-                        //         },
-                        //       ),
-                        //     ),
-                        //     Expanded(
-                        //       child: TextButton(
-                        //         child: Text(
-                        //           '삭제하기',
-                        //           style: TextStyle(color: Colors.white),
-                        //         ),
-                        //         onPressed: () {
-                        //           Navigator.of(dialogContext).pop();
-                        //           setState(() {});
-                        //           //todo 삭제 API
-                        //           CommonToast.show(
-                        //             context: context,
-                        //             message: "리뷰가 삭제 되었습니다.",
-                        //             type: ToastificationType.success,
-                        //           );
-                        //           setState(() {
-                        //             _reviews.removeAt(index);
-                        //           });
-                        //         },
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                       );
                     }
                   );

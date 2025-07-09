@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:cinemarket/features/mypage/repository/review_repository.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,22 @@ class ReviewViewModel extends ChangeNotifier {
       notifyListeners();
     }
     return result;
+  }
+
+  Future<bool> updateReview({
+    required String reviewId,
+    required int rating,
+    required String comment,
+    required List<String> keepImageIds,
+    required List<File> newImages,
+  }) async {
+    return await _repository.updateReview(
+      reviewId: reviewId,
+      rating: rating,
+      comment: comment,
+      keepImageIds: keepImageIds,
+      newImages: newImages,
+    );
   }
 
 

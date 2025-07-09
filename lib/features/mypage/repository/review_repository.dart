@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:cinemarket/features/mypage/service/review_service.dart';
 
@@ -55,4 +57,19 @@ class ReviewRepository {
     return await _service.deleteReview(reviewId);
   }
 
+  Future<bool> updateReview({
+    required String reviewId,
+    required int rating,
+    required String comment,
+    required List<String> keepImageIds,
+    required List<File> newImages,
+  }) {
+    return _service.updateReview(
+      reviewId: reviewId,
+      rating: rating,
+      comment: comment,
+      keepImageIds: keepImageIds,
+      newImages: newImages,
+    );
+  }
 }
