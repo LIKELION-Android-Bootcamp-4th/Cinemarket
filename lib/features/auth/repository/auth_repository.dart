@@ -24,6 +24,10 @@ class AuthRepository {
     return await _authService.checkValidNickName(nickName);
   }
 
+  Future<Response> signUp(String email, String password, String nickName) async {
+    return await _authService.signUp(email, password, nickName);
+  }
+
   Future<Response> editProfile({
     required String nickName,
     required String phone,
@@ -38,5 +42,9 @@ class AuthRepository {
       address2: address2,
       zipCode: zipCode,
     );
+  }
+
+  Future emailAuth(String email, String emailAuthCode) async {
+    return await _authService.emailAuth(email, emailAuthCode);
   }
 }

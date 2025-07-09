@@ -20,7 +20,6 @@ class SignUpViewModel extends ChangeNotifier {
   String? get error => _error;
 
   Future<void> checkValidEmail(String email) async {
-    notifyListeners();
     try {
       if (email != null && email.isNotEmpty) {
         final response = await _authRepository.checkValidEmail(email);
@@ -36,13 +35,10 @@ class SignUpViewModel extends ChangeNotifier {
     } catch (e) {
       _error = '이메일 중복확인 중 오류가 발생했습니다.';
       print('이메일 중복확인 실패: $e');
-    } finally {
-      notifyListeners();
     }
   }
 
   Future<void> checkValidNickName(String nickName) async {
-    notifyListeners();
     try {
       if (nickName != null && nickName.isNotEmpty) {
         final response = await _authRepository.checkValidNickName(nickName);
@@ -58,21 +54,42 @@ class SignUpViewModel extends ChangeNotifier {
     } catch (e) {
       _error = '닉네임 중복확인 중 오류가 발생했습니다.';
       print('닉네임 중복확인 실패: $e');
-    } finally {
-      notifyListeners();
+    }
+  }
+
+  Future<void> signUp(String email, String password, String nickName) async {
+    try {
+      if (email != null && password != null && nickName != null) {
+        final response = await _authRepository.signUp(
+          email,
+          password,
+          nickName,
+        );
+        final data = response.data['data'];
+        if (data['code'] == 0000) {
+          _email = email;
+          _nickName = nickName;
+          _error = null;
+        }
+      }
+    } catch (e) {
+      _error = '회원가입 중 오류가 발생했습니다.';
+      print('회원가입 실패: $e');
+    }
+  }
+
+  Future<void> emailAuth(String email, String emailAuthCode) async {
+    try {
+      if (email != null && emailAuthCode != null) {
+        final response = await _authRepository.emailAuth(email, emailAuthCode);
+        final data = response.data['data'];
+        if (data['code'] == 0000) {
+          _error = null;
+        }
+      }
+    } catch (e) {
+      _error = '이메일 인증 중 오류가 발생했습니다.';
+      print('이메일 인증 실패: $e');
     }
   }
 }
-
-/*
-{
-  "success": true,
-  "message": "Email is available",
-  "data": {
-    "available": true,
-    "email": "newuser@example.com",
-    "message": "사용 가능한 이메일입니다."
-  },
-  "timestamp": "2024-01-15T10:30:00.000Z"
-}
- */

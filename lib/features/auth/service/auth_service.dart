@@ -73,4 +73,35 @@ class AuthService {
       rethrow;
     }
   }
+
+  Future<Response> signUp(
+    String email,
+    String password,
+    String nickName,
+  ) async {
+    try {
+      final formData = {
+        'email': email,
+        'password': password,
+        'nickName': nickName,
+      };
+      final response = await _dio.post(
+        '/api/auth/register/buyer',
+        data: formData,
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> emailAuth(String email, String emailAuthCode) async {
+    try {
+      final formData = {'email': email, 'emailAuthCode': emailAuthCode};
+      final response = await _dio.post('/api/auth/email-auth', data: formData);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

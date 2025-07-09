@@ -17,11 +17,22 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordCheckController = TextEditingController();
   final TextEditingController nickNameController = TextEditingController();
+
+  final TextEditingController emailAuthCode = TextEditingController();
   bool _hasSignUp = false;
   bool _hasVaildEmail = false;
+  final signupViewModel = SignUpViewModel();
+
   //테스트용 true
   bool _hasVaildNickName = true;
+
+  String get email => emailController.text;
+  String get password => passwordController.text;
+  String get nickName => nickNameController.text;
+
 
   @override
   void dispose() {
@@ -69,6 +80,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
             TextField(
               style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
+                enabled: false,
+                hintStyle: TextStyle(color: Colors.grey),
+                filled: true,
+                fillColor: AppColors.textPrimary,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+            SizedBox(height: 25.0),
+
+            TextField(
+              controller: emailAuthCode,
+              style: TextStyle(color: Colors.black),
+              decoration: InputDecoration(
                 hintText: '이메일 인증코드 입력',
                 hintStyle: TextStyle(color: Colors.grey),
                 filled: true,
@@ -83,7 +110,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(height: 50.0),
 
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                await signupViewModel.emailAuth(email, emailAuthCode.text);
+
+                if (signupViewModel.error != null) {
+                  CommonToast.show(
+                    context: context,
+                    message: signupViewModel.error.toString(),
+                    type: ToastificationType.error,
+                  );
+                  return;
+                }
                 context.go('/home');
                 CommonToast.show(
                   context: context,
@@ -167,7 +204,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   return;
                 }
                 try {
-                  final signupViewModel = SignUpViewModel();
                   await signupViewModel.checkValidEmail(email);
                   if (signupViewModel.error != null) {
                     CommonToast.show(
@@ -204,6 +240,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(height: 30),
 
             TextField(
+              controller: passwordController,
               obscureText: true,
               style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
@@ -221,6 +258,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(height: 30),
 
             TextField(
+              controller: passwordCheckController,
               obscureText: true,
               style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
@@ -266,7 +304,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   return;
                 }
                 try {
-                  final signupViewModel = SignUpViewModel();
                   await signupViewModel.checkValidNickName(nickName);
                   if (signupViewModel.error != null) {
                     CommonToast.show(
@@ -304,11 +341,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(height: 45),
 
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_hasVaildEmail && _hasVaildNickName) {
-                  setState(() {
-                    _hasSignUp = true;
-                  });
+                  await signupViewModel.signUp(email, password, nickName);
+                  if (signupViewModel.error != null) {
+                    CommonToast.show(
+                      context: context,
+                      message: "회원가입 중 오류가 발생했습니다.",
+                      type: ToastificationType.error,
+                    );
+                  } else {
+                    CommonToast.show(
+                      context: context,
+                      message: "회원가입을 성공했습니다.\n이메일 인증을 진행해주세요.",
+                      type: ToastificationType.success,
+                    );
+                    setState(() {
+                      _hasSignUp = true;
+                    });
+                  }
                 } else {
                   CommonToast.show(
                     context: context,
@@ -316,7 +367,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     type: ToastificationType.info,
                   );
                 }
-
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.widgetBackground,
