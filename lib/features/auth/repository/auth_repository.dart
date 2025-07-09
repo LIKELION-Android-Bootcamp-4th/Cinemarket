@@ -23,4 +23,20 @@ class AuthRepository {
   Future<Response> checkValidNickName(String nickName) async {
     return await _authService.checkValidNickName(nickName);
   }
+
+  Future<Response> editProfile({
+    required String nickName,
+    required String phone,
+    required String address1,
+    required String address2,
+    required String zipCode,
+  }) async {
+    return await _authService.editProfile(
+      nickName: nickName,
+      phone: phone,
+      address1: address1,
+      address2: address2,
+      zipCode: zipCode,
+    );
+  }
 }

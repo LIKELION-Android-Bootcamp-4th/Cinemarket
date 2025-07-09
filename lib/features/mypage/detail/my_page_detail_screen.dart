@@ -1,11 +1,13 @@
 import 'package:cinemarket/features/mypage/detail/component/edit_profile_component.dart';
 import 'package:cinemarket/features/mypage/detail/component/fix_review_component.dart';
+import 'package:cinemarket/features/mypage/detail/component/kpostal_widget.dart';
 import 'package:cinemarket/features/mypage/detail/component/my_review_component.dart';
 import 'package:cinemarket/features/mypage/detail/component/order_detail_component.dart';
 import 'package:cinemarket/features/mypage/detail/component/order_history_component.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kpostal/kpostal.dart';
 
 class MyPageDetailScreen extends StatelessWidget {
   const MyPageDetailScreen({super.key});
@@ -44,6 +46,9 @@ class MyPageDetailScreen extends StatelessWidget {
       case 'my_review':
         title = '나의 리뷰';
         bodyWidget = const MyReviewComponent();
+      case 'kpostal':
+        title = '주소 검색';
+        bodyWidget = const KpostalAddressSearchWidget();
         break;
       case 'fix_review' :
         title = '리뷰 수정';
