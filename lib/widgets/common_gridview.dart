@@ -42,14 +42,14 @@ class CommonGridview<T> extends StatelessWidget {
         if (item is Goods) {
           return GestureDetector(
             onTap: () {
-              context.push('/goods/detail', extra: item);
+              context.push('/goods/${item.id}', );
             },
             child: GoodsItem(
               imageUrl: item.images.main,
               goodsName: item.name,
               movieName: item.id,
               price: '${item.price} 원',
-              rating: item.reviewStats.averageRating,
+              rating: item.reviewStats!.averageRating,
               reviewCount: item.reviewCount,
               isFavorite: item.isFavorite,
             ),

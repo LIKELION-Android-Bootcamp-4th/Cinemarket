@@ -1,5 +1,6 @@
 import 'package:cinemarket/features/search/viewmodel/search_view_model.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_all_viewmodel.dart';
+import 'package:cinemarket/features/goods/viewmodel/goods_detail_viewmodel.dart';
 import 'package:cinemarket/features/movies/viewmodel/movies_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:cinemarket/features/home/viewModel/home_viewmodel.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => GoodsAllViewModel()),
+        ChangeNotifierProvider(create: (_) => GoodsDetailViewmodel()),
         ChangeNotifierProvider(create: (_) => MoviesViewModel()),
         ChangeNotifierProvider(create: (_) => SearchViewModel()),
       ],
