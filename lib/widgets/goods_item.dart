@@ -26,10 +26,11 @@ class GoodsItem extends StatefulWidget {
 }
 
 class _GoodsItemState extends State<GoodsItem> {
-  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
+    bool isFavorite = widget.isFavorite;
+
     return Container(
       padding: const EdgeInsets.all(4),
       child: Column(

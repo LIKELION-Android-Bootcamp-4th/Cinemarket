@@ -1,10 +1,11 @@
-
-
 import 'package:cinemarket/features/favorite/model/favorite_item.dart';
 import 'package:cinemarket/features/favorite/service/favorite_service.dart';
+import 'package:cinemarket/features/goods/model/goods.dart';
+import 'package:cinemarket/features/goods/services/goods_service.dart';
 
 class FavoriteRepository {
   final FavoriteService favoriteService;
+  final GoodsService goodsService = GoodsService();
 
   FavoriteRepository({required this.favoriteService});
 
@@ -20,5 +21,18 @@ class FavoriteRepository {
       sort: sort,
       order: order,
     );
+  }
+
+  Future<List<Goods>> getAllFavoriteGoods() async {
+    List<Goods> favoriteGoods = [];
+    List<FavoriteItem> favoriteItems = await getAllFavoriteItems();
+
+    for (final item in favoriteItems) {
+      final response = await goodsService.getDetailGoods(goodsId: item.favoriteGoods.id);
+      Goods goods = response.data;
+      favoriteGoods.add(goods);
+    };
+
+    return favoriteGoods;
   }
 }

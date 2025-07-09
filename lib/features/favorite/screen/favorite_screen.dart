@@ -13,7 +13,7 @@ class FavoriteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final viewModel = context.read<FavoriteViewModel>();
-    viewModel.getAllFavoriteItems();
+    viewModel.getAllFavoriteGoods();
 
     return DefaultTabController(
       length: 2,
@@ -44,7 +44,7 @@ class FavoriteScreen extends StatelessWidget {
                     CommonGridview(
                       itemType: ItemType.goods,
                       // items: dummyGoods,
-                      items: [],
+                      items: viewModel.favoriteGoods,
                     ),
                     CommonGridview(
                       itemType: ItemType.movie,

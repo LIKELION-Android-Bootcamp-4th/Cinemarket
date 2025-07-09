@@ -1,35 +1,30 @@
-import 'package:cinemarket/features/favorite/model/favorite_item.dart';
 import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
+import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 class FavoriteViewModel extends ChangeNotifier {
   final FavoriteRepository favoriteRepository;
 
-  List<FavoriteItem> favoriteItems = [];
+  List<Goods> favoriteGoods = [];
   final Logger logger = Logger();
 
   FavoriteViewModel({required this.favoriteRepository});
 
-  Future<void> getAllFavoriteItems({
+  Future<void> getAllFavoriteGoods({
     int page = 1,
     int limit = 20,
     String sort = 'createdAt',
     String order = 'desc',
   }) async {
     try {
-      favoriteItems = await favoriteRepository.getAllFavoriteItems(
-        page: page,
-        limit: limit,
-        sort: sort,
-        order: order,
-      );
+      favoriteGoods = await favoriteRepository.getAllFavoriteGoods();
       notifyListeners();
 
       logger.i('굿즈 찜 목록 조회');
-      favoriteItems.forEach( (item) {
-        logger.d('favoriteItem ${item.favoriteGoods}');
-      });
+      for (var item in favoriteGoods) {
+        logger.d('favoriteGoods $item');
+      }
 
     } catch (e, stackTrace) {
       logger.i('😂😂😂 err');
