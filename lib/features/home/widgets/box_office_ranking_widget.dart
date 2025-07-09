@@ -1,6 +1,6 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/features/home/viewModel/home_viewmodel.dart';
+import 'package:cinemarket/features/home/viewmodel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
