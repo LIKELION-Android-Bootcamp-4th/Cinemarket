@@ -12,12 +12,6 @@ class AuthService {
       final response = await _dio.post(
         '/api/auth/login',
         data: request.toJson(),
-        options: Options(
-          headers: {
-            'X-Company-Code': '685f69fc439922c09c21aef0',
-            'Content-Type': 'application/json',
-          },
-        ),
       );
       return response;
     } catch (e) {
@@ -36,15 +30,7 @@ class AuthService {
 
   Future<Response> checkValidEmail(String email) async {
     try {
-      final response = await _dio.get(
-        '/api/auth/check-email?email=$email',
-        options: Options(
-          headers: {
-            'X-Company-Code': '685f69fc439922c09c21aef0',
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
+      final response = await _dio.get('/api/auth/check-email?email=$email');
       return response;
     } catch (e) {
       rethrow;
@@ -55,12 +41,6 @@ class AuthService {
     try {
       final response = await _dio.get(
         '/api/auth/check-nickname?nickName=$nickName',
-        options: Options(
-          headers: {
-            'X-Company-Code': '685f69fc439922c09c21aef0',
-            'Content-Type': 'application/json',
-          },
-        ),
       );
       return response;
     } catch (e) {
@@ -81,23 +61,13 @@ class AuthService {
         'address1': address1,
         'address2': address2,
       };
-      print('address payload: ' + addressPayload.toString());
       final formData = FormData.fromMap({
         'nickName': nickName,
         'phone': phone,
         'address': jsonEncode(addressPayload),
       });
 
-      final response = await _dio.patch(
-        '/api/mypage/profile',
-        data: formData,
-        options: Options(
-          headers: {
-            'X-Company-Code': '685f69fc439922c09c21aef0',
-            'Content-Type': 'multipart/form-data',
-          },
-        ),
-      );
+      final response = await _dio.patch('/api/mypage/profile', data: formData);
       return response;
     } catch (e) {
       rethrow;
