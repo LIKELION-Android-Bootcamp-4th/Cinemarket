@@ -44,6 +44,7 @@ class FavoriteService {
           '/api/products/$goodsId/toggle-favorites'
       );
 
+      Logger().i('message: ${response.data['message']}');
       return response.data['success'] == true;  // bool? 고려
 
     } on DioException catch (e) {

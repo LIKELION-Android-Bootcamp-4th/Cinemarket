@@ -29,10 +29,16 @@ class GoodsItem extends StatefulWidget {
 }
 
 class _GoodsItemState extends State<GoodsItem> {
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.isFavorite;
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool isFavorite = widget.isFavorite;
 
     return Container(
       padding: const EdgeInsets.all(4),
@@ -57,13 +63,16 @@ class _GoodsItemState extends State<GoodsItem> {
                     isFavorite ? Icons.favorite : Icons.favorite_border,
                     color: Colors.red,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() => isFavorite = !isFavorite);
-                    FavoriteViewModel(
+
+                    final success = await FavoriteViewModel(
                       favoriteRepository: FavoriteRepository(
                         favoriteService: FavoriteService(),
                       ),
                     ).toggleFavorite(goodsId: widget.movieName);  // todo: movieName이 goodsId임 !!  // 변경 필수 !!
+
+                    if (!success) { setState(() => isFavorite = !isFavorite);}
                   },
                 ),
               ],
