@@ -6,13 +6,13 @@ enum MovieSortType { latest, rating }
 class MoviesRepository {
   final MoviesService _service = MoviesService();
 
-  Future<List<TmdbMovie>> fetchMovies(MovieSortType sortType) {
+  Future<List<TmdbMovie>> fetchMovies(MovieSortType sortType,{int page = 1}) {
     switch (sortType) {
       case MovieSortType.rating:
-        return _service.fetchTopRatedMovies();
+        return _service.fetchTopRatedMovies(page: page);
       case MovieSortType.latest:
       default:
-        return _service.fetchNowPlayingMovies();
+        return _service.fetchNowPlayingMovies(page: page);
     }
   }
 }

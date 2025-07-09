@@ -7,6 +7,8 @@ class MovieDetailHeader extends StatelessWidget {
   final String thumbnailUrl;
   final bool isFavorite;
   final VoidCallback onFavoriteToggle;
+  final String title;
+  final double voteAverage;
 
   const MovieDetailHeader({
     super.key,
@@ -14,6 +16,8 @@ class MovieDetailHeader extends StatelessWidget {
     required this.thumbnailUrl,
     required this.isFavorite,
     required this.onFavoriteToggle,
+    required this.title,
+    required this.voteAverage,
   });
 
   @override
@@ -81,23 +85,21 @@ class MovieDetailHeader extends StatelessWidget {
               const SizedBox(width: 16),
 
               // 영화 제목 + 평점
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
+                    Text(title, style: AppTextStyle.section),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('영화 제목', style: AppTextStyle.headline),
-                        Expanded(child: SizedBox()), // 오른쪽으로 밀기
-                        Icon(Icons.star_border, color: Color(0xffFF8700), size: 20),
+                        Icon(Icons.star, color: Color(0xffFF8700), size: 20),
                         SizedBox(width: 4),
                         Text(
-                          '4.5',
+                          voteAverage.toStringAsFixed(1),
                           style: TextStyle(color: Color(0xffFF8700), fontSize: 14),
                         ),
-                        SizedBox(width: 10),
                       ],
                     ),
                   ],

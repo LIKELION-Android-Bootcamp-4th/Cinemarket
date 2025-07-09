@@ -3,16 +3,16 @@ import 'package:cinemarket/features/goods/repository/goods_repository.dart';
 import 'package:flutter/material.dart';
 
 class GoodsAllViewModel extends ChangeNotifier {
-  final GoodsAllRepository _goodsAllRepository;
+  final GoodsRepository _goodsRepository;
 
   List<Goods> goodsList = [];
 
-  GoodsAllViewModel({GoodsAllRepository? goodsAllRepository})
-    : _goodsAllRepository = goodsAllRepository ?? GoodsAllRepository();
+  GoodsAllViewModel({GoodsRepository? goodsRepository})
+    : _goodsRepository = goodsRepository ?? GoodsRepository();
 
   Future<void> getAllGoods() async {
     try {
-      goodsList = await _goodsAllRepository.getAllGoodsList();
+      goodsList = await _goodsRepository.getAllGoodsList();
       notifyListeners();
 
       // 로그 출력

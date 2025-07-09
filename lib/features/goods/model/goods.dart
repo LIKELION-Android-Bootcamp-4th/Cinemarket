@@ -12,9 +12,9 @@ class Goods {
   final int viewCount;
   final int orderCount;
   final int reviewCount;
-  final String createdBy;
+  final String createdAt;
   final GoodsImages images;
-  final ReviewStats reviewStats;
+  final ReviewStats? reviewStats;
   final bool isFavorite;
 
   Goods({
@@ -28,9 +28,9 @@ class Goods {
     required this.viewCount,
     required this.orderCount,
     required this.reviewCount,
-    required this.createdBy,
+    required this.createdAt,
     required this.images,
-    required this.reviewStats,
+    this.reviewStats,
     required this.isFavorite,
   });
 
@@ -38,7 +38,7 @@ class Goods {
     return Goods(
       id: json['id'],
       name: json['name'],
-      description: json['description'],
+      description: json['description'],  // todo: 기본값 처리 필요
       price: json['price'],
       stock: json['stock'],
       status: json['status'],
@@ -46,9 +46,11 @@ class Goods {
       viewCount: json['viewCount'],
       orderCount: json['orderCount'],
       reviewCount: json['reviewCount'],
-      createdBy: json['createdBy'],
-      images: GoodsImages.fromJson(json['images']),
-      reviewStats: ReviewStats.fromJson(json['reviewStats']),
+      createdAt: json['createdAt'],
+      images: GoodsImages.fromJson(json['images']),  // todo: 기본값 처리 필요
+      reviewStats: json['reviewStats'] != null
+      ? ReviewStats.fromJson(json['reviewStats'])
+      : null,
       isFavorite: json['isFavorite'],
     );
   }
@@ -56,6 +58,6 @@ class Goods {
   // 로그용 모델 출력
   @override
   String toString() {
-    return 'Goods(name: $name, price: $price, isFavorite: $isFavorite)';
+    return 'Goods( id: $id, name: $name, price: $price, isFavorite: $isFavorite,)';
   }
 }

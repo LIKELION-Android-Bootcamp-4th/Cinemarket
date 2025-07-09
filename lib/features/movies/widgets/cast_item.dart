@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class CastItem extends StatelessWidget {
   final String imageUrl;
   final String name;
+  final String character;
 
   const CastItem({
     super.key,
     required this.imageUrl,
     required this.name,
+    required this.character,
   });
 
   @override
@@ -35,6 +37,14 @@ class CastItem extends StatelessWidget {
             maxLines: 1,
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 4),
+          Text(
+            character,
+            style: AppTextStyle.body,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            textAlign: TextAlign.center,
+          )
         ],
       )
     );
