@@ -1,8 +1,8 @@
 import 'package:cinemarket/features/mypage/detail/widget/edit_profile_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/fix_review_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/my_review_widget.dart';
-import 'package:cinemarket/features/mypage/detail/widget/order_detail_widget.dart';
-import 'package:cinemarket/features/mypage/detail/widget/order_history_widget.dart';
+import 'package:cinemarket/features/mypage/detail/widget/order/order_detail_widget.dart';
+import 'package:cinemarket/features/mypage/detail/widget/order/order_history_widget.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

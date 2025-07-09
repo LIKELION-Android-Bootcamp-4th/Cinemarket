@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/mypage/detail/widget/order/viewModel/order_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -36,10 +37,22 @@ class OrderHistoryWidget extends StatefulWidget {
 
 class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
   late List<OrderItem> _orders;
-
+  OrderViewModel _viewModel = OrderViewModel();
   @override
   void initState() {
     super.initState();
+    print("@@@");
+    _viewModel.fetchOrders(
+      page: 1,
+      limit: 20,
+      status: 'delivered',
+      startDate: '2025-01-01',
+      endDate: '2025-12-31',
+      sort: 'createdAt',
+      order: 'desc',
+    );
+    print("@@@");
+
     _orders = [
       OrderItem(
         date: '25.06.25',
