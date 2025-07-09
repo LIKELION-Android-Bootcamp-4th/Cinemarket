@@ -1,4 +1,6 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
+import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/home/widgets/build_best_goods_grid.dart';
 import 'package:cinemarket/features/movies/viewmodel/movie_detail_viewmodel.dart';
 import 'package:cinemarket/features/movies/widgets/cast_grid_view.dart';
 import 'package:cinemarket/features/movies/widgets/movie_detail_header.dart';
@@ -30,6 +32,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       final movieId = int.parse(widget.movieId);
       final vm = context.read<MovieDetailViewModel>();
       vm.loadMovieDetail(movieId);
+      vm.loadRecommendedGoods(widget.movieId);
     });
   }
 
@@ -40,9 +43,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
         if (vm.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (vm.error != null) {
-          return Center(child: Text('Error: ${vm.error}'));
-        }
+
         final movieDetail = vm.movieDetail;
         final castList = vm.castList;
 
@@ -84,10 +85,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                           padding: EdgeInsets.all(16),
                           child: SynopsisText(synopsis: movieDetail.overview),
                         ),
-                        CommonGridview(
-                          itemType: ItemType.goods,
-                          items: [],
-                        ),
+                        vm.goodsList.isEmpty
+                            ? Center(child: Text('상품 정보가 없습니다.',style: AppTextStyle.body,))
+                            : buildBestGoodsGrid(vm.goodsList, movieDetail.title),
                         CastGridView(
                             castList: castList
                         )

@@ -32,6 +32,7 @@ class BestGoodsViewModel extends ChangeNotifier {
       if (_success == true) {
         _goodsList = listResponse.items;
       } else {
+        _goodsList = [];
         _errorMessage = listResponse.message;
       }
     } catch (e) {

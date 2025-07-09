@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class Pagination {
   final int page;
