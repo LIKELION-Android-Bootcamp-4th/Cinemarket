@@ -27,6 +27,20 @@ class AppTextStyle {
     color: AppColors.textPrimary,
   );
 
+  static const TextStyle bodyPointRed = TextStyle(
+    fontFamily: _fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Colors.red,
+  );
+
+  static const TextStyle bodyPointBlue = TextStyle(
+    fontFamily: _fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Colors.blue,
+  );
+
   static const TextStyle bodySmall = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 12,
