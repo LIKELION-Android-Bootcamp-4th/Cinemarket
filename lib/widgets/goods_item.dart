@@ -1,6 +1,9 @@
 import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
+import 'package:cinemarket/features/favorite/service/favorite_service.dart';
+import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,10 +32,16 @@ class GoodsItem extends StatefulWidget {
 }
 
 class _GoodsItemState extends State<GoodsItem> {
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.isFavorite;
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool isFavorite = widget.isFavorite;
 
     return Container(
       padding: const EdgeInsets.all(4),
@@ -59,6 +68,15 @@ class _GoodsItemState extends State<GoodsItem> {
                   ),
                   onPressed: () async {
                     setState(() => isFavorite = !isFavorite);
+
+                    final success = await FavoriteViewModel(
+                      favoriteRepository: FavoriteRepository(
+                        favoriteService: FavoriteService(),
+                      ),
+                    ).toggleFavorite(goodsId: widget.movieName);  // todo: movieName이 goodsId임 !!  // 변경 필수 !!
+
+                    if (!success) { setState(() => isFavorite = !isFavorite);}
+
                     final accessToken = await TokenStorage.getAccessToken();
 
                     if (!mounted) return;  // state의 화면 부착 여부
@@ -88,7 +106,6 @@ class _GoodsItemState extends State<GoodsItem> {
                         context.push('/login', );
                       }
                     }
-
                   },
                 ),
               ],
@@ -118,9 +135,11 @@ class _GoodsItemState extends State<GoodsItem> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Row(
               children: [
-                Icon(Icons.star_rate, size: 15, color: Colors.yellow,),
-                Text('${widget.rating}(${widget.reviewCount})',
-                style: AppTextStyle.bodySmall,),
+                Icon(Icons.star_rate, size: 15, color: Colors.yellow),
+                Text(
+                  '${widget.rating}(${widget.reviewCount})',
+                  style: AppTextStyle.bodySmall,
+                ),
                 Spacer(),
                 Text(
                   widget.price,

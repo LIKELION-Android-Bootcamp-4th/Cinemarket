@@ -35,4 +35,21 @@ class FavoriteService {
       throw('찜 목록 조회 실패: $message');
     }
   }
+
+  Future<bool> toggleFavorite({
+    required String goodsId,
+  }) async {
+    try {
+      final response = await _dio.post(
+          '/api/products/$goodsId/toggle-favorites'
+      );
+
+      Logger().i('message: ${response.data['message']}');
+      return response.data['success'] == true;  // bool? 고려
+
+    } on DioException catch (e) {
+      final message = e.response?.data['message'] ?? e.message;
+      throw Exception('굿즈 찜 실패: $message');
+    }
+  }
 }

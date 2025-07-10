@@ -33,4 +33,20 @@ class FavoriteViewModel extends ChangeNotifier {
     }
   }
 
+  Future<bool> toggleFavorite({required String goodsId,}) async {
+    try {
+      final bool isSuccesses = await favoriteRepository.toggleFavorite(goodsId: goodsId);
+
+      debugPrint('😍😍😍');
+      debugPrint('isSuccess : $isSuccesses');
+
+      return isSuccesses;  // todo: 로그 출력을 위해 바로 리턴하지 않고 변수 생성  // 변수 삭제 후 바로 리턴할 것
+    } catch (e, stackTrace) {
+      debugPrint('😂😂😂 err');
+      debugPrint('$e');
+      debugPrint('$stackTrace');
+
+      throw(e, stackTrace);
+    }
+  }
 }
