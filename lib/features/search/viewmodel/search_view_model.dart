@@ -20,7 +20,7 @@ class SearchViewModel extends ChangeNotifier {
   List<SearchItem> _goodsResults = [];
   List<SearchItem> get goodsResults => _goodsResults;
 
-
+  final Set<int> _failedMovieIds = {};
 
   Future<void> search(String keyword) async {
     _isLoading = true;
@@ -30,7 +30,7 @@ class SearchViewModel extends ChangeNotifier {
     List<SearchItem> fromKeyword = [];
 
     try {
-      //영화 검색
+      //TMDB 영화 검색
       _tmdbResults = await _repository.searchMovies(keyword);
     } catch (e) {
       print('TMDB 검색 실패: $e');
@@ -38,35 +38,41 @@ class SearchViewModel extends ChangeNotifier {
     }
 
     try {
-      //영화ID로  굿즈 검색
-      for (final movie in _tmdbResults) {
-        if (movie.id ==0) {
-          print('없는 movie id');
-          continue;
-        }
+      final filtered = _tmdbResults
+          .where((m) => m.id != 0 && !_failedMovieIds.contains(m.id))
+          .toList();
+
+      //영화 ID 10개씩 묶어서 테스트 (요청량 조절)
+      for (final movie in filtered.take(10)) {
         try {
           final goods = await _repository.searchMovieByContentId(movie.id);
-          fromContentId.addAll(goods);
+
+          // 실제 굿즈가 있을 때만 추가
+          if (goods.isNotEmpty) {
+            fromContentId.addAll(goods);
+          } else {
+            print('굿즈 없음 (movie.id: ${movie.id})');
+          }
         } catch (e) {
-          print('굿즈 검색 실패 (movie.id: ${movie.id}) -> 무시하고 다음');
+          print('굿즈 검색 실패 (movie.id: ${movie.id}) -> 무시');
+          _failedMovieIds.add(movie.id);
         }
       }
     } catch (e) {
-      print(' 전체 굿즈 처리 실패: $e');
+      print('전체 굿즈 처리 실패: $e');
     }
 
     try {
-      //키워드 기반 검색
       fromKeyword = await _repository.searchGoodsByKeyword(keyword);
     } catch (e) {
       print('키워드 검색 실패 : $e');
     }
 
-    final allGods = {
-      for (var item in [...fromContentId, ...fromKeyword]) item.id : item
+    final allGoods = {
+      for (var item in [...fromContentId, ...fromKeyword]) item.id: item
     }.values.toList();
 
-    _goodsResults = allGods;
+    _goodsResults = allGoods;
     _isLoading = false;
     notifyListeners();
   }
