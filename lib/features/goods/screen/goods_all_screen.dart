@@ -11,30 +11,39 @@ class GoodsAllScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: context.read<GoodsAllViewModel>().getAllGoods(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-    final viewModel = context.read<GoodsAllViewModel>();
-    viewModel.getAllGoods();
+        final viewModel = context.read<GoodsAllViewModel>();
 
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          const Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: EdgeInsets.only(right: 4),
-              child: SortDropdown(itemType: ItemType.goods),
-            ),
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              const Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 4),
+                  child: SortDropdown(itemType: ItemType.goods),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: CommonGridview<Goods>(
+                  itemType: ItemType.goods,
+                  items: viewModel.goodsList,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: CommonGridview<Goods>(
-              itemType: ItemType.goods,
-              items: viewModel.goodsList,
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
