@@ -2,6 +2,7 @@ import 'package:cinemarket/core/network/api_client.dart';
 import 'package:cinemarket/features/goods/model/goods_all_response.dart';
 import 'package:cinemarket/features/goods/model/goods_detail_response.dart';
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 
 class GoodsService {
   final Dio _dio = ApiClient.dio;
@@ -47,6 +48,17 @@ class GoodsService {
       final message = e.response?.data['message'] ?? e.message;
 
       Error.throwWithStackTrace(Exception('상품상세 조회 실패: $message'), stackTrace);
+    }
+  }
+
+  Future<Response> getGoodsReviews({required String? goodsId}) async {
+    try {
+      return await _dio.get('/api/products/$goodsId/reviews');
+    } on DioException catch (e) {
+      Logger().e(e.message);
+      Logger().e(e.stackTrace);
+
+      rethrow;
     }
   }
 }
