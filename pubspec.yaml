@@ -47,7 +47,10 @@ dependencies:
   flutter_dotenv: ^5.2.1
   shimmer: ^3.0.0
   logger: ^2.6.0
-
+  #주소검색
+  kpostal: ^1.1.0
+  #이미지 선택기
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

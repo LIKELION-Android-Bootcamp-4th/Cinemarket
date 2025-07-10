@@ -1,5 +1,5 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
-import 'package:cinemarket/features/mypage/detail/component/my_review_component.dart' show Review;
+import 'package:cinemarket/features/mypage/detail/widget//my_review_widget.dart' show Review;
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:cinemarket/widgets/review_item.dart';
 import 'package:flutter/material.dart';

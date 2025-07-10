@@ -2,14 +2,14 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
-class FixReviewComponent extends StatefulWidget {
-  const FixReviewComponent({super.key, int? int});
+class FixReviewWidget extends StatefulWidget {
+  const FixReviewWidget({super.key, int? int});
 
   @override
-  State<StatefulWidget> createState() => _FixReviewComponentState();
+  State<StatefulWidget> createState() => _FixReviewWidgetState();
 }
 
-class _FixReviewComponentState extends State<FixReviewComponent> {
+class _FixReviewWidgetState extends State<FixReviewWidget> {
   int _selectedStar = 0;
   final TextEditingController _reviewController = TextEditingController();
 
