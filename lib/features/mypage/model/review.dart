@@ -9,6 +9,7 @@ class Review {
   final List<ReviewImage> images; //리뷰 이미지
   final ReviewProduct product; //리뷰 상품
   final DateTime createdAt;
+  final int likeCount;
 
   Review({
     required this.id,
@@ -18,6 +19,7 @@ class Review {
     required this.images,
     required this.product,
     required this.createdAt,
+    this.likeCount = 0,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) {
@@ -31,6 +33,7 @@ class Review {
           .toList(),
       product: ReviewProduct.fromJson(json['product']),
       createdAt: DateTime.parse(json['createdAt']),
+      likeCount: json['likeCount'],
     );
   }
 }

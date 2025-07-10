@@ -15,6 +15,7 @@ class ReviewItem extends StatefulWidget {
     this.onClick1,
     this.onClick2,
     this.isEditing = false,
+    this.likeCount = 0
   });
 
   final String title;
@@ -27,6 +28,7 @@ class ReviewItem extends StatefulWidget {
   final VoidCallback? onClick1;
   final VoidCallback? onClick2;
   final bool isEditing;
+  final int likeCount;
 
   @override
   State<StatefulWidget> createState() {
@@ -37,11 +39,13 @@ class ReviewItem extends StatefulWidget {
 class _ReviewItemState extends State<ReviewItem> {
   late double _currentRating;
   bool _isExpanded = false;
+  late int _likeCount;
 
   @override
   void initState() {
     super.initState();
     _currentRating = widget.initialRating;
+    _likeCount = widget.likeCount;
   }
 
   @override
@@ -65,7 +69,7 @@ class _ReviewItemState extends State<ReviewItem> {
           const SizedBox(height: 16.0),
           _buildReviewText(),
           const SizedBox(height: 16.0),
-          _buildActionButtons(),
+          _buildActionButtons(_likeCount),
           const SizedBox(height: 24.0),
           Container(height: 5.0, width: 500.0, color: AppColors.innerWidget),
         ],
@@ -194,7 +198,7 @@ class _ReviewItemState extends State<ReviewItem> {
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(int _likeCount) {
     String button1;
     String button2;
 
@@ -202,7 +206,7 @@ class _ReviewItemState extends State<ReviewItem> {
       button1 = '수정';
       button2 = '삭제';
     } else if (widget.title == '리뷰 목록') {
-      button1 = '좋아요';
+      button1 = _likeCount == 0 ? '좋아요' : '좋아요 $_likeCount';
       button2 = '싫어요';
     } else {
       return const SizedBox.shrink();
