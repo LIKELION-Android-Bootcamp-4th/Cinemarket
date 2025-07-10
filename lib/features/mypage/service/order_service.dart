@@ -12,4 +12,13 @@ class OrderService {
       throw Exception('주문 목록 조회 실패: $e');
     }
   }
+
+  Future<Response> fetchOrderDetail(String orderId) async {
+    try {
+      final response = await _dio.get('/api/orders/$orderId');
+      return response;
+    } catch (e) {
+      throw Exception('주문 상세 조회 실패: $e');
+    }
+  }
 }

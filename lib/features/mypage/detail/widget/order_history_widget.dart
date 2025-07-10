@@ -42,7 +42,7 @@ class OrderHistoryWidget extends StatelessWidget {
 
               if (item == null) return const SizedBox();
 
-              return _buildOrderItemCard(context, order.createdAt, order.status, item);
+              return _buildOrderItemCard(context, order.createdAt, order.status, item, order.id);
             },
               separatorBuilder: (context, index) => const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -54,7 +54,7 @@ class OrderHistoryWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderItemCard(BuildContext context, DateTime createdAt, String status, dynamic item) {
+  Widget _buildOrderItemCard(BuildContext context, DateTime createdAt, String status, dynamic item, String orderId) {
     final dateStr = '${createdAt.year}.${createdAt.month.toString().padLeft(2, '0')}.${createdAt.day.toString().padLeft(2, '0')}';
 
     return Column(
@@ -73,7 +73,10 @@ class OrderHistoryWidget extends StatelessWidget {
                     const SizedBox(width: 8.0),
                     TextButton(
                       onPressed: () {
-                        context.push('/mypage/detail', extra: 'order_detail');
+                        context.push('/mypage/detail', extra: {
+                          'where': 'order_detail',
+                          'orderId': orderId,
+                        });
                       },
                       child: Text("주문상세", style: AppTextStyle.body),
                     ),
