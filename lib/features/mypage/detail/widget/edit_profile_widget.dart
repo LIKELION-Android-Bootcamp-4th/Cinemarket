@@ -257,6 +257,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           );
           return;
         }
+        _viewModel.editProfile(
+          nickName: _nicknameController.text,
+          phone: _phoneController.text,
+          address1: _addressController.text,
+          address2: _addressDetailController.text,
+          zipCode: zipCode,
+        );
         CommonToast.show(
           context: context,
           message: "수정이 완료 되었습니다.",

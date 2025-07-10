@@ -23,11 +23,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final TextEditingController emailAuthCode = TextEditingController();
   bool _hasSignUp = false;
-  bool _hasVaildEmail = false;
+  bool _hasValidEmail = false;
   final signupViewModel = SignUpViewModel();
 
   //테스트용 true
-  bool _hasVaildNickName = true;
+  bool _hasValidNickName = true;
 
   String get email => emailController.text;
   String get password => passwordController.text;
@@ -212,7 +212,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       type: ToastificationType.info,
                     );
                   } else {
-                    _hasVaildEmail = true;
+                    _hasValidEmail = true;
                     CommonToast.show(
                       context: context,
                       message: "사용 가능한 이메일 입니다.",
@@ -308,21 +308,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   if (signupViewModel.error != null) {
                     CommonToast.show(
                       context: context,
-                      message: "이미 사용중인 닉네임 입니다.",
+                      message: signupViewModel.error.toString(),
                       type: ToastificationType.info,
                     );
                   } else {
-                    _hasVaildNickName = true;
+                    _hasValidNickName = true;
                     CommonToast.show(
                       context: context,
-                      message: "사용 가능한 닉네임 입니다.",
+                      message: signupViewModel.message.toString(),
                       type: ToastificationType.success,
                     );
                   }
                 } catch (e) {
                   CommonToast.show(
                     context: context,
-                    message: "닉네임 중복확인 중 오류가 발생했습니다.",
+                    message: signupViewModel.error.toString(),
                     type: ToastificationType.error,
                   );
                 }
@@ -342,7 +342,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             ElevatedButton(
               onPressed: () async {
-                if (_hasVaildEmail && _hasVaildNickName) {
+                if (_hasValidEmail && _hasValidNickName) {
                   await signupViewModel.signUp(email, password, nickName);
                   if (signupViewModel.error != null) {
                     CommonToast.show(
