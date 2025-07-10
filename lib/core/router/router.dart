@@ -67,8 +67,23 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/goods/detail/review',
-      builder: (context, state) => const GoodsReviewScreen(),
+      path: '/goods/:goodsId/review',
+      builder: (context, state) {
+        final goodsId = state.pathParameters['goodsId']!;
+
+        final extra = state.extra as Map<String, dynamic>?;
+
+        final goodsName = extra?['goodsName'] as String?;
+        final movieTitle = extra?['movieTitle'] as String?;
+        final goodsImage = extra?['goodsImage'] as String?;
+
+        return GoodsReviewScreen(
+          goodsId: goodsId,
+          goodsName: goodsName ?? '',
+          movieTitle: movieTitle ?? '',
+          goodsImage: goodsImage ?? '',
+        );
+      },
     ),
     GoRoute(
       path: '/movies/:movieId',
