@@ -49,7 +49,8 @@ class FavoriteService {
 
     } on DioException catch (e) {
       final message = e.response?.data['message'] ?? e.message;
-      throw Exception('굿즈 찜 실패: $message');
+      Logger().i('굿즈 찜 실패: $message');
+      return false;
     }
   }
 }
