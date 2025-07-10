@@ -10,12 +10,12 @@ class CartItemTile extends StatelessWidget {
   final VoidCallback onDecrease;
 
   const CartItemTile({
-    Key? key,
+    super.key,
     required this.item,
     required this.onChanged,
     required this.onIncrease,
     required this.onDecrease,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,8 @@ class CartItemTile extends StatelessWidget {
     final String formattedPrice = '${totalPrice.toString().replaceAllMapped(
       RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
           (m) => '${m[1]},')}원';
-    final bool shouldBreakLine = totalPrice >= 1000000;
+    print('[CartItemTile] imageUrl: "${item.imageUrl}"');
+    final bool shouldBreakLine = totalPrice >= 100000;
 
     return Card(
       color: AppColors.widgetBackground,
@@ -52,7 +53,16 @@ class CartItemTile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.innerWidget,
                 borderRadius: BorderRadius.circular(8),
+                image: item.imageUrl != null && item.imageUrl!.isNotEmpty
+                    ? DecorationImage(
+                  image: NetworkImage(item.imageUrl!),
+                  fit: BoxFit.cover,
+                )
+                    : null,
               ),
+              child: (item.imageUrl == null || item.imageUrl!.trim().isEmpty)
+                  ? const Icon(Icons.image_not_supported, color: Colors.grey)
+                  : null,
             ),
             const SizedBox(width: 12),
 

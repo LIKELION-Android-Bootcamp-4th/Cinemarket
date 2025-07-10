@@ -1,18 +1,18 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
-import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:toastification/toastification.dart';
 
 class CartBottomBarWidgets extends StatelessWidget {
   final List<CartItem> items;
   final ValueChanged<bool> onSelectAll;
+  final void Function()? onPurchasePressed;
 
   const CartBottomBarWidgets({
     Key? key,
     required this.items,
     required this.onSelectAll,
+    this.onPurchasePressed,
   }) : super(key: key);
 
   @override
@@ -116,4 +116,3 @@ class CartBottomBarWidgets extends StatelessWidget {
     );
   }
 }
-
