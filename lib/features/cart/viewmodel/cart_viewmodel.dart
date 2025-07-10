@@ -15,8 +15,21 @@ class CartViewModel extends ChangeNotifier {
       .where((item) => item.isSelected)
       .fold(0, (sum, item) => sum + item.price * item.quantity);
 
+  int _cartCount = 0;
+  int get cartCount => _cartCount;
+  Future<void> fetchCartCount() async {
+    try {
+      _cartCount = await _cartService.fetchCartCount();
+      print('[DEBUG] 장바구니 수량: $_cartCount');
+      notifyListeners();
+    } catch (e) {
+      print('장바구니 개수 조회 실패: $e');
+    }
+  }
+
   CartViewModel() {
     fetchCart();
+    fetchCartCount();
   }
 
   Future<void> fetchCart() async {
