@@ -2,10 +2,10 @@ import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_recommended_viewmodel.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class RecommendGoodsWidget extends StatelessWidget {
-  static const double _itemImageWidth = 150;
   static const double _listHeight = 220;
 
 
@@ -42,20 +42,25 @@ class RecommendGoodsWidget extends StatelessWidget {
                 itemCount: vm.recommendedGoods.length,
                 itemBuilder: (context, index) {
                   final item = vm.recommendedGoods[index];
-                    return SizedBox(
+                    return GestureDetector(
+                      onTap: () {
+                        context.push('/goods/${item.id}');
+                      },
+                      child: SizedBox(
                         width: 200,
                         child: GoodsItem(
-                        imageUrl: item.images.main,
-                        goodsName: item.name,
-                        movieName: '없음',
-                        price: '￦${item.price}',
-                        // rating: goods.reviewStats.averageRating,
-                        // reviewCount: goods.reviewCount,
-                        rating: 0.0,
-                        reviewCount:10,
-                        isFavorite: item.isFavorite,
-                    ),
-                  );
+                          imageUrl: item.images.main,
+                          goodsName: item.name,
+                          movieName: '없음',
+                          price: '￦${item.price}',
+                          // rating: item.reviewStats.averageRating,
+                          reviewCount: item.reviewCount,
+                          rating: 0.0,
+                          // reviewCount:10,
+                          isFavorite: item.isFavorite,
+                        ),
+                      ),
+                    );
                 },
               ),
             ),
