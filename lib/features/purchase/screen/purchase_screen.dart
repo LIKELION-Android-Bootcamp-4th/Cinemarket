@@ -1,4 +1,5 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:cinemarket/features/cart/service/cart_service.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/features/purchase/widgets/bottom_action_button.dart';
 import 'package:cinemarket/features/purchase/widgets/delivery_info_cart.dart';
@@ -9,19 +10,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
-
 class PurchaseScreen extends StatefulWidget {
   final List<CartItem> cartItems;
 
-  const PurchaseScreen({super.key, required this.cartItems, });
+  const PurchaseScreen({super.key, required this.cartItems});
 
   @override
   State<PurchaseScreen> createState() => _PurchaseScreen();
 }
 
-
 class _PurchaseScreen extends State<PurchaseScreen> {
   late List<CartItem> cartItems;
+  final CartService _cartService = CartService();
 
   @override
   void initState() {
@@ -43,8 +43,8 @@ class _PurchaseScreen extends State<PurchaseScreen> {
     });
   }
 
-
-  int get totalPrice => cartItems.fold(0, (sum, item) => sum + item.price*item.quantity);
+  int get totalPrice =>
+      cartItems.fold(0, (sum, item) => sum + item.price * item.quantity);
 
   @override
   Widget build(BuildContext context) {
@@ -82,16 +82,26 @@ class _PurchaseScreen extends State<PurchaseScreen> {
       ),
       bottomNavigationBar: BottomActionButton(
         label: '구매',
-        onPressed: () {
-          // 버튼 이벤트
-          CommonToast.show(
-            context: context,
-            message: '구매가 완료되었습니다.',
-            type: ToastificationType.success,
-          );
-          Future.delayed(const Duration(milliseconds: 600), () {
-            context.go('/mypage'); // 구매후 메인 화면? 마이페이지 주문 내역 화면?
-          });
+        onPressed: () async{
+          // 구매 완료 토스트 후 마이페이지 이동
+          try {
+            final cartIds = cartItems.map((e) => e.cartId).toList();
+            await _cartService.checkoutCart(cartIds);
+            CommonToast.show(
+              context: context,
+              message: '구매가 완료되었습니다.',
+              type: ToastificationType.success,
+            );
+            Future.delayed(const Duration(milliseconds: 600), () {
+              context.go('/home'); // 구매후 마이페이지(주문내역) 이동
+            });
+          } catch (e) {
+            CommonToast.show(
+              context: context,
+              message: '구매가 실패했습니다.',
+              type: ToastificationType.error,
+            );
+          }
         },
       ),
     );
