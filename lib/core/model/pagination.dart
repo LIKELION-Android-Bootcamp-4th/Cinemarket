@@ -1,4 +1,3 @@
-
 class Pagination {
   final int page;
   final int limit;
