@@ -36,24 +36,27 @@ class Goods {
 
   factory Goods.fromJson(Map<String, dynamic> json) {
     return Goods(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],  // todo: 기본값 처리 필요
-      price: json['price'],
-      stock: json['stock'],
-      status: json['status'],
-      favoriteCount: json['favoriteCount'],
-      viewCount: json['viewCount'],
-      orderCount: json['orderCount'],
-      reviewCount: json['reviewCount'],
-      createdAt: json['createdAt'],
-      images: GoodsImages.fromJson(json['images']),  // todo: 기본값 처리 필요
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      price: json['price'] ?? 0,
+      stock: json['stock'] ?? 0,
+      status: json['status'] ?? 'unknown',
+      favoriteCount: json['favoriteCount'] ?? 0,
+      viewCount: json['viewCount'] ?? 0,
+      orderCount: json['orderCount'] ?? 0,
+      reviewCount: json['reviewCount'] ?? 0,
+      createdAt: json['createdAt'] ?? '',
+      images: json['images'] != null
+          ? GoodsImages.fromJson(json['images'])
+          : GoodsImages.empty(),
       reviewStats: json['reviewStats'] != null
-      ? ReviewStats.fromJson(json['reviewStats'])
-      : null,
-      isFavorite: json['isFavorite'],
+          ? ReviewStats.fromJson(json['reviewStats'])
+          : null,
+      isFavorite: json['isFavorite'] ?? false,
     );
   }
+
 
   // 로그용 모델 출력
   @override

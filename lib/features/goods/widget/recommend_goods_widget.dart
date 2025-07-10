@@ -1,52 +1,68 @@
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/goods/viewmodel/goods_recommended_viewmodel.dart';
+import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RecommendGoodsWidget extends StatelessWidget {
-  static const double _itemImageWidth = 100;
-  static const double _listHeight = 150;
+  static const double _itemImageWidth = 150;
+  static const double _listHeight = 220;
 
-  final List<Map<String, dynamic>> dummyGoods;
 
-  const RecommendGoodsWidget({super.key, required this.dummyGoods});
+  const RecommendGoodsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Consumer<GoodsRecommendedViewModel>(
+      builder:  (context, vm, _) {
+        if (vm.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-      children: [
-        const Text('추천 굿즈', style: AppTextStyle.section),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: _listHeight,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: dummyGoods.length,
-            itemBuilder: (context, index) {
-              final item = dummyGoods[index];
-              return Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        item['imageUrl'],
-                        width: _itemImageWidth,
-                        fit: BoxFit.cover,
-                      ),
+        if (vm.errorMessage != null) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(vm.errorMessage!, style: AppTextStyle.body),
+          );
+        }
+        if (vm.recommendedGoods.isEmpty) {
+          return const SizedBox();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            const Text('추천 굿즈', style: AppTextStyle.section),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: _listHeight,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: vm.recommendedGoods.length,
+                itemBuilder: (context, index) {
+                  final item = vm.recommendedGoods[index];
+                    return SizedBox(
+                        width: 200,
+                        child: GoodsItem(
+                        imageUrl: item.images.main,
+                        goodsName: item.name,
+                        movieName: '없음',
+                        price: '￦${item.price}',
+                        // rating: goods.reviewStats.averageRating,
+                        // reviewCount: goods.reviewCount,
+                        rating: 0.0,
+                        reviewCount:10,
+                        isFavorite: item.isFavorite,
                     ),
-                    SizedBox(height: 8,),
-                    Text(item['goodsName'], style: AppTextStyle.bodySmall,),
-                    Text(item['price'], style: AppTextStyle.bodySmall,),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
+
   }
 }
