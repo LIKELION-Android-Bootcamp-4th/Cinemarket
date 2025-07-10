@@ -83,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           viewCount: 0,
                           orderCount: 0,
                           reviewCount: 0,
-                          createdBy: 'unknown', // 실제 값 필요하면 item.createdBy 사용
+                          createdAt: '0', // 생성일시
                           images: GoodsImages(
                             main: item.mainImage,
                             sub: const [],
