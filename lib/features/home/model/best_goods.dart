@@ -23,15 +23,19 @@ class BestGoods {
   });
 
   factory BestGoods.fromJson(Map<String, dynamic> json) {
+    print('Parsing item: $json');
     return BestGoods(
-      id: json['id'],
-      name: json['name'],
-      // movieName: json['movieName'] ?? '',
-      images: GoodsImages.fromJson(json['images']),
-      price: json['price'] ?? 0,
-      reviewStats: ReviewStats.fromJson(json['reviewStats']),
-      reviewCount: json['reviewCount'] ?? 0,
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      images: GoodsImages.fromJson(json['images'] ?? {}),
+      price: json['price'] is int ? json['price'] : int.tryParse('${json['price']}') ?? 0,
+      reviewStats: ReviewStats.fromJson(json['reviewStats'] ?? {'averageRating': 0.0}),
+      reviewCount: json['reviewCount'] is int ? json['reviewCount'] : int.tryParse('${json['reviewCount']}') ?? 0,
       isFavorite: json['isFavorite'] ?? false,
     );
   }
+
+
+
+
 }

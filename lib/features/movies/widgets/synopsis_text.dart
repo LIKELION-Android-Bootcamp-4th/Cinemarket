@@ -9,7 +9,7 @@ class SynopsisText extends StatefulWidget {
   const SynopsisText({
     super.key,
     required this.synopsis,
-    this.maxLines = 8,
+    this.maxLines = 5,
   });
 
   @override

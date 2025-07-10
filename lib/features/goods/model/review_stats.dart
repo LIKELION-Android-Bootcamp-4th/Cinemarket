@@ -9,11 +9,21 @@ class ReviewStats {
     required this.ratingDistribution,
   });
 
-  factory ReviewStats.fromJson(Map<String, dynamic> json) {
+  factory ReviewStats.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return ReviewStats(
+        averageRating: 0.0,
+        totalReviews: 0,
+        ratingDistribution: {},
+      );
+    }
+
     return ReviewStats(
-      averageRating: (json['averageRating'] as num).toDouble(),
-      totalReviews: json['totalReviews'],
-      ratingDistribution: Map<String, int>.from(json['ratingDistribution']),
+      averageRating: (json['averageRating'] ?? 0).toDouble(),
+      totalReviews: json['totalReviews'] ?? 0,
+      ratingDistribution: json['ratingDistribution'] != null
+          ? Map<String, int>.from(json['ratingDistribution'])
+          : {},
     );
   }
 }
