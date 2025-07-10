@@ -1,5 +1,11 @@
+import 'package:cinemarket/core/storage/token_storage.dart';
+import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
+import 'package:cinemarket/features/favorite/service/favorite_service.dart';
+import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class GoodsItem extends StatefulWidget {
   final String imageUrl;
@@ -26,10 +32,17 @@ class GoodsItem extends StatefulWidget {
 }
 
 class _GoodsItemState extends State<GoodsItem> {
-  bool isFavorite = false;
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.isFavorite;
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: const EdgeInsets.all(4),
       child: Column(
@@ -53,8 +66,46 @@ class _GoodsItemState extends State<GoodsItem> {
                     isFavorite ? Icons.favorite : Icons.favorite_border,
                     color: Colors.red,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() => isFavorite = !isFavorite);
+
+                    final success = await FavoriteViewModel(
+                      favoriteRepository: FavoriteRepository(
+                        favoriteService: FavoriteService(),
+                      ),
+                    ).toggleFavorite(goodsId: widget.movieName);  // todo: movieName이 goodsId임 !!  // 변경 필수 !!
+
+                    if (!success) { setState(() => isFavorite = !isFavorite);}
+
+                    final accessToken = await TokenStorage.getAccessToken();
+
+                    if (!mounted) return;  // state의 화면 부착 여부
+
+                    if (accessToken == null) {  // 비회원의 경우
+
+                      final shouldNavigate = await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('로그인이 필요합니다', style: AppTextStyle.section,),
+                            content: const Text('로그인 화면으로 이동하시겠습니까?', style: AppTextStyle.body,),
+                            backgroundColor: AppColors.widgetBackground,
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: const Text('취소', style: AppTextStyle.bodyPointRed,),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(true),
+                                child: const Text('이동', style: AppTextStyle.bodyPointBlue,),
+                              ),
+                            ],
+                          ),
+                      );
+
+                      if(shouldNavigate == true && mounted) {
+                        context.push('/login', );
+                      }
+                    }
                   },
                 ),
               ],
@@ -84,9 +135,11 @@ class _GoodsItemState extends State<GoodsItem> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Row(
               children: [
-                Icon(Icons.star_rate, size: 15, color: Colors.yellow,),
-                Text('${widget.rating}(${widget.reviewCount})',
-                style: AppTextStyle.bodySmall,),
+                Icon(Icons.star_rate, size: 15, color: Colors.yellow),
+                Text(
+                  '${widget.rating}(${widget.reviewCount})',
+                  style: AppTextStyle.bodySmall,
+                ),
                 Spacer(),
                 Text(
                   widget.price,

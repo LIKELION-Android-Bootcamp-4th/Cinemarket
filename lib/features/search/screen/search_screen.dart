@@ -1,6 +1,9 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
-import 'package:cinemarket/features/search/model/search_tmdb_model.dart';
+import 'package:cinemarket/features/goods/model/goods.dart';
+import 'package:cinemarket/features/goods/model/goods_images.dart';
+import 'package:cinemarket/features/goods/model/review_stats.dart';
+import 'package:cinemarket/features/home/model/tmdb_movie.dart';
 import 'package:cinemarket/features/search/viewmodel/search_view_model.dart';
 import 'package:cinemarket/features/search/widgets/search_app_bar.dart';
 import 'package:cinemarket/features/search/widgets/search_empty_result.dart';
@@ -58,62 +61,67 @@ class _SearchScreenState extends State<SearchScreen> {
               onBack: _handleBack,
             ),
             Expanded(
-              child:
-                  viewModel.isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : ListView(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                        children: [
-                          const SearchSectionTitle(title: '굿즈'),
-                          if (!hasSearched || goodsResults.isEmpty)
-                            const SearchEmptyResultText()
-                          else
-                            CommonGridview(
-                              items:
-                                  goodsResults
-                                      .map(
-                                        (item) => {
-                                          'imageUrl': item.mainImage,
-                                          'goodsName': item.name,
-                                          'movieName': item.description,
-                                          'price': '${item.price}원',
-                                          'rating': 0.0,
-                                          'reviewCount': 0,
-                                          'isFavorite': false,
-                                        },
-                                      )
-                                      .toList(),
-                              itemType: ItemType.goods,
-                              isInScrollView: true,
-                            ),
-                          const SizedBox(height: 24),
-                          const SearchSectionTitle(title: '영화'),
-                          if (!hasSearched || movieResults.isEmpty)
-                            const SearchEmptyResultText()
-                          else
-                            CommonGridview(
-                              items:
-                                  movieResults.map(
-                                        (movie) => {
-                                          'imageUrl':
-                                              movie.posterPath.isNotEmpty
-                                                  ? 'https://image.tmdb.org/t/p/original/${movie.posterPath}'
-                                                  : '',
-                                          'movieName': movie.title,
-                                          'cumulativeSales': 0,
-                                          'providers': <String>[],
-                                          'isFavorite': false,
-                                        },
-                                      )
-                                      .toList(),
-                              itemType: ItemType.movie,
-                              isInScrollView: true,
-                            ),
-                        ],
-                      ),
+              child: viewModel.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                children: [
+                  const SearchSectionTitle(title: '굿즈'),
+                  if (!hasSearched || goodsResults.isEmpty)
+                    const SearchEmptyResultText()
+                  else
+                    CommonGridview<Goods>(
+                      items: goodsResults.map((item) {
+                        return Goods(
+                          id: item.id,
+                          name: item.name,
+                          description: item.description,
+                          price: item.price,
+                          stock: 0, // 임시값, 실제 데이터가 있다면 반영
+                          status: 'on_sale', // 임시값, 실제 item.status 있으면 사용
+                          favoriteCount: 0,
+                          viewCount: 0,
+                          orderCount: 0,
+                          reviewCount: 0,
+                          createdBy: 'unknown', // 실제 값 필요하면 item.createdBy 사용
+                          images: GoodsImages(
+                            main: item.mainImage,
+                            sub: const [],
+                          ),
+                          reviewStats: ReviewStats(
+                            averageRating: 0.0,
+                            totalReviews: 0,
+                            ratingDistribution: {},
+                          ),
+                          isFavorite: false,
+                        );
+                      }).toList(),
+                      itemType: ItemType.goods,
+                      isInScrollView: true,
+                    ),
+                  const SizedBox(height: 24),
+                  const SearchSectionTitle(title: '영화'),
+                  if (!hasSearched || movieResults.isEmpty)
+                    const SearchEmptyResultText()
+                  else
+                    CommonGridview<TmdbMovie>(
+                      items: movieResults.map((movie) {
+                        return TmdbMovie(
+                          id: movie.id,
+                          title: movie.title,
+                          overview: movie.overview,
+                          posterPath: movie.posterPath,
+                          releaseDate: movie.releaseDate,
+                          voteAverage: movie.voteAverage,
+                          popularity: movie.popularity,
+                          providers: [],
+                        );
+                      }).toList(),
+                      itemType: ItemType.movie,
+                      isInScrollView: true,
+                    ),
+                ],
+              ),
             ),
           ],
         ),

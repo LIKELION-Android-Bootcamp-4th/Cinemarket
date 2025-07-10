@@ -1,6 +1,7 @@
 import 'package:cinemarket/features/cart/screen/cart_screen.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/features/favorite/screen/favorite_screen.dart';
+import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/screen/goods_detail_screen.dart';
 import 'package:cinemarket/features/goods/screen/goods_all_screen.dart';
 import 'package:cinemarket/features/goods/screen/goods_review_screen.dart';
@@ -9,8 +10,9 @@ import 'package:cinemarket/features/login/screen/login_screen.dart';
 import 'package:cinemarket/features/main/screen/main_screen.dart';
 import 'package:cinemarket/features/movies/screen/movie_detail_screen.dart';
 import 'package:cinemarket/features/movies/screen/movies_screen.dart';
-import 'package:cinemarket/features/mypage/detail/component/fix_review_component.dart';
+import 'package:cinemarket/features/mypage/detail/widget/fix_review_widget.dart';
 import 'package:cinemarket/features/mypage/detail/my_page_detail_screen.dart';
+import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:cinemarket/features/mypage/screen/my_page_screen.dart';
 import 'package:cinemarket/features/purchase/screen/purchase_screen.dart';
 import 'package:cinemarket/features/search/screen/search_screen.dart';
@@ -58,10 +60,10 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const CartScreen()
     ),
     GoRoute(
-      path: '/goods/detail',
+      path: '/goods/:goodsId',
       builder: (context, state) {
-        final item = state.extra as Map<String, dynamic>;
-        return GoodsDetailScreen(item: item);
+        final goodsId = state.pathParameters['goodsId']!;
+        return GoodsDetailScreen(goodsId: goodsId,);
       },
     ),
     GoRoute(
@@ -89,7 +91,10 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/widget',
-      builder: (context, state) => const FixReviewComponent(),
+      builder: (context, state) {
+        final review = state.extra as Review;
+        return FixReviewWidget(review: review);
+      }
     ),
     GoRoute(
       path: '/purchase',

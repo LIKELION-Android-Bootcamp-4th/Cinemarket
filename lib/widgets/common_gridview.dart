@@ -11,12 +11,14 @@ class CommonGridview<T> extends StatelessWidget {
   final List<T> items;
   final ItemType itemType;
   final bool isInScrollView;
+  final ScrollController? scrollController;
 
   const CommonGridview({
     super.key,
     required this.itemType,
     required this.items,
     this.isInScrollView = false,
+    this.scrollController, // ✅ 추가
   });
 
   @override
@@ -27,6 +29,7 @@ class CommonGridview<T> extends StatelessWidget {
     };
 
     return GridView.builder(
+      controller: scrollController,
       shrinkWrap: isInScrollView,
       physics: isInScrollView ? const NeverScrollableScrollPhysics() : null,
       itemCount: items.length,
@@ -42,14 +45,14 @@ class CommonGridview<T> extends StatelessWidget {
         if (item is Goods) {
           return GestureDetector(
             onTap: () {
-              context.push('/goods/detail', extra: item);
+              context.push('/goods/${item.id}', );
             },
             child: GoodsItem(
               imageUrl: item.images.main,
               goodsName: item.name,
-              movieName: item.id,
+              movieName: item.id,  // todo: 이거 상품 id임
               price: '${item.price} 원',
-              rating: item.reviewStats.averageRating,
+              rating: item.reviewStats?.averageRating ?? 0.0,
               reviewCount: item.reviewCount,
               isFavorite: item.isFavorite,
             ),

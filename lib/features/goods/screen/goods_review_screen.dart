@@ -1,5 +1,5 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
-import 'package:cinemarket/features/mypage/detail/component/my_review_component.dart' show Review;
+import 'package:cinemarket/features/mypage/detail/widget/my_review_widget.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:cinemarket/widgets/review_item.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +35,8 @@ class GoodsReviewScreen extends StatelessWidget {
 }
 
 
-List<Review> _reviews = [
-  Review(
+List<ReviewData> _reviews = [
+  ReviewData(
     productName: '존 윅 4',
     movieTitle: 'John Wick: Chapter 4',
     productImage:
@@ -69,7 +69,7 @@ List<Review> _reviews = [
       'https://mblogthumb-phinf.pstatic.net/MjAyMzA0MTBfMjUy/MDAxNjgxMDk4MDY5MTY4.RjIYmuwdXuhNK5n4GBfmHyKvqnspm3E_-TaDHv7xFm0g.kWEjcHbcgCfp8Aq0gEpJJc8LCKxdffPZOhj9yvZaDIAg.JPEG.realnogun/3456435345.jpg?type=w800',
     ],
   ),
-  Review(
+  ReviewData(
     productName: '스파이더맨: 어크로스 더 유니버스',
     movieTitle: 'Spider-Man: Across the Spider-Verse',
     productImage:

@@ -1,8 +1,9 @@
-import 'package:cinemarket/features/mypage/detail/component/edit_profile_component.dart';
-import 'package:cinemarket/features/mypage/detail/component/fix_review_component.dart';
-import 'package:cinemarket/features/mypage/detail/component/my_review_component.dart';
-import 'package:cinemarket/features/mypage/detail/component/order_detail_component.dart';
-import 'package:cinemarket/features/mypage/detail/component/order_history_component.dart';
+import 'package:cinemarket/features/mypage/detail/widget/edit_profile_widget.dart';
+import 'package:cinemarket/features/mypage/detail/widget/fix_review_widget.dart';
+import 'package:cinemarket/features/mypage/detail/widget/my_review_widget.dart';
+import 'package:cinemarket/features/mypage/detail/widget/order_detail_widget.dart';
+import 'package:cinemarket/features/mypage/detail/widget/order_history_widget.dart';
+import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -14,11 +15,11 @@ class MyPageDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dynamic extraData = GoRouterState.of(context).extra;
     String menu = '';
-    int? reviewId;
+    Review? review;
 
-    if(extraData is Map<String, dynamic>) {
+    if (extraData is Map<String, dynamic>) {
       menu = extraData['where'] as String? ?? '';
-      reviewId = extraData['reviewId'] as int? ?? 0;
+      review = extraData['review'] as Review?;
     } else if (extraData is String) {
       menu = extraData;
     }
@@ -31,23 +32,22 @@ class MyPageDetailScreen extends StatelessWidget {
     switch (menu) {
       case 'edit_profile':
         title = '회원 정보 수정';
-        bodyWidget = const EditProfileComponent();
+        bodyWidget = const EditProfileWidget();
         break;
       case 'order_history':
         title = '주문 내역';
-        bodyWidget = const OrderHistoryComponent();
+        bodyWidget = const OrderHistoryWidget();
         break;
       case 'order_detail':
         title = '주문상세내역';
-        bodyWidget = const OrderDetailComponent();
+        bodyWidget = const OrderDetailWidget();
         break;
       case 'my_review':
         title = '나의 리뷰';
-        bodyWidget = const MyReviewComponent();
-        break;
+        bodyWidget = const MyReviewWidget();
       case 'fix_review' :
         title = '리뷰 수정';
-        bodyWidget = FixReviewComponent(int: reviewId);
+        bodyWidget = FixReviewWidget(review: review!);
         break;
       default:
         title = '에러';

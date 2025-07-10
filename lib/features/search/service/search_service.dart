@@ -9,7 +9,7 @@ class SearchService {
   final Dio _dio = ApiClient.dio;
   final Dio _tmdbDio = TmdbClient.dio;
 
-  //tmdb
+  // TMDB 영화 검색
   Future<List<SearchTmdbModel>> searchMovies(String query) async {
     try {
       final apiKey = dotenv.env['TMDB_API_KEY'] ?? '';
@@ -25,44 +25,45 @@ class SearchService {
       final List results = response.data['results'];
       return results.map((e) => SearchTmdbModel.fromJson(e)).toList();
     } catch (e) {
-      print('tmdb 검색 오류: $e');
-      rethrow;
+      print('❌ TMDB 검색 오류: $e');
+      return [];
     }
   }
 
-  //굿즈 직접 검색
+  // 굿즈 키워드 검색
   Future<List<SearchItem>> fetchGoodsByKeyword(String keyword) async {
     try {
       final response = await _dio.get(
         '/api/products',
         queryParameters: {
-          'search': keyword
+          'search': keyword,
         },
       );
       final items = response.data['data']['items'] as List;
       return items.map((e) => SearchItem.fromJson(e)).toList();
     } catch (e) {
       if (e is DioError) {
-        print('❌ DioError: ${e.response?.statusCode}');
-        print('응답: ${e.response?.data}');
+        print('❌ 키워드 굿즈 검색 실패: ${e.response?.statusCode}');
       } else {
-        print('❌ Unknown error: $e');
+        print('❌ 알 수 없는 키워드 검색 오류: $e');
       }
-      rethrow;
+      return [];
     }
   }
 
-  //영화 ID로 굿즈 검색
+  // 영화 ID 기반 굿즈 검색
   Future<List<SearchItem>> fetchMovieByContentId(int contentId) async {
     try {
-      final response = await _dio.get(
-          '/api/content-product/products/$contentId'
-      );
+      final response = await _dio.get('/api/content-product/products/$contentId');
       final items = response.data['data']['items'] as List;
       return items.map((e) => SearchItem.fromJson(e)).toList();
     } catch (e) {
-      print('❌ 굿즈 검색 오류 (ID): $e');
-      rethrow;
+      if (e is DioError) {
+        print('❌ 굿즈 검색 실패 (ID: $contentId) → ${e.response?.statusCode}');
+      } else {
+        print('❌ 알 수 없는 굿즈 검색 오류: $e');
+      }
+      return [];
     }
   }
 }
