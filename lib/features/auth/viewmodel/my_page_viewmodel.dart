@@ -1,6 +1,7 @@
 import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/features/auth/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class MyPageViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -12,12 +13,20 @@ class MyPageViewModel extends ChangeNotifier {
   String? _nickname;
   String? _email;
   String? _profileImage;
+  String? _phone;
+  String? _address1;
+  String? _address2;
+  String? _zipCode;
   String? _error;
 
   bool get hasToken => _hasToken;
   String? get nickname => _nickname;
   String? get email => _email;
   String? get profileImage => _profileImage;
+  String? get phone => _phone;
+  String? get address1 => _address1;
+  String? get address2 => _address2;
+  String? get zipCode => _zipCode;
   String? get error => _error;
 
   // 초기화 - 토큰 확인 및 프로필 조회
@@ -25,7 +34,6 @@ class MyPageViewModel extends ChangeNotifier {
     await _checkTokenAndLoadProfile();
   }
 
-  // 토큰 확인 및 프로필 로드
   Future<void> _checkTokenAndLoadProfile() async {
     notifyListeners();
 
@@ -49,9 +57,24 @@ class MyPageViewModel extends ChangeNotifier {
     try {
       final response = await _authRepository.getProfile(accessToken);
       final data = response.data['data'];
+      print(data);
       _nickname = data['nickName'] ?? 'nickName';
       _email = data['email'] ?? 'user@example.com';
       _profileImage = data['profileImage'];
+      _phone = data['phone'];
+      final addressRaw = data['address'];
+      Map<String, dynamic>? addressMap;
+      if (addressRaw is String) {
+        addressMap = jsonDecode(addressRaw);
+      } else if (addressRaw is Map) {
+        addressMap = addressRaw.cast<String, String>();
+      } else {
+        addressMap = {};
+      }
+      _address1 = addressMap?['address1'] ?? '';
+      _address2 = addressMap?['address2'] ?? '';
+      _zipCode = addressMap?['zipCode'] ?? '';
+      
     } catch (e) {
       _error = '프로필 조회에 실패했습니다.';
       print('프로필 조회 실패: $e');
@@ -67,11 +90,37 @@ class MyPageViewModel extends ChangeNotifier {
       _nickname = null;
       _email = null;
       _profileImage = null;
+      _phone = null;
+      _address1 = null;
+      _address2 = null;
+      _zipCode = null;
       _error = null;
     } catch (e) {
       _error = '로그아웃 중 오류가 발생했습니다.';
       print('로그아웃 실패: $e');
     } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> editProfile({
+    required String nickName,
+    required String phone,
+    required String address1,
+    required String address2,
+    required String zipCode,
+  }) async {
+    try {
+      await _authRepository.editProfile(
+        nickName: nickName,
+        phone: phone,
+        address1: address1,
+        address2: address2,
+        zipCode: zipCode,
+      );
+      await _checkTokenAndLoadProfile();
+    } catch (e) {
+      _error = '프로필 수정에 실패했습니다.';
       notifyListeners();
     }
   }
