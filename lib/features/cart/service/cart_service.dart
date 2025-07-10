@@ -108,4 +108,19 @@ class CartService {
       rethrow;
     }
   }
+
+  Future<int> fetchCartCount() async {
+    try {
+      final response = await _dio.get('/api/cart/count');
+      final data = response.data;
+
+      if (data is Map && data['data'] is int) {
+        return data['data'];
+      } else {
+        throw Exception('잘못된 장바구니 수량 응답: $data');
+      }
+    } catch (e) {
+      throw Exception('장바구니 개수 조회 오류: $e');
+    }
+  }
 }
