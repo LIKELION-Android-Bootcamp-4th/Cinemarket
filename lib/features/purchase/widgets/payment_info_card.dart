@@ -1,10 +1,11 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/cart/model/cart_item_model.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:flutter/material.dart';
 
 class PaymentInfoCard extends StatelessWidget {
-  final List<CartItem> items;
+  final List<CartItemModel> items;
 
   const PaymentInfoCard({
     super.key,
