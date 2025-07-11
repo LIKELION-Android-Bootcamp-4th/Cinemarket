@@ -1,9 +1,20 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:flutter/material.dart';
 
 class BottomButtonsWidget extends StatelessWidget {
-  const BottomButtonsWidget({super.key});
+  final Goods goods;
+  final VoidCallback onAddToCart;
+  final VoidCallback onBuyNow;
+
+
+  const BottomButtonsWidget({
+    super.key,
+    required this.goods,
+    required this.onAddToCart,
+    required this.onBuyNow,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +27,7 @@ class BottomButtonsWidget extends StatelessWidget {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: onAddToCart,
                 style: ElevatedButton.styleFrom(
                   foregroundColor: AppColors.textPrimary,
                   backgroundColor: AppColors.widgetBackground,
@@ -31,7 +42,7 @@ class BottomButtonsWidget extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: onBuyNow,
                 style: ElevatedButton.styleFrom(
                   foregroundColor: AppColors.textPrimary,
                   backgroundColor: AppColors.widgetBackground,

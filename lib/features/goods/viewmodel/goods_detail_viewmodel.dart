@@ -1,5 +1,6 @@
 import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/repository/goods_repository.dart';
+import 'package:cinemarket/features/goods/services/goods_cart_service.dart';
 import 'package:flutter/material.dart';
 
 class GoodsDetailViewmodel extends ChangeNotifier {
@@ -10,6 +11,8 @@ class GoodsDetailViewmodel extends ChangeNotifier {
 
   Goods? _goods;
   Goods get goods => _goods!;
+
+  final GoodsCartService _goodsCartService = GoodsCartService();
 
   Future<Goods> getDetailGoods({required String goodsId,}) async {
     try {
@@ -30,6 +33,21 @@ class GoodsDetailViewmodel extends ChangeNotifier {
     }
 
     return _goods!;
+  }
+
+
+
+  Future<void> addToCartFromGoods(Goods goods) async {
+    try {
+      await _goodsCartService.addToCart(
+        productId: goods.id,
+        quantity: 1,
+        unitPrice: goods.price,
+      );
+    } catch (e) {
+      debugPrint("장바구니 추가 실패: $e");
+      rethrow;
+    }
   }
 
 }
