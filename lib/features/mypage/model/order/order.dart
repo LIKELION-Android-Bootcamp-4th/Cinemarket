@@ -68,7 +68,7 @@ class Order {
       companyId: json['companyId'] ?? '',
       storeId: json['storeId'],
       userId: json['userId'] ?? '',
-      items: (json['items'] as List<dynamic>? ?? [])
+      items: (json['products'] as List<dynamic>? ?? [])
           .map((e) => OrderItem.fromJson(e))
           .toList(),
       subtotalAmount: json['subtotalAmount'] ?? 0,

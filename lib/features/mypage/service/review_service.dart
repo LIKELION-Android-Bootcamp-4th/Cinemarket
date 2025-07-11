@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cinemarket/core/network/api_client.dart';
 import 'package:cinemarket/core/network/tmdb_client.dart';
+import 'package:cinemarket/features/mypage/model/review_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -93,5 +94,30 @@ class ReviewService {
       return false;
     }
   }
+
+  Future<bool> createReview(ReviewRequest request) async {
+    try {
+      final formData = FormData.fromMap({
+        if (request.orderId != null) 'orderId': request.orderId,
+        'rating': request.rating,
+        'comment': request.comment,
+        'images': [
+          for (final image in request.images)
+            await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
+        ]
+      });
+
+      final response = await _dio.post(
+        '/api/products/${request.productId}/reviews',
+        data: formData,
+      );
+
+      return response.data['success'] == true;
+    } catch (e) {
+      print('리뷰 생성 실패: $e');
+      return false;
+    }
+  }
+
 
 }

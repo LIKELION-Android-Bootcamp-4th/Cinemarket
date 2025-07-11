@@ -126,22 +126,33 @@ class OrderHistoryWidget extends StatelessWidget {
         const SizedBox(height: 16.0),
 
         // 버튼들
-        //리뷰 완료? 어떻게 확인?
         Row(
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  // 리뷰 작성 화면 이동
-                  context.push('/mypage/detail', extra: {'where': 'fix_review'});
+                onPressed: item.review != null ? null :() {
+                  // // 리뷰 작성 화면 이동
+                  // context.push('/mypage/detail', extra: {'where': 'fix_review'});
+                  context.push('/mypage/create-review', extra: item);
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.textPoint,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                          (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.disabled)) {
+                          return Colors.grey.shade600; // 비활성화일 때 회색
+                        }
+                        return AppColors.textPoint; // 활성화일 때 색상
+                      },
+                    ),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                   ),
-                ),
-                child: const Text('리뷰쓰기'),
+                child: Text(
+                  item.review != null ? '리뷰 완료' : '리뷰 쓰기',
+                )
               ),
             ),
             const SizedBox(width: 8),
