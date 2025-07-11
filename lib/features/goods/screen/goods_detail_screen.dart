@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/features/cart/model/cart_item_model.dart';
+import 'package:cinemarket/features/cart/service/cart_service.dart';
 import 'package:cinemarket/features/goods/services/goods_cart_service.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_detail_viewmodel.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_recommended_viewmodel.dart';
@@ -114,19 +115,30 @@ class GoodsDetailScreen extends StatelessWidget {
                       );
                     }
                   },
-                  onBuyNow: () {
-                    final tempCartItem = CartItemModel(
-                      cartId: '',
-                      productId: item.id,
-                      name: item.name,
-                      description: item.description,
-                      price: item.price,
-                      stock: item.stock,
-                      quantity: 1,
-                      image: item.images.main,
-                    );
+                  onBuyNow: () async {
+                    final cartService = CartService();
+                    try {
+                      //장바구니에 추가
+                      await cartService.addItemToCart(
+                        productId: item.id,
+                        quantity: 1,
+                        unitPrice: item.price,
+                      );
+                      //전체 장바구니 다시 불러오기
+                      final cartItems = await cartService.fetchCartItems();
 
-                    context.push('/purchase', extra: [tempCartItem]);
+                      //추가한 상품 찾기
+                      final matched = cartItems.firstWhere((e) => e.productId == item.id);
+
+                      //구매 화면으로 이동
+                      context.push('/purchase', extra: [matched]);
+                    } catch (e) {
+                      CommonToast.show(
+                        context: context,
+                        message: '바로구매 실패: $e',
+                        type: ToastificationType.error,
+                      );
+                    }
                   },
                 ),
               ],
