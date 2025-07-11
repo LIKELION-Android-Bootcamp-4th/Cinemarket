@@ -9,6 +9,10 @@ import 'package:provider/provider.dart';
 class GoodsAllScreen extends StatelessWidget {
   const GoodsAllScreen({super.key});
 
+  Future<void> _refresh(BuildContext context) async {
+    await context.read<GoodsAllViewModel>().getAllGoods(force: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

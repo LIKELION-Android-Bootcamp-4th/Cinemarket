@@ -9,7 +9,10 @@ class HomeViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
 
-  Future<void> loadMovies(String date) async {
+
+  Future<void> loadMovies(String date, {bool force = false}) async {
+    if (!force && movies.isNotEmpty) return;
+
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -22,5 +25,10 @@ class HomeViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearMovies() {
+    movies.clear();
+    notifyListeners();
   }
 }

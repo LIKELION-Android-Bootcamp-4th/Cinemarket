@@ -10,7 +10,9 @@ class GoodsAllViewModel extends ChangeNotifier {
   GoodsAllViewModel({GoodsRepository? goodsRepository})
     : _goodsRepository = goodsRepository ?? GoodsRepository();
 
-  Future<void> getAllGoods() async {
+  Future<void> getAllGoods({bool force = false}) async {
+    if (!force && goodsList.isNotEmpty) return;
+
     try {
       goodsList = await _goodsRepository.getAllGoodsList();
       notifyListeners();
@@ -29,6 +31,11 @@ class GoodsAllViewModel extends ChangeNotifier {
       // notifyListeners();
       print("😎😎😎 통과");
     }
+  }
+
+  void clearGoods() {
+    goodsList.clear();
+    notifyListeners();
   }
 
 }
