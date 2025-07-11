@@ -21,6 +21,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   bool hasSearched = false;
 
   void _handleSearch(String query) async {
@@ -39,16 +40,25 @@ class _SearchScreenState extends State<SearchScreen> {
         hasSearched = false;
         _searchController.clear();
       });
+      context.read<SearchViewModel>().reset();
     } else {
       Navigator.pop(context);
     }
   }
 
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<SearchViewModel>();
-    final movieResults = viewModel.tmdbResults;
-    final goodsResults = viewModel.goodsResults;
+    final movieResults = viewModel.pageMovieResults;
+    final goodsResults = viewModel.pageGoodsResults;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -63,47 +73,80 @@ class _SearchScreenState extends State<SearchScreen> {
             Expanded(
               child: viewModel.isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  : Stack(
                 children: [
-                  const SearchSectionTitle(title: '굿즈'),
-                  if (!hasSearched || goodsResults.isEmpty)
-                    const SearchEmptyResultText()
-                  else
-                    CommonGridview<Goods>(
-                      items: goodsResults.map((item) {
-                        return Goods(
-                          id: item.id,
-                          name: item.name,
-                          description: item.description,
-                          price: item.price,
-                          stock: 0, // 임시값, 실제 데이터가 있다면 반영
-                          status: 'on_sale', // 임시값, 실제 item.status 있으면 사용
-                          favoriteCount: 0,
-                          viewCount: 0,
-                          orderCount: 0,
-                          reviewCount: 0,
-                          createdBy: 'unknown', // 실제 값 필요하면 item.createdBy 사용
-                          images: GoodsImages(
-                            main: item.mainImage,
-                            sub: const [],
-                          ),
-                          reviewStats: ReviewStats(
-                            averageRating: 0.0,
-                            totalReviews: 0,
-                            ratingDistribution: {},
-                          ),
-                          isFavorite: false,
-                        );
-                      }).toList(),
-                      itemType: ItemType.goods,
-                      isInScrollView: true,
-                    ),
+                  ListView(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    children: [
+                      const SearchSectionTitle(title: '굿즈'),
+                      if (!hasSearched || goodsResults.isEmpty)
+                        const SearchEmptyResultText()
+                      else ... [
+                        CommonGridview<Goods>(
+                          items: goodsResults.map((item) {
+                            return Goods(
+                              id: item.id,
+                              name: item.name,
+                              description: item.description,
+                              price: item.price,
+                              stock: 0, // 임시값, 실제 데이터가 있다면 반영
+                              status: 'on_sale', // 임시값, 실제 item.status 있으면 사용
+                              favoriteCount: 0,
+                              viewCount: 0,
+                              orderCount: 0,
+                              reviewCount: 0,
+                              createdBy: 'unknown', // 실제 값 필요하면 item.createdBy 사용
+                              images: GoodsImages(
+                                main: item.mainImage,
+                                sub: const [],
+                              ),
+                              reviewStats: ReviewStats(
+                                averageRating: 0.0,
+                                totalReviews: 0,
+                                ratingDistribution: {},
+                              ),
+                              isFavorite: false,
+                            );
+                          }).toList(),
+                          itemType: ItemType.goods,
+                          isInScrollView: true,
+                        ),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          viewModel.totalPages,
+                              (index) {
+                            final pageNum = index + 1;
+                            final isSelected = pageNum == viewModel.currentPage;
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  viewModel.goToGoodsPage(pageNum);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: isSelected
+                                      ? AppColors.textPrimary
+                                      : AppColors.widgetBackground,
+                                  foregroundColor: isSelected
+                                      ? AppColors.background
+                                      : AppColors.widgetBackground,
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                ),
+                                child: Text('$pageNum'),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   const SizedBox(height: 24),
                   const SearchSectionTitle(title: '영화'),
                   if (!hasSearched || movieResults.isEmpty)
                     const SearchEmptyResultText()
-                  else
+                  else ... [
                     CommonGridview<TmdbMovie>(
                       items: movieResults.map((movie) {
                         return TmdbMovie(
@@ -120,6 +163,48 @@ class _SearchScreenState extends State<SearchScreen> {
                       itemType: ItemType.movie,
                       isInScrollView: true,
                     ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      viewModel.movieTotalPages,
+                          (index) {
+                        final pageNum = index + 1;
+                        final isSelected = pageNum == viewModel.currentMoviePage;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              viewModel.goToMoviePage(pageNum);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: isSelected
+                                  ? AppColors.textPrimary
+                                  : AppColors.widgetBackground,
+                              foregroundColor: isSelected
+                                  ? AppColors.background
+                                  : AppColors.textPrimary,
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                            ),
+                            child: Text('$pageNum'),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+                      const SizedBox(height: 24),
+                    ],
+                  ),
+                  Positioned(
+                    right: 20,
+                    bottom: 20,
+                    child: FloatingActionButton(
+                      onPressed: _scrollToTop,
+                      backgroundColor: AppColors.pointAccent,
+                      child: const Icon(Icons.arrow_upward),
+                    ),
+                  ),
                 ],
               ),
             ),
