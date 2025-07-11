@@ -193,16 +193,22 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 ],
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 10),
                     ],
                   ),
                   Positioned(
-                    right: 20,
-                    bottom: 20,
-                    child: FloatingActionButton(
-                      onPressed: _scrollToTop,
-                      backgroundColor: AppColors.pointAccent,
-                      child: const Icon(Icons.arrow_upward),
+                    right: 10,
+                    bottom: 10,
+                    child: SizedBox(
+                      width: 48, // 원하는 크기
+                      height: 48,
+                      child: FloatingActionButton(
+                        onPressed: _scrollToTop,
+                        backgroundColor: AppColors.pointAccent,
+                        elevation: 4,
+                        shape: const CircleBorder(),
+                        child: const Icon(Icons.arrow_upward, size: 20),
+                      ),
                     ),
                   ),
                 ],
