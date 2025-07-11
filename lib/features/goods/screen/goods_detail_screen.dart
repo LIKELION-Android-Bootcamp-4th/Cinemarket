@@ -8,6 +8,7 @@ import 'package:cinemarket/features/goods/widget/tabs_delivery_refund.dart';
 import 'package:cinemarket/features/goods/widget/tabs_detail.dart';
 import 'package:cinemarket/features/goods/widget/tabs_inquiry.dart';
 import 'package:cinemarket/features/goods/widget/tabs_review.dart';
+import 'package:cinemarket/features/mypage/service/review_service.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:cinemarket/widgets/common_tab_view.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,6 @@ class GoodsDetailScreen extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        final viewModel = context.read<GoodsDetailViewmodel>();
         final item = snapshot.data!;
 
         return ChangeNotifierProvider(
@@ -54,7 +54,34 @@ class GoodsDetailScreen extends StatelessWidget {
                         CommonTabsContent(
                           widgets: getTabsDetailWidgets(item.description),
                         ),
-                        CommonTabsContent(widgets: getTabsReviewWidgets()),
+                        CommonTabsContent(
+                        widgets: [
+                          FutureBuilder<String>(
+                            future: ReviewService()
+                                .fetchContentIdByProductId(goodsId)
+                                .then((id) {
+                              if (id == null) return '';
+                              return ReviewService().fetchMovieTitleByContentId(id)
+                              .then((title) => title ?? '');
+                            }),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const SizedBox(); // 또는 로딩 위젯
+                              }
+
+                              final movieTitle = snapshot.data!;
+
+                              return getTabsReviewWidget(
+                                  context: context,
+                                  goodsId: goodsId,
+                                  goodsName: item.name,
+                                  movieTitle: movieTitle,
+                                  goodsImage: item.images.main,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                         CommonTabsContent(
                           widgets: getTabsDeliveryRefundWidgets(),
                         ),

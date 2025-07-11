@@ -1,4 +1,5 @@
 import 'package:cinemarket/features/goods/model/goods.dart';
+import 'package:cinemarket/features/goods/model/goods_review.dart';
 import 'package:cinemarket/features/goods/services/goods_service.dart';
 
 class GoodsRepository {
@@ -35,5 +36,15 @@ class GoodsRepository {
     final result = await _goodsService.getDetailGoods(goodsId: goodsId,);
 
     return result.data;
+  }
+
+  Future<List<GoodsReview>> getGoodsReviews({
+    required String goodsId,
+}) async {
+    final response = await _goodsService.getGoodsReviews(goodsId: goodsId);
+
+    final reviews = response.data['data']['items'] as List<dynamic>;
+
+    return reviews.map((review) => GoodsReview.fromJson(review)).toList();
   }
 }

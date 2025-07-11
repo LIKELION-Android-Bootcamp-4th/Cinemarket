@@ -6,24 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
-class ReviewData {
-  final String productName;
-  final String movieTitle;
-  final String productImage;
-  final double initialRating;
-  final String initialReviewText;
-  final List<String> photoUrls;
-
-  ReviewData({
-    required this.productName,
-    required this.movieTitle,
-    required this.productImage,
-    required this.initialRating,
-    required this.initialReviewText,
-    required this.photoUrls,
-  });
-}
-
 class MyReviewWidget extends StatefulWidget {
   const MyReviewWidget({super.key,});
 
