@@ -47,7 +47,7 @@ class BestMovieWidget extends StatelessWidget {
                         },
                         child: const Text(
                           '영화 더보기',
-                          style: TextStyle(color: Colors.grey),
+                          style: AppTextStyle.point
                         )
                     )
                   ]
