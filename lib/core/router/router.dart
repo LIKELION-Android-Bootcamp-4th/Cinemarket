@@ -1,3 +1,4 @@
+import 'package:cinemarket/features/cart/model/cart_item_model.dart';
 import 'package:cinemarket/features/cart/screen/cart_screen.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/features/favorite/screen/favorite_screen.dart';
@@ -116,7 +117,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/purchase',
       builder: (context, state) {
-        final cartItems = state.extra as List<CartItem>;
+        final cartItems = state.extra as List<CartItemModel>;
         return PurchaseScreen(cartItems: cartItems);
       },
     ),
