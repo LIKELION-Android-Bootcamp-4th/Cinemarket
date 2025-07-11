@@ -45,63 +45,65 @@ class MoviesScreenState extends State<MoviesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () => context.read<MoviesViewModel>().loadMovies(force: true),
+      child: Consumer<MoviesViewModel>(
+        builder: (context, vm, child) {
+          if (vm.movies.isEmpty && vm.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-    return Consumer<MoviesViewModel>(
-      builder: (context, vm, child) {
-        if (vm.movies.isEmpty && vm.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+          if (vm.errorMessage != null) {
+            return Center(child: Text('에러 발생: ${vm.errorMessage}'));
+          }
 
-        if (vm.errorMessage != null) {
-          return Center(child: Text('에러 발생: ${vm.errorMessage}'));
-        }
+          if (vm.movies.isEmpty) {
+            return const Center(child: Text('영화 데이터가 없습니다.'));
+          }
 
-        if (vm.movies.isEmpty) {
-          return const Center(child: Text('영화 데이터가 없습니다.'));
-        }
-
-        final movies = vm.movies;
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: SortDropdown(
-                  itemType: ItemType.movie,
-                  selectedValue: vm.sortType.label,
-                  onSelected: (sortType) {
-                    if (sortType == '최신순') {
-                      vm.changeSortTypeFromLabel('최신순');
-                    } else if (sortType == '평점순') {
-                      vm.changeSortTypeFromLabel('평점순');
-                    }
-                  },
+          final movies = vm.movies;
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: SortDropdown(
+                    itemType: ItemType.movie,
+                    selectedValue: vm.sortType.label,
+                    onSelected: (sortType) {
+                      if (sortType == '최신순') {
+                        vm.changeSortTypeFromLabel('최신순');
+                      } else if (sortType == '평점순') {
+                        vm.changeSortTypeFromLabel('평점순');
+                      }
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: CommonGridview(
-                  itemType: ItemType.movie,
-                  items: movies,
-                  scrollController: _scrollController,
+                const SizedBox(height: 10),
+                Expanded(
+                  child: CommonGridview(
+                    itemType: ItemType.movie,
+                    items: movies,
+                    scrollController: _scrollController,
+                  ),
                 ),
-              ),
-              if (vm.isLoading && vm.hasMore)
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-              // 더 이상 불러올 데이터가 없을 때 메시지 표시
-              if (!vm.hasMore && vm.movies.isNotEmpty)
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(child: Text('더 이상 불러올 영화가 없습니다.',style: AppTextStyle.body,)),
-                ),
-            ],
-          ),
-        );
-      },
+                if (vm.isLoading && vm.hasMore)
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                // 더 이상 불러올 데이터가 없을 때 메시지 표시
+                if (!vm.hasMore && vm.movies.isNotEmpty)
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: Text('더 이상 불러올 영화가 없습니다.',style: AppTextStyle.body,)),
+                  ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

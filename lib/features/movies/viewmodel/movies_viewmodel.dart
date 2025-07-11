@@ -61,7 +61,7 @@ class MoviesViewModel extends ChangeNotifier {
     if (!force && (_isLoading || !_hasMore)) return;
 
     if (force) {
-      clearMovies(); // 🔄 강제 초기화 후 다시 로딩
+      clearMovies();
     }
 
     if (_isLoading || !_hasMore) {
