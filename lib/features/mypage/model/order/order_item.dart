@@ -1,4 +1,5 @@
 import 'package:cinemarket/features/mypage/model/order/order_item_product.dart';
+import 'package:cinemarket/features/mypage/model/order/order_review.dart';
 
 class OrderItem {
   final OrderItemProduct productId;
@@ -8,6 +9,8 @@ class OrderItem {
   final int totalPrice;
   final String? productImage;
   final String stockType;
+  final OrderReview? review;
+  String? movieTitle;
 
   OrderItem({
     required this.productId,
@@ -17,6 +20,8 @@ class OrderItem {
     required this.totalPrice,
     this.productImage,
     required this.stockType,
+    this.review,
+    this.movieTitle,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic>? json) {
@@ -24,21 +29,31 @@ class OrderItem {
       return OrderItem(
         productId: OrderItemProduct(id: '', name: ''),
         productName: '',
-        quantity: 0,
-        unitPrice: 0,
-        totalPrice: 0,
-        productImage: null,
-        stockType: '',
+        quantity: 1, // 수량 정보 없음 → 기본값 1
+        unitPrice: json?['price'] ?? 0,
+        totalPrice: json?['price'] ?? 0,
+        productImage: json?['images']?['main'],
+        stockType: 'on_sale',
+        review: null,
+        movieTitle: null,
       );
     }
+
     return OrderItem(
-      productId: OrderItemProduct.fromJson(json['productId']),
-      productName: json['productName'] ?? '',
-      quantity: json['quantity'] ?? 0,
-      unitPrice: json['unitPrice'] ?? 0,
-      totalPrice: json['totalPrice'] ?? 0,
-      productImage: json['productImage'],
-      stockType: json['stockType'] ?? '',
+      productId: OrderItemProduct.fromJson({
+        'id': json['id'],
+        'name': json['name'],
+        'thumbnailImage': json['images']?['main'],
+      }),
+      productName: json['name'] ?? '',
+      quantity: 1, // 수량 정보 없음
+      unitPrice: json['price'] ?? 0,
+      totalPrice: json['price'] ?? 0,
+      productImage: json['images']?['main'],
+      stockType: json['status'] ?? 'on_sale',
+      review: null,
+      movieTitle: null,
     );
   }
+
 }
