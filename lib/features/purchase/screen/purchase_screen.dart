@@ -1,7 +1,7 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
+import 'package:cinemarket/features/cart/model/cart_item_model.dart';
 import 'package:cinemarket/features/cart/service/cart_service.dart';
-import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/features/purchase/widgets/bottom_action_button.dart';
 import 'package:cinemarket/features/purchase/widgets/delivery_info_cart.dart';
 import 'package:cinemarket/features/purchase/widgets/goods_summary_card.dart';
@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 class PurchaseScreen extends StatefulWidget {
-  final List<CartItem> cartItems;
+  final List<CartItemModel> cartItems;
 
   const PurchaseScreen({super.key, required this.cartItems});
 
@@ -22,7 +22,7 @@ class PurchaseScreen extends StatefulWidget {
 }
 
 class _PurchaseScreen extends State<PurchaseScreen> {
-  late List<CartItem> cartItems;
+  late List<CartItemModel> cartItems;
   final CartService _cartService = CartService();
   final memoController = TextEditingController();
 
@@ -44,19 +44,37 @@ class _PurchaseScreen extends State<PurchaseScreen> {
 
   void increaseQuantity(int index) {
     setState(() {
-      cartItems[index].quantity++;
+      final item = cartItems[index];
+      cartItems[index] = CartItemModel(
+        cartId: item.cartId,
+        productId: item.productId,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        stock: item.stock,
+        quantity: item.quantity + 1,
+        image: item.image,
+      );
     });
   }
 
   void decreaseQuantity(int index) {
     setState(() {
-      if (cartItems[index].quantity > 1) {
-        cartItems[index].quantity--;
+      final item = cartItems[index];
+      if (item.quantity > 1) {
+        cartItems[index] = CartItemModel(
+          cartId: item.cartId,
+          productId: item.productId,
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          stock: item.stock,
+          quantity: item.quantity - 1,
+          image: item.image,
+        );
       }
     });
   }
-
-
 
   int get totalPrice =>
       cartItems.fold(0, (sum, item) => sum + item.price * item.quantity);
@@ -97,8 +115,8 @@ class _PurchaseScreen extends State<PurchaseScreen> {
 
           // 배송지 카드 (주소 선택 포함)
           DeliveryInfoCard(
-            address: address,
-            zipCode: zipCode,
+            address: myPageViewModel.fullAddress,
+            zipCode: myPageViewModel.zipCode,
             onAddressChanged: (newAddress, newZip) {
               myPageViewModel.setAddress(newAddress, newZip);
             },
@@ -106,40 +124,37 @@ class _PurchaseScreen extends State<PurchaseScreen> {
 
           const SizedBox(height: 16),
           PaymentInfoCard(items: cartItems),
-
-          const SizedBox(height: 16),
-          // TextField(
-          //   controller: memoController,
-          //   style: const TextStyle(color: Colors.white),
-          //   decoration: const InputDecoration(
-          //     labelText: '배송 메모 (선택)',
-          //     labelStyle: TextStyle(color: Colors.white),
-          //     filled: true,
-          //     fillColor: Colors.grey,
-          //     border: OutlineInputBorder(),
-          //   ),
-          // ),
           const SizedBox(height: 80),
         ],
       ),
       bottomNavigationBar: BottomActionButton(
         label: '구매',
         onPressed: () async {
-          if (address == null || zipCode == null) {
+          final cartIds = cartItems.map((e) => e.cartId).where((id) => id.isNotEmpty).toList();
+
+          if (cartIds.isEmpty) {
             CommonToast.show(
               context: context,
-              message: '배송지를 선택해주세요.',
+              message: '선택된 상품이 없습니다.',
+              type: ToastificationType.error,
+            );
+            return;
+          }
+
+          if(myPageViewModel.address1 == null || myPageViewModel.zipCode == null) {
+            CommonToast.show(
+              context: context,
+              message: '배송지를 선택해주세요',
               type: ToastificationType.error,
             );
             return;
           }
 
           try {
-            final cartIds = cartItems.map((e) => e.cartId).toList();
             await _cartService.checkoutCart(
               cartIds: cartIds,
-              recipient: name,
-              address: address,
+              recipient: myPageViewModel.recipientName,
+              address: '${myPageViewModel.address1??''} ${myPageViewModel.address2 ?? ''}',
               phone: myPageViewModel.safePhone,
               zipCode: zipCode!,
               memo: memoController.text,
