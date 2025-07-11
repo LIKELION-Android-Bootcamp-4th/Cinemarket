@@ -1,115 +1,126 @@
-import 'package:cinemarket/core/theme/app_colors.dart';
-import 'package:cinemarket/features/cart/widgets/cart_bottom_bar_widgets.dart';
-import 'package:cinemarket/features/cart/widgets/cart_empty_view_widgets.dart';
-import 'package:cinemarket/features/cart/widgets/cart_item_tile.dart';
-import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+import '../viewmodel/cart_viewmodel.dart';
+import '../widgets/cart_item_tile.dart';
+import '../widgets/cart_empty_view_widgets.dart';
+import '../widgets/cart_bottom_bar_widgets.dart';
 
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  List<CartItem> cartItems = [];
-  bool selectAll = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    cartItems = [
-      CartItem(name: '영화 굿즈 인형', quantity: 1, price: 150000, isSelected: true),
-      CartItem(name: '한정판 포스터', quantity: 2, price: 10000, isSelected: true),
-    ];
-    selectAll = cartItems.isNotEmpty && cartItems.every((item) => item.isSelected);
-  }
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('장바구니'),
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
-      ),
-      body: cartItems.isEmpty
-          ? const CartEmptyViewWidgets()
-          : Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
+    return ChangeNotifierProvider(
+      create: (_) => CartViewModel(),
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white,),
+            onPressed: () => context.pop(),
+          ),
+          title: const Text(
+            '장바구니',
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+        ),
+        body: Consumer<CartViewModel>(
+          builder: (context, viewModel, _) {
+            if (viewModel.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            final cartItems = viewModel.items;
+
+            final allSelected = cartItems.isNotEmpty && cartItems.every((item) => item.isSelected);
+
+            if (cartItems.isEmpty) {
+              return const CartEmptyViewWidgets();
+            }
+
+            return Column(
               children: [
-                Checkbox(
-                  value: selectAll,
-                  onChanged: (value) {
-                    setState(() {
-                      selectAll = value!;
-                      for (var item in cartItems) {
-                        item.isSelected = value;
-                      }
-                    });
-                  },
-                  activeColor: Colors.black,
+                //전체선택 +삭제 버튼
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: allSelected,
+                        onChanged: (value) =>
+                            viewModel.toggleSelectAll(value ?? false),
+                        activeColor: Colors.black,
+                      ),
+                      const Text(
+                        '전체 선택',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.white),
+                        onPressed: () {
+                          final selectedCartIds = cartItems
+                              .where((item) => item.isSelected).map((e) => e.cartId)
+                              .toList();
+                          if (selectedCartIds.isEmpty) {
+                            CommonToast.show(
+                              context: context,
+                              message: '삭제할 상품이 없습니다.',
+                              type: ToastificationType.warning,
+                            );
+                          } else {
+                            viewModel.removeSelectedItemsFromCart(selectedCartIds);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                Text('전체 선택', style: TextStyle(color: AppColors.textSecondary)),
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.white),
-                  onPressed: () {
-                    setState(() {
-                      cartItems.removeWhere((item) => item.isSelected);
-                    });
+                //장바구니 아이템 목록
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: cartItems.length,
+                    itemBuilder: (context, index) {
+                      final item = cartItems[index];
+                      return CartItemTile(
+                        item: item,
+                        onChanged: (_) => viewModel.toggleSelect(index),
+                        onIncrease: () => viewModel.increaseQuantity(index),
+                        onDecrease: () => viewModel.decreaseQuantity(index),
+                      );
+                    },
+                  ),
+                ),
+
+                //결제
+                CartBottomBarWidgets(
+                  items: cartItems,
+                  onSelectAll: (selectAll) => viewModel.toggleSelectAll(selectAll),
+                  onPurchasePressed: () {
+                    final selectedItems =
+                    viewModel.items.where((item) => item.isSelected).toList();
+
+                    if (selectedItems.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('선택된 상품이 없습니다')),
+                      );
+                      return;
+                    }
+
+                    // 선택된 아이템 리스트를 PurchaseScreen으로 전달
+                    context.push('/purchase', extra: selectedItems);
                   },
                 ),
               ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: cartItems.length,
-              itemBuilder: (context, index) {
-                return CartItemTile(
-                  item: cartItems[index],
-                  onChanged: (checked) {
-                    setState(() {
-                      cartItems[index].isSelected = checked;
-                      selectAll = cartItems.isNotEmpty &&
-                          cartItems.every((item) => item.isSelected);
-                    });
-                  },
-                  onIncrease: () {
-                    setState(() {
-                      cartItems[index].quantity++;
-                    });
-                  },
-                  onDecrease: () {
-                    setState(() {
-                      if (cartItems[index].quantity > 1) {
-                        cartItems[index].quantity--;
-                      }
-                    });
-                  },
-                );
-              },
-            ),
-          ),
-          CartBottomBarWidgets(
-            items: cartItems,
-            onSelectAll: (bool value) {
-              setState(() {
-                selectAll = value;
-                for (var item in cartItems) {
-                  item.isSelected = value;
-                }
-              });
-            },
-          )
-        ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
 import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
 import 'package:cinemarket/features/favorite/service/favorite_service.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MoviesViewModel()),
         ChangeNotifierProvider(create: (_) => SearchViewModel()),
         ChangeNotifierProvider(create: (_) => MovieDetailViewModel()),
+        ChangeNotifierProvider(create: (_) => MyPageViewModel()),
         ChangeNotifierProvider(
           create:
               (_) => FavoriteViewModel(
