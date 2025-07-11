@@ -6,16 +6,23 @@ class GoodsAllViewModel extends ChangeNotifier {
   final GoodsRepository _goodsRepository;
 
   List<Goods> goodsList = [];
+  bool _isLoaded = false;
+
 
   GoodsAllViewModel({GoodsRepository? goodsRepository})
     : _goodsRepository = goodsRepository ?? GoodsRepository();
 
+  bool get isLoaded => _isLoaded;
+
+
   Future<void> getAllGoods({bool force = false}) async {
-    if (!force && goodsList.isNotEmpty) return;
+    if (!force && _isLoaded) return;
 
     try {
       goodsList = await _goodsRepository.getAllGoodsList();
       notifyListeners();
+      _isLoaded = true;
+
 
       // 로그 출력
       print("😍😍😍");
@@ -35,6 +42,7 @@ class GoodsAllViewModel extends ChangeNotifier {
 
   void clearGoods() {
     goodsList.clear();
+    _isLoaded = false;
     notifyListeners();
   }
 
