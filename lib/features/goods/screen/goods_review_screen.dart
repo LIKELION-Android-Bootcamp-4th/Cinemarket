@@ -1,8 +1,10 @@
+import 'package:cinemarket/core/network/api_client.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_review_viewmodel.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:cinemarket/widgets/review_item.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -82,8 +84,26 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                 ],
                 initialRating: review.rating.toDouble(),
                 initialReviewText: review.comment,
-                onClick1: () {},
-                onClick2: () {},
+                likeCount: review.likeCount,
+                onClick1: () async {
+                  Logger().i('review id : ${review.id}');
+
+                  try {
+                    final response = await ApiClient.dio.post(
+                        '/api/reviews/${review.id}/like-toggle');
+                    Logger().i('${response.data['message']}');
+                  } on DioException catch(e) {
+                    Logger().e('$e');
+                    Logger().e('${e.stackTrace}');
+
+                    rethrow;
+                  }
+                },
+                onClick2: () async {
+                  Logger().i('review id : ${review.id}');
+                  final response = await ApiClient.dio.post('/api/dislikes/review/${review.id}');
+                  Logger().i('${response.data['message']}');
+                },
               );
             },
           );

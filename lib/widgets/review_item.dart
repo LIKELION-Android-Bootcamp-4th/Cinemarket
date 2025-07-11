@@ -69,7 +69,7 @@ class _ReviewItemState extends State<ReviewItem> {
           const SizedBox(height: 16.0),
           _buildReviewText(),
           const SizedBox(height: 16.0),
-          _buildActionButtons(_likeCount),
+          _buildActionButtons(),
           const SizedBox(height: 24.0),
           Container(height: 5.0, width: 500.0, color: AppColors.innerWidget),
         ],
@@ -198,7 +198,7 @@ class _ReviewItemState extends State<ReviewItem> {
     );
   }
 
-  Widget _buildActionButtons(int _likeCount) {
+  Widget _buildActionButtons() {
     String button1;
     String button2;
 
