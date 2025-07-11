@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cinemarket/features/mypage/model/review.dart';
+import 'package:cinemarket/features/mypage/model/review_request.dart';
 import 'package:cinemarket/features/mypage/service/review_service.dart';
 
 class ReviewRepository {
@@ -31,9 +32,6 @@ class ReviewRepository {
         final contentId = await _service.fetchContentIdByProductId(productId);
         if (contentId != null) {
           final fetchedTitle = await _service.fetchMovieTitleByContentId(contentId);
-          if (fetchedTitle != null) {
-            print('fetchedTitle: $fetchedTitle');
-          }
           movieTitle = fetchedTitle ?? '';
         }
       }
@@ -44,10 +42,6 @@ class ReviewRepository {
       });
 
       reviews.add(review);
-    }
-
-    for (final review in reviews) {
-      print('review: ${review.movieTitle}');
     }
 
     return reviews;
@@ -72,4 +66,9 @@ class ReviewRepository {
       newImages: newImages,
     );
   }
+
+  Future<bool> createReview(ReviewRequest request) {
+    return _service.createReview(request);
+  }
+
 }

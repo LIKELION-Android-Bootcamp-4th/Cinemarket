@@ -20,6 +20,13 @@ class AppTextStyle {
     color: AppColors.textPrimary,
   );
 
+  static const TextStyle bodyLarge = TextStyle(
+    fontFamily: _fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
   static const TextStyle body = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 14,

@@ -16,10 +16,12 @@ class MyPageDetailScreen extends StatelessWidget {
     final dynamic extraData = GoRouterState.of(context).extra;
     String menu = '';
     Review? review;
+    String? orderId;
 
     if (extraData is Map<String, dynamic>) {
       menu = extraData['where'] as String? ?? '';
       review = extraData['review'] as Review?;
+      orderId = extraData['orderId'] as String?;
     } else if (extraData is String) {
       menu = extraData;
     }
@@ -40,7 +42,7 @@ class MyPageDetailScreen extends StatelessWidget {
         break;
       case 'order_detail':
         title = '주문상세내역';
-        bodyWidget = const OrderDetailWidget();
+        bodyWidget = OrderDetailWidget(orderId: orderId!);
         break;
       case 'my_review':
         title = '나의 리뷰';
