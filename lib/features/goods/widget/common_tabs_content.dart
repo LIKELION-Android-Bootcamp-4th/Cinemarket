@@ -15,7 +15,7 @@ class CommonTabsContent extends StatelessWidget {
         children: [
           ...widgets,
           const SizedBox(height: 8),
-          RecommendGoodsWidget(dummyGoods: dummyGoods),
+          RecommendGoodsWidget(),
         ],
       ),
     );

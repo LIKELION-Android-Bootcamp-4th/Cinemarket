@@ -1,14 +1,48 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/widgets/common_toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:toastification/toastification.dart';
+import 'package:kpostal/kpostal.dart';
+
+
 
 class DeliveryInfoCard extends StatelessWidget {
-  const DeliveryInfoCard({super.key});
+  final String? address;
+  final String? zipCode;
+  final void Function(String address, String zipCode)? onAddressChanged;
+
+  const DeliveryInfoCard({
+    super.key,
+    this.address,
+    this.zipCode,
+    this.onAddressChanged,
+  });
+
+
+  Future<void> _selectAddress(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => KpostalView(
+          useLocalServer: true,
+          localPort: 1024,
+          callback: (Kpostal result) {
+            if (onAddressChanged != null) {
+              onAddressChanged!(result.address, result.postCode);
+            }
+          },
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    final displayText = (address != null && zipCode != null && address!.isNotEmpty && zipCode!.isNotEmpty)
+        ? '($zipCode) $address'
+        : '배송지 정보가 없습니다.';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -21,9 +55,9 @@ class DeliveryInfoCard extends StatelessWidget {
             color: AppColors.innerWidget,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Text(
-              '서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456서울시 은평구 123456',
-              style: AppTextStyle.body
+          child: Text(
+            displayText,
+            style: AppTextStyle.body,
           ),
         ),
         const SizedBox(height: 8),
@@ -32,13 +66,7 @@ class DeliveryInfoCard extends StatelessWidget {
             backgroundColor: AppColors.widgetBackground,
             side: BorderSide(color: AppColors.background),
           ),
-          onPressed: () {
-            CommonToast.show(
-              context: context,
-              message: '기능 준비중',
-              type: ToastificationType.info
-            );
-          },
+          onPressed: () => _selectAddress(context),
           child: const Text(
             '배송지 변경',
             style: TextStyle(color: AppColors.textSecondary),

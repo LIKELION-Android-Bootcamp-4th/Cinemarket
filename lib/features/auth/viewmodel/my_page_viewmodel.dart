@@ -29,6 +29,15 @@ class MyPageViewModel extends ChangeNotifier {
   String? get zipCode => _zipCode;
   String? get error => _error;
 
+  String get fullAddress {
+    final parts = [_address1, _address2];
+    return parts.where((p) => p != null && p!.isNotEmpty).join(' ');
+  }
+
+  String get recipientName => _nickname ?? '고객';
+  String get safePhone => _phone ?? '010-0000-0000';
+
+
   // 초기화 - 토큰 확인 및 프로필 조회
   Future<void> initialize() async {
     await _checkTokenAndLoadProfile();
@@ -130,6 +139,12 @@ class MyPageViewModel extends ChangeNotifier {
     _error = null;
     notifyListeners();
     _checkTokenAndLoadProfile();
+  }
+
+  void setAddress(String address1, String zipCode) {
+    _address1 = address1;
+    _zipCode = zipCode;
+    notifyListeners();
   }
 
   // 에러 초기화
