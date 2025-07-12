@@ -41,7 +41,7 @@ class BestGoodsWidget extends StatelessWidget {
                         },
                         child: const Text(
                           '굿즈 더보기',
-                          style: TextStyle(color: Colors.grey),
+                            style: AppTextStyle.point
                         )
                     )
                   ]
