@@ -76,7 +76,7 @@ class CommonGridview<T> extends StatelessWidget {
             child: MovieItem(
               imageUrl: 'https://image.tmdb.org/t/p/w500${item.posterPath}',
               movieName: item.title,
-              cumulativeSales: 0, //추후 판매량 데이터 연결
+              cumulativeSales: item.cumulativeSales,
               providers: item.providers,
               isFavorite: false, //추후 즐겨찾기 연동?
             ),

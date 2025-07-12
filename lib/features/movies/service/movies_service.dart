@@ -122,4 +122,33 @@ class MoviesService {
       throw Exception('영화 연관 굿즈 불러오기 실패: $e');
     }
   }
+
+  // 영화의 상품 누적 판매량 조회
+  Future<int> fetchCumulativeSales(int contentId) async {
+    try {
+      final response = await _dio.get('/api/content-product/products/$contentId');
+      final items = response.data['data']?['items'] ?? [];
+
+      if (items is! List) return 0;
+
+      int totalSales = 0;
+      for (final item in items) {
+        final count = item['orderCount'];
+        if (count is int) {
+          totalSales += count;
+        }
+      }
+      return totalSales;
+    } on DioException catch (e) {
+      // 400 Error 시 처리
+      if (e.response?.statusCode == 400) {
+        return 0;
+      }
+      rethrow;
+    } catch (e) {
+      throw Exception('누적 판매량 계산 실패: $e');
+    }
+  }
+
+
 }
