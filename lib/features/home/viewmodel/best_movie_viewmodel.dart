@@ -13,7 +13,8 @@ class BestMovieViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  Future<void> loadTrendingMovies() async {
+  Future<void> loadTrendingMovies({bool force = false}) async {
+    if (!force && movies.isNotEmpty) return;
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();

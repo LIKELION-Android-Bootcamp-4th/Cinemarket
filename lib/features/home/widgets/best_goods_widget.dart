@@ -1,5 +1,5 @@
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/features/home/viewModel/best_goods_viewmodel.dart';
+import 'package:cinemarket/features/home/viewmodel/best_goods_viewmodel.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

@@ -57,7 +57,13 @@ class MoviesViewModel extends ChangeNotifier {
     loadMovies();
   }
 
-  Future<void> loadMovies() async {
+  Future<void> loadMovies({bool force = false}) async {
+    if (!force && (_isLoading || !_hasMore)) return;
+
+    if (force) {
+      clearMovies();
+    }
+
     if (_isLoading || !_hasMore) {
       return;
     }
@@ -79,5 +85,12 @@ class MoviesViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearMovies() {
+    _movies.clear();
+    _currentPage = 1;
+    _hasMore = true;
+    notifyListeners();
   }
 }
