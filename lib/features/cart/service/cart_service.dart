@@ -77,7 +77,7 @@ class CartService {
   }
 
   Future<void> checkoutCart({
-    required List<String> cartIds,
+    required List<Map<String, dynamic>> cartItems,
     required String recipient,
     required String address,
     required String phone,
@@ -93,7 +93,7 @@ class CartService {
           "zipCode": zipCode,
         },
         "memo": memo,
-        "cartIds": cartIds,
+        "cartItems": cartItems.map((e) => e['cartId']).toList(),
       };
 
       final response = await _dio.post('/api/cart/checkout', data: body);

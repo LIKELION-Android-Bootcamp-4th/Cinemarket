@@ -1,3 +1,4 @@
+import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +92,7 @@ class CartScreen extends StatelessWidget {
                       return CartItemTile(
                         item: item,
                         onChanged: (_) => viewModel.toggleSelect(index),
-                        onIncrease: () => viewModel.increaseQuantity(index),
+                        onIncrease: (context) => viewModel.increaseQuantity(index, context),
                         onDecrease: () => viewModel.decreaseQuantity(index),
                       );
                     },

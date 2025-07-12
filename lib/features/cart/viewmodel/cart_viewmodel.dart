@@ -1,6 +1,8 @@
 import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 import '../service/cart_service.dart';
 
 class CartViewModel extends ChangeNotifier {
@@ -59,6 +61,7 @@ class CartViewModel extends ChangeNotifier {
           name: e.name,
           quantity: e.quantity,
           price: e.price,
+          stock: e.stock,
           imageUrl: safeImage,
           isSelected: false,
         );
@@ -109,9 +112,20 @@ class CartViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void increaseQuantity(int index) {
-    _items[index].quantity++;
-    notifyListeners();
+  void increaseQuantity(int index, BuildContext context) {
+    final item = _items[index];
+    final maxQuantity = item.stock - 10;
+
+    if (item.quantity < maxQuantity) {
+      item.quantity++;
+      notifyListeners();
+    } else {
+      CommonToast.show(
+        context: context,
+        message: '최대 수량은 ${maxQuantity}개까지 가능합니다.',
+        type: ToastificationType.warning,
+      );
+    }
   }
 
   void decreaseQuantity(int index) {

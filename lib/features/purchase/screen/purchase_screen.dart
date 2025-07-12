@@ -44,15 +44,36 @@ class _PurchaseScreen extends State<PurchaseScreen> {
 
   void increaseQuantity(int index) {
     setState(() {
-      cartItems[index].quantity++;
+      final item = cartItems[index];
+      cartItems[index] = CartItem(
+        cartId: item.cartId,
+        productId: item.productId,
+        name: item.name,
+        quantity: item.quantity + 1,
+        price: item.price,
+        stock: item.stock,
+        isSelected: item.isSelected,
+        imageUrl: item.imageUrl,
+      );
     });
   }
 
   void decreaseQuantity(int index) {
     setState(() {
-      if (cartItems[index].quantity > 1) {
-        cartItems[index].quantity--;
+      final item = cartItems[index];
+      if (item.quantity > 1) {
+        cartItems[index] = CartItem(
+          cartId: item.cartId,
+          productId: item.productId,
+          name: item.name,
+          quantity: item.quantity - 1,
+          price: item.price,
+          stock: item.stock,
+          isSelected: item.isSelected,
+          imageUrl: item.imageUrl,
+        );
       }
+
     });
   }
 
@@ -108,17 +129,7 @@ class _PurchaseScreen extends State<PurchaseScreen> {
           PaymentInfoCard(items: cartItems),
 
           const SizedBox(height: 16),
-          // TextField(
-          //   controller: memoController,
-          //   style: const TextStyle(color: Colors.white),
-          //   decoration: const InputDecoration(
-          //     labelText: '배송 메모 (선택)',
-          //     labelStyle: TextStyle(color: Colors.white),
-          //     filled: true,
-          //     fillColor: Colors.grey,
-          //     border: OutlineInputBorder(),
-          //   ),
-          // ),
+
           const SizedBox(height: 80),
         ],
       ),
@@ -137,13 +148,14 @@ class _PurchaseScreen extends State<PurchaseScreen> {
           try {
             final cartIds = cartItems.map((e) => e.cartId).toList();
             await _cartService.checkoutCart(
-              cartIds: cartIds,
+              cartItems: cartItems.map((e) => {'cartId': e.cartId}).toList(), // 이 줄을 cartIds로 바꿈
               recipient: name,
               address: address,
               phone: myPageViewModel.safePhone,
               zipCode: zipCode!,
               memo: memoController.text,
             );
+
             CommonToast.show(
               context: context,
               message: '구매가 완료되었습니다.',
