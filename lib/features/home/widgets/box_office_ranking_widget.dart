@@ -171,7 +171,6 @@ class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
                             style: AppTextStyle.point,
                           )
                         ],
-                      ),
                     ),
                   );
                 },
