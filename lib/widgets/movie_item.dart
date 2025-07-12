@@ -100,28 +100,30 @@ class _MovieItemState extends State<MovieItem> {
           const SizedBox(height: 2),
           Padding(
             padding: const EdgeInsets.only(left: 4, bottom: 4,),
-            child: Row(
-              children: widget.providers.map((provider) {
-                //watcha 로고 이상하게 나오는 TMDB 상 오류 -> 네트워크 샘플 이미지로 대체 -> 추후 변경
-                final isWatcha = provider['providerName']?.toLowerCase() == 'watcha';
-                final logoUrl = isWatcha
-                    ? 'https://play-lh.googleusercontent.com/vAkKvTtE8kdb0MWWxOVaqYVf0_suB-WMnfCR1MslBsGjhI49dAfF1IxcnhtpL3PnjVY'
-                    : provider['logoUrl'] ?? '';
+            child: widget.providers.isNotEmpty
+              ? Row(
+                  children: widget.providers.map((provider) {
+                    //TMDB watcha 로고 오류 -> 네트워크 이미지로 대체
+                    final isWatcha = provider['providerName']?.toLowerCase() == 'watcha';
+                    final logoUrl = isWatcha
+                        ? 'https://play-lh.googleusercontent.com/vAkKvTtE8kdb0MWWxOVaqYVf0_suB-WMnfCR1MslBsGjhI49dAfF1IxcnhtpL3PnjVY'
+                        : provider['logoUrl'] ?? '';
 
-                return Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: Image.network(
-                      logoUrl,
-                      width: 15,
-                      height: 15,
-                      errorBuilder: (context, error, stackTrace) => const SizedBox(),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.network(
+                          logoUrl,
+                          width: 15,
+                          height: 15,
+                          errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                )
+              : const SizedBox(height: 15,)
           ),
         ],
       ),
