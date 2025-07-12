@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CommonGridview<T> extends StatelessWidget {
-  // final List<Map<String, dynamic>> items;
   final List<T> items;
   final ItemType itemType;
   final bool isInScrollView;
@@ -18,7 +17,7 @@ class CommonGridview<T> extends StatelessWidget {
     required this.itemType,
     required this.items,
     this.isInScrollView = false,
-    this.scrollController, // ✅ 추가
+    this.scrollController,
   });
 
   @override
@@ -26,6 +25,16 @@ class CommonGridview<T> extends StatelessWidget {
     final double aspectRatio = switch (itemType) {
       ItemType.goods => 0.7,
       ItemType.movie => 0.51,
+    };
+
+    final double crossAxisSpacing = switch (itemType) {
+      ItemType.goods => 8,
+      ItemType.movie => 16,
+    };
+
+    final double mainAxisSpacing = switch (itemType) {
+      ItemType.goods => 8,
+      ItemType.movie => 16,
     };
 
     return GridView.builder(
@@ -36,8 +45,8 @@ class CommonGridview<T> extends StatelessWidget {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: aspectRatio,
-        crossAxisSpacing: 8, // todo: 그리드뷰 내부 패딩값 논의
-        mainAxisSpacing: 8,
+        crossAxisSpacing: crossAxisSpacing,
+        mainAxisSpacing: mainAxisSpacing,
       ),
       itemBuilder: (context, index) {
         final item = items[index];
