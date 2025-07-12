@@ -30,18 +30,17 @@ class MoviesService {
     );
   }
 
-  //평점순 데이터 통신
-  Future<List<TmdbMovie>> fetchTopRatedMovies({int page = 1}) async {
+  //정렬 기준 사용 데이터 통신
+  Future<List<TmdbMovie>> fetchMoviesBySortKey(String sortKey, {int page = 1}) async {
     final response = await _tmdbDio.get('/discover/movie', queryParameters: {
       'api_key': _apiKey,
       'language': 'ko-KR',
       'region': 'KR',
-      'sort_by': 'vote_average.desc',
+      'sort_by': sortKey,
       'vote_count.gte': 10000, //1000표 이상 받은 인기 영화만 필터링.
       'primary_release_date.gte': '${DateTime.now().year - 10}-01-01',
       'page': page,
     });
-    print(response.data['results']);
 
     final movies = _mapResults(response.data['results']);
 
