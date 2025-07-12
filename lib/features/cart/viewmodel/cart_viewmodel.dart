@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:flutter/material.dart';
 import '../service/cart_service.dart';
@@ -30,6 +31,15 @@ class CartViewModel extends ChangeNotifier {
   CartViewModel() {
     fetchCart();
     fetchCartCount();
+  }
+
+  Future<void> checkLoginAndFetchCount() async {
+    final isLoggedIn = await TokenStorage.isLoggedIn();
+    if (isLoggedIn) {
+      await fetchCartCount();
+    } else {
+      _cartCount = 0;
+    }
   }
 
   Future<void> fetchCart() async {
