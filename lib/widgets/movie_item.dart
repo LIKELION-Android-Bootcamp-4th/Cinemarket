@@ -46,6 +46,14 @@ class _MovieItemState extends State<MovieItem> {
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
+                      errorBuilder: (context,error,stackTrace) {
+                        return Image.asset(
+                          'assets/images/default_poster.png',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        );
+                      },
                     ),
                   ),
                 ),
