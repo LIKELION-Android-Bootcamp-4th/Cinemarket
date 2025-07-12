@@ -1,4 +1,7 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:cinemarket/features/cart/model/cart_item_model.dart';
+import 'package:cinemarket/features/cart/service/cart_service.dart';
+import 'package:cinemarket/features/goods/services/goods_cart_service.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_detail_viewmodel.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_recommended_viewmodel.dart';
 import 'package:cinemarket/features/goods/widget/bottom_buttons_widget.dart';
@@ -11,8 +14,11 @@ import 'package:cinemarket/features/goods/widget/tabs_review.dart';
 import 'package:cinemarket/features/mypage/service/review_service.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:cinemarket/widgets/common_tab_view.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:toastification/toastification.dart';
 
 class GoodsDetailScreen extends StatelessWidget {
   final String goodsId;
@@ -90,7 +96,51 @@ class GoodsDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const BottomButtonsWidget(),
+                BottomButtonsWidget(
+                  goods: item,
+                  onAddToCart: () async {
+                    try {
+                      await context.read<GoodsDetailViewmodel>().addToCartFromGoods(item);
+
+                      CommonToast.show(
+                        context: context,
+                        message: '장바구니에 추가되었습니다.',
+                        type: ToastificationType.success,
+                      );
+                    } catch (e) {
+                      CommonToast.show(
+                        context: context,
+                        message: '장바구니 추가 실패',
+                        type: ToastificationType.error,
+                      );
+                    }
+                  },
+                  onBuyNow: () async {
+                    final cartService = CartService();
+                    try {
+                      //장바구니에 추가
+                      await cartService.addItemToCart(
+                        productId: item.id,
+                        quantity: 1,
+                        unitPrice: item.price,
+                      );
+                      //전체 장바구니 다시 불러오기
+                      final cartItems = await cartService.fetchCartItems();
+
+                      //추가한 상품 찾기
+                      final matched = cartItems.firstWhere((e) => e.productId == item.id);
+
+                      //구매 화면으로 이동
+                      context.push('/purchase', extra: [matched]);
+                    } catch (e) {
+                      CommonToast.show(
+                        context: context,
+                        message: '바로구매 실패: $e',
+                        type: ToastificationType.error,
+                      );
+                    }
+                  },
+                ),
               ],
             ),
           )
