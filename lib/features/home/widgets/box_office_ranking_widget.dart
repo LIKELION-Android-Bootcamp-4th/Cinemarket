@@ -168,10 +168,11 @@ class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
                           const SizedBox(height: 4),
                           Text(
                             movie.releaseDate,
-                            style: AppTextStyle.point,
+                            style: AppTextStyle.bodySmall,
                           )
                         ],
-                    ),
+                      ),
+                    )
                   );
                 },
               ),
