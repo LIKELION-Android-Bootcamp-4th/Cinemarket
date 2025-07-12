@@ -7,6 +7,8 @@ class TmdbMovie {
   final double voteAverage;
   final double popularity;
   final List<Map<String, String>> providers;
+  final int cumulativeSales;
+
 
   TmdbMovie({
     required this.id,
@@ -17,6 +19,7 @@ class TmdbMovie {
     required this.voteAverage,
     required this.popularity,
     this.providers = const [],
+    this.cumulativeSales = 0,
   });
 
   factory TmdbMovie.fromJson(Map<String, dynamic> json) {
@@ -29,6 +32,7 @@ class TmdbMovie {
       voteAverage: (json['vote_average'] ?? 0).toDouble(),
       popularity: (json['popularity'] ?? 0).toDouble(),
       providers: [],
+      cumulativeSales: 0,
     );
   }
 
@@ -42,6 +46,21 @@ class TmdbMovie {
       voteAverage: voteAverage,
       popularity: popularity,
       providers: newProviders,
+      cumulativeSales: cumulativeSales,
+    );
+  }
+
+  TmdbMovie copyWithCumulativeSales(int newSales) {
+    return TmdbMovie(
+      id: id,
+      title: title,
+      overview: overview,
+      posterPath: posterPath,
+      releaseDate: releaseDate,
+      voteAverage: voteAverage,
+      popularity: popularity,
+      providers: providers,
+      cumulativeSales: newSales,
     );
   }
 }

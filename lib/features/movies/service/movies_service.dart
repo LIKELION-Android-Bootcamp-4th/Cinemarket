@@ -30,18 +30,17 @@ class MoviesService {
     );
   }
 
-  //평점순 데이터 통신
-  Future<List<TmdbMovie>> fetchTopRatedMovies({int page = 1}) async {
+  //정렬 기준 사용 데이터 통신
+  Future<List<TmdbMovie>> fetchMoviesBySortKey(String sortKey, {int page = 1}) async {
     final response = await _tmdbDio.get('/discover/movie', queryParameters: {
       'api_key': _apiKey,
       'language': 'ko-KR',
       'region': 'KR',
-      'sort_by': 'vote_average.desc',
+      'sort_by': sortKey,
       'vote_count.gte': 10000, //1000표 이상 받은 인기 영화만 필터링.
       'primary_release_date.gte': '${DateTime.now().year - 10}-01-01',
       'page': page,
     });
-    print(response.data['results']);
 
     final movies = _mapResults(response.data['results']);
 
@@ -122,4 +121,33 @@ class MoviesService {
       throw Exception('영화 연관 굿즈 불러오기 실패: $e');
     }
   }
+
+  // 영화의 상품 누적 판매량 조회
+  Future<int> fetchCumulativeSales(int contentId) async {
+    try {
+      final response = await _dio.get('/api/content-product/products/$contentId');
+      final items = response.data['data']?['items'] ?? [];
+
+      if (items is! List) return 0;
+
+      int totalSales = 0;
+      for (final item in items) {
+        final count = item['orderCount'];
+        if (count is int) {
+          totalSales += count;
+        }
+      }
+      return totalSales;
+    } on DioException catch (e) {
+      // 400 Error 시 처리
+      if (e.response?.statusCode == 400) {
+        return 0;
+      }
+      rethrow;
+    } catch (e) {
+      throw Exception('누적 판매량 계산 실패: $e');
+    }
+  }
+
+
 }

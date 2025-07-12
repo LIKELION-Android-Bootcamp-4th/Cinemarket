@@ -71,12 +71,8 @@ class MoviesScreenState extends State<MoviesScreen> {
                   child: SortDropdown(
                     itemType: ItemType.movie,
                     selectedValue: vm.sortType.label,
-                    onSelected: (sortType) {
-                      if (sortType == '최신순') {
-                        vm.changeSortTypeFromLabel('최신순');
-                      } else if (sortType == '평점순') {
-                        vm.changeSortTypeFromLabel('평점순');
-                      }
+                    onSelected: (sortTypeLabel) {
+                      vm.changeSortTypeFromLabel(sortTypeLabel);
                     },
                   ),
                 ),
