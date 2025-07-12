@@ -1,7 +1,9 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 class CartBottomBarWidgets extends StatelessWidget {
   final List<CartItem> items;
@@ -25,7 +27,6 @@ class CartBottomBarWidgets extends StatelessWidget {
     int selectedCount = items
         .where((item) => item.isSelected)
         .fold(0, (sum, item) => sum + item.quantity);
-
 
     return SafeArea(
       top: false,
@@ -88,6 +89,13 @@ class CartBottomBarWidgets extends StatelessWidget {
                     if (selectedCount > 0) {
                       final selectedItems = items.where((item) => item.isSelected).toList();
                       context.push('/purchase', extra: selectedItems); //데이터 전달
+                    } else {
+                      CommonToast.show(
+                        context: context,
+                        message: '선택된 상품이 없습니다.',
+                        type: ToastificationType.warning,
+                        placement: ToastPlacement.bottom,
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(

@@ -1,10 +1,12 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/features/auth/viewmodel/login_viewmodel.dart';
+import 'package:cinemarket/features/cart/viewmodel/cart_viewmodel.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -125,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       message: "로그인 되었습니다.",
                       type: ToastificationType.success,
                     );
+                    await context.read<CartViewModel>().fetchCartCount();
                     context.pop();
                   }
                 } catch (e) {
