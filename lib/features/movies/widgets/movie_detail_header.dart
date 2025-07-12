@@ -9,6 +9,7 @@ class MovieDetailHeader extends StatelessWidget {
   final VoidCallback onFavoriteToggle;
   final String title;
   final double voteAverage;
+  final List<Map<String, String>> providers;
 
   const MovieDetailHeader({
     super.key,
@@ -18,13 +19,14 @@ class MovieDetailHeader extends StatelessWidget {
     required this.onFavoriteToggle,
     required this.title,
     required this.voteAverage,
+    required this.providers,
   });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final posterHeight = screenWidth * 2 / 3;
-    final thumbnailHeight = posterHeight / 2;
+    final thumbnailHeight = posterHeight / 1.5;
     final thumbnailWidth = thumbnailHeight * 2 / 3;
 
     return Column(
@@ -102,8 +104,35 @@ class MovieDetailHeader extends StatelessWidget {
                         ),
                       ],
                     ),
+
+                    if (providers.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Row(
+                          children: providers.map((provider) {
+                            final isWatcha = provider['providerName']?.toLowerCase() == 'watcha';
+                            final logoUrl = isWatcha
+                                ? 'https://play-lh.googleusercontent.com/vAkKvTtE8kdb0MWWxOVaqYVf0_suB-WMnfCR1MslBsGjhI49dAfF1IxcnhtpL3PnjVY'
+                                : provider['logoUrl'] ?? '';
+
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 6),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Image.network(
+                                  logoUrl,
+                                  width: 22,
+                                  height: 22,
+                                  errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                   ],
                 ),
+
               ),
             ],
           ),

@@ -32,4 +32,9 @@ class MovieDetailRepository {
     return goodsList;
   }
 
+  Future<List<Map<String, String>>> getMovieProviders(int movieId) {
+    return _service.fetchProviders(movieId);
+  }
+
+
 }

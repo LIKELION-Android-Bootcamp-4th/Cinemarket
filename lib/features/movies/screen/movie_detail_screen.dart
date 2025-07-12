@@ -33,7 +33,6 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       final vm = context.read<MovieDetailViewModel>();
       vm.loadMovieDetail(movieId);
       vm.loadRecommendedGoods(widget.movieId);
-      print('goodsList: ${vm.goodsList}');
     });
   }
 
@@ -69,6 +68,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     },
                     title: movieDetail.title,
                     voteAverage: movieDetail.voteAverage,
+                    providers: movieDetail.providers ?? [],
                   ),
 
                   MovieInfoRow(

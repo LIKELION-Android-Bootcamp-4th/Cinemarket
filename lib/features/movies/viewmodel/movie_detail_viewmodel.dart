@@ -34,8 +34,11 @@ class MovieDetailViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _movieDetail = await _repository.getMovieDetail(movieId);
+      final detail = await _repository.getMovieDetail(movieId);
       _castList = await _repository.getMovieCredits(movieId);
+      final providers = await _repository.getMovieProviders(movieId);
+
+      _movieDetail = detail.copyWithProviders(providers);
     } catch (e) {
       _error = e.toString();
     } finally {
