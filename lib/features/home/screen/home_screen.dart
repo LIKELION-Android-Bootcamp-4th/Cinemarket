@@ -4,7 +4,6 @@ import 'package:cinemarket/features/home/viewmodel/home_viewmodel.dart';
 import 'package:cinemarket/features/home/widgets/best_goods_widget.dart';
 import 'package:cinemarket/features/home/widgets/best_movie_widget.dart';
 import 'package:cinemarket/features/home/widgets/box_office_ranking_widget.dart';
-import 'package:cinemarket/features/home/widgets/recommended_goods_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,8 +39,6 @@ class HomeScreen extends StatelessWidget {
             BestGoodsWidget(),
             SizedBox(height: 24),
             BestMovieWidget(),
-            SizedBox(height: 24),
-            RecommendedGoodsWidget(),
           ],
         ),
       ),

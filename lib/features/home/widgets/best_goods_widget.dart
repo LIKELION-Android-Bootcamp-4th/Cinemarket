@@ -41,7 +41,7 @@ class BestGoodsWidget extends StatelessWidget {
                         },
                         child: const Text(
                           '굿즈 더보기',
-                          style: TextStyle(color: Colors.grey),
+                            style: AppTextStyle.point
                         )
                     )
                   ]
@@ -55,18 +55,23 @@ class BestGoodsWidget extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(width: 12),
                   itemBuilder: (context, index) {
                     final goods = vm.goodsList[index];
-                    return SizedBox(
-                      width: 200,
-                      child: GoodsItem(
-                        imageUrl: goods.images.main,
-                        goodsName: goods.name,
-                        movieName: '없음',
-                        price: '￦${goods.price}',
-                        // rating: goods.reviewStats.averageRating,
-                        // reviewCount: goods.reviewCount,
-                        rating: 0.0,
-                        reviewCount:10,
-                        isFavorite: goods.isFavorite,
+                    return GestureDetector(
+                      onTap: () {
+                        context.push('/goods/${goods.id}');
+                      },
+                      child: SizedBox(
+                        width: 200,
+                        child: GoodsItem(
+                          imageUrl: goods.images.main,
+                          goodsName: goods.name,
+                          movieName: '없음',
+                          price: '￦${goods.price}',
+                          // rating: goods.reviewStats.averageRating,
+                          // reviewCount: goods.reviewCount,
+                          rating: 0.0,
+                          reviewCount:10,
+                          isFavorite: goods.isFavorite,
+                        ),
                       ),
                     );
                   },
