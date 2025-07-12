@@ -33,6 +33,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       final vm = context.read<MovieDetailViewModel>();
       vm.loadMovieDetail(movieId);
       vm.loadRecommendedGoods(widget.movieId);
+      print('goodsList: ${vm.goodsList}');
     });
   }
 
@@ -47,6 +48,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
         final movieDetail = vm.movieDetail;
         final castList = vm.castList;
 
+        print('goodsList, movie.detail,screen ${vm.goodsList}');
         return Scaffold(
           appBar: const CommonAppBar(title: '영화 상세'),
           backgroundColor: AppColors.background,

@@ -5,8 +5,6 @@ import 'package:go_router/go_router.dart';
 
 Widget buildBestGoodsGrid(List<BestGoods> goodsList,String movieName) {
   return GridView.builder(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
     padding: const EdgeInsets.symmetric(horizontal: 16),
     itemCount: goodsList.length,
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
