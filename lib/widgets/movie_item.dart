@@ -79,7 +79,7 @@ class _MovieItemState extends State<MovieItem> {
               widget.movieName,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyle.body,
+              style: AppTextStyle.bodyLarge,
             ),
           ),
           const SizedBox(height: 2),
