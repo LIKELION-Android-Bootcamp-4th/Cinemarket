@@ -8,6 +8,7 @@ class GoodsSummaryCard extends StatelessWidget {
   final VoidCallback onAdd;
   final VoidCallback onRemove;
   final int pricePerItem;
+  final String? imageUrl;
 
   const GoodsSummaryCard({
     super.key,
@@ -16,6 +17,7 @@ class GoodsSummaryCard extends StatelessWidget {
     required this.onRemove,
     required this.pricePerItem,
     required this.name,
+    required this.imageUrl,
   });
 
   @override
@@ -33,17 +35,33 @@ class GoodsSummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 상품 이미지 자리
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: AppColors.innerWidget,
-              borderRadius: BorderRadius.circular(8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: imageUrl != null
+                ? Image.network(
+              imageUrl!,
+              width: 120,
+              height: 120,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 120,
+                  height: 120,
+                  color: Colors.grey,
+                  child: const Icon(Icons.broken_image, color: Colors.white),
+                );
+              },
+            )
+                : Container(
+              width: 100,
+              height: 100,
+              color: Colors.grey,
+              child: const Icon(Icons.image_not_supported, color: Colors.white),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
 
           // 상품 정보
           Expanded(
