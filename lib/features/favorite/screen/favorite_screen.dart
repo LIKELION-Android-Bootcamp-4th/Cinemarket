@@ -15,9 +15,7 @@ class FavoriteScreen extends StatelessWidget {
       future: context.read<FavoriteViewModel>().getAllFavoriteGoods(),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
+          return const Center(child: CircularProgressIndicator(),);
         }
 
         final viewModel = context.read<FavoriteViewModel>();
