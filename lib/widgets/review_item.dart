@@ -71,7 +71,7 @@ class _ReviewItemState extends State<ReviewItem> {
           const SizedBox(height: 16.0),
           _buildActionButtons(),
           const SizedBox(height: 24.0),
-          Container(height: 5.0, width: 500.0, color: AppColors.innerWidget),
+          Divider(thickness: 1,color: AppColors.widgetBackground,)
         ],
       ),
     );
