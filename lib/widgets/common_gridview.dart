@@ -69,7 +69,8 @@ class CommonGridview<T> extends StatelessWidget {
               movieName: item.title,
               cumulativeSales: 0, //추후 판매량 데이터 연결
               providers: item.providers,
-              isFavorite: false, //추후 즐겨찾기 연동?
+              isFavorite: false, //추후 즐겨찾기 연동?  // todo:
+              movieId: item.id,
             ),
           );
         }

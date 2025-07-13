@@ -1,15 +1,33 @@
 import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
 import 'package:cinemarket/features/goods/model/goods.dart';
+import 'package:cinemarket/features/home/model/tmdb_movie.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 class FavoriteViewModel extends ChangeNotifier {
-  final FavoriteRepository favoriteRepository;
 
+  final FavoriteRepository _favoriteRepository;
+
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
   List<Goods> favoriteGoods = [];
+  List<TmdbMovie> favoriteMovies = [];
   final Logger logger = Logger();
 
-  FavoriteViewModel({required this.favoriteRepository});
+  FavoriteViewModel({FavoriteRepository? favoriteRepository}) : _favoriteRepository = FavoriteRepository();
+
+  Future<void> getAllFavorites() async {
+    _isLoading = true;
+    notifyListeners();
+
+    await Future.wait([
+      getAllFavoriteGoods(),
+      getAllFavoriteMovies(),
+    ]);
+
+    _isLoading = false;
+    notifyListeners();
+  }
 
   Future<void> getAllFavoriteGoods({
     int page = 1,
@@ -17,8 +35,9 @@ class FavoriteViewModel extends ChangeNotifier {
     String sort = 'createdAt',
     String order = 'desc',
   }) async {
+
     try {
-      favoriteGoods = await favoriteRepository.getAllFavoriteGoods();
+      favoriteGoods = await _favoriteRepository.getAllFavoriteGoods();
       notifyListeners();
 
       logger.i('굿즈 찜 목록 조회');
@@ -35,7 +54,7 @@ class FavoriteViewModel extends ChangeNotifier {
 
   Future<bool> toggleFavorite({required String goodsId,}) async {
     try {
-      final bool isSuccesses = await favoriteRepository.toggleFavorite(goodsId: goodsId);
+      final bool isSuccesses = await _favoriteRepository.toggleFavorite(goodsId: goodsId);
 
       debugPrint('😍😍😍');
       debugPrint('isSuccess : $isSuccesses');
@@ -49,4 +68,44 @@ class FavoriteViewModel extends ChangeNotifier {
       throw(e, stackTrace);
     }
   }
+
+
+  Future<void> getAllFavoriteMovies() async {
+
+    try {
+      favoriteMovies = await _favoriteRepository.getAllFavoriteMovies();
+      notifyListeners();
+
+      logger.i('😎😎😎 영화 찜 목록 조회');
+      for (var movie in favoriteMovies) {
+        logger.d('favoriteGoods\n'
+            'id: ${movie.id}\n'
+            'title: ${movie.title}');
+      }
+
+    } catch (e, stackTrace) {
+      logger.i('😂😂😂 영화 찜 목록 조회 실패');
+      logger.d(e);
+      logger.d(stackTrace);
+    }
+  }
+
+  Future<bool> toggleMovieFavorite({required String contentId,}) async {
+    try {
+      final bool isSuccess = await _favoriteRepository.toggleMovieFavorite(contentId: contentId);
+
+      Logger().i('😍😍😍');
+      Logger().i('isSuccess : $isSuccess');
+
+      return isSuccess;
+    } catch (e, stackTrace) {
+
+      Logger().e('😂😂😂 err');
+      Logger().e('$e');
+      Logger().e('$stackTrace');
+
+      return false;
+    }
+  }
+
 }
