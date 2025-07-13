@@ -23,7 +23,7 @@ class OrderViewModel extends ChangeNotifier {
 
   Future<void> fetchOrders({
     int page = 1,
-    int limit = 5,
+    int limit = 20,
     String? status,
     String? startDate,
     String? endDate,

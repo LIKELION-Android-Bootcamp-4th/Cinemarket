@@ -5,11 +5,17 @@ import 'package:cinemarket/features/mypage/viewmodel/order_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 class OrderHistoryWidget extends StatelessWidget {
   const OrderHistoryWidget({super.key});
+
+  String formatCurrency(int price) {
+    final formatter = NumberFormat('#,###');
+    return '${formatter.format(price)}원';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +122,7 @@ class OrderHistoryWidget extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text('${item.quantity}개', style: AppTextStyle.bodySmall),
                         const SizedBox(height: 4),
-                        Text('${item.totalPrice}원', style: AppTextStyle.bodySmall),
+                        Text(formatCurrency(item.totalPrice), style: AppTextStyle.bodySmall),
                       ],
                     ),
                   ),
