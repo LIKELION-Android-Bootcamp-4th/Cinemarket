@@ -29,11 +29,14 @@ class _ExpandableTextState extends State<ExpandableText> {
               color: AppColors.widgetBackground,
               borderRadius: BorderRadius.circular(4),
             ),
-            child: Text(
-              widget.textWidget.data ?? '',
-              maxLines: 10,
-              overflow: TextOverflow.ellipsis,
-              style: widget.textWidget.style,
+            child: SizedBox(
+              width: double.infinity,
+              child: Text(
+                widget.textWidget.data ?? '',
+                maxLines: 10,
+                overflow: TextOverflow.ellipsis,
+                style: widget.textWidget.style,
+              ),
             ),
           ),
 
@@ -44,7 +47,7 @@ class _ExpandableTextState extends State<ExpandableText> {
               borderRadius: BorderRadius.circular(4),
             ),
             // child: SingleChildScrollView(child: widget.textWidget),
-            child: widget.textWidget,
+            child: SizedBox(width: double.infinity, child: widget.textWidget),
           ),
         ),
         const SizedBox(height: 8),
