@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/mypage/model/order/order_item.dart';
+import 'package:cinemarket/features/mypage/model/review_request.dart';
 import 'package:cinemarket/features/mypage/viewmodel/review_viewmodel.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -81,27 +83,66 @@ class _CreateReviewWidgetState extends State<CreateReviewWidget> {
                             minimumSize: const Size(double.infinity, 55),
                           ),
                           onPressed: () async {
-                            // final success = await vm.createReview(
-                            //   productId: widget.orderItem.productId.id ?? '',
-                            //   rating: _selectedStar,
-                            //   comment: _reviewController.text,
-                            //   newImages: _newImages.map((e) => File(e.path)).toList(),
-                            // );
-                            // if (success) {
-                            //   CommonToast.show(
-                            //     context: context,
-                            //     message: '리뷰가 등록되었습니다.',
-                            //     type: ToastificationType.success,
-                            //   );
-                            //   Navigator.pop(context, true);
-                            // } else {
-                            //   CommonToast.show(
-                            //     context: context,
-                            //     message: '리뷰 등록에 실패했습니다.',
-                            //     type: ToastificationType.error,
-                            //   );
-                            // }
-                          },
+                            final vm = context.read<ReviewViewModel>();
+
+                            if (_reviewController.text.trim().isEmpty) {
+                              CommonToast.show(
+                                context: context,
+                                message: '리뷰 내용을 입력해주세요.',
+                                type: ToastificationType.warning,
+                              );
+                              return;
+                            }
+
+                            if (_newImages.length > 5) {
+                              CommonToast.show(
+                                context: context,
+                                message: '이미지는 최대 5개까지 업로드 가능합니다.',
+                                type: ToastificationType.warning,
+                              );
+                              return;
+                            }
+
+                            final List<MultipartFile> imageFiles = [];
+                            for (final image in _newImages) {
+                              final file = File(image.path);
+                              final fileName = image.name;
+
+                              imageFiles.add(await MultipartFile.fromFile(
+                                file.path,
+                                filename: fileName,
+                              ));
+                            }
+
+                            final request = ReviewRequest(
+                              rating: _selectedStar,
+                              comment: _reviewController.text,
+                              images: imageFiles,
+                              orderId: null, // optional
+                            );
+
+                            final success = await vm.submitReview(
+                              productId: widget.orderItem.id,
+                              request: request,
+                            );
+
+                            if (success) {
+                              CommonToast.show(
+                                context: context,
+                                message: '리뷰가 등록되었습니다.',
+                                type: ToastificationType.success,
+                              );
+                              Navigator.pop(context, true); // <-- 정상적으로 뒤로 이동
+                            } else {
+                              CommonToast.show(
+                                context: context,
+                                message: vm.errorMessage ?? '리뷰 등록에 실패했습니다.',
+                                type: ToastificationType.error,
+                              );
+                            }
+
+                          }
+                          ,
                           child: const Text("리뷰 등록하기"),
                         ),
                       ),

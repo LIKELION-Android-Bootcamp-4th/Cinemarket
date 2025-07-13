@@ -72,7 +72,7 @@ class ReviewViewModel extends ChangeNotifier {
   }
 
 
-  Future<void> submitReview({
+  Future<bool> submitReview({
     required String productId,
     required ReviewRequest request,
   }) async {
@@ -82,15 +82,23 @@ class ReviewViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _repository.createReview(productId: productId, request: request);
-      _isSuccess = true;
+      final result = await _repository.createReview(productId: productId, request: request);
+      _isSuccess = result;
+      if (!result) {
+        _errorMessage = '리뷰 작성 실패 (서버 응답 실패)';
+      }
+      return result;
     } catch (e) {
       _errorMessage = '리뷰 작성 실패: $e';
+      _isSuccess = false;
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
+
+
 
 
 

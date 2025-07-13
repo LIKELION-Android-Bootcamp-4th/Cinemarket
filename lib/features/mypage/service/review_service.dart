@@ -95,7 +95,7 @@ class ReviewService {
     }
   }
 
-  Future<void> createReview({
+  Future<bool> createReview({
     required String productId,
     required ReviewRequest request,
   }) async {
@@ -109,6 +109,8 @@ class ReviewService {
     );
 
     if (response.statusCode != 200 || response.data['success'] != true) {
+      return true;
+    } else {
       throw Exception('리뷰 작성 실패: ${response.data['message']}');
     }
   }

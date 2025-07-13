@@ -67,7 +67,7 @@ class ReviewRepository {
     );
   }
 
-  Future<void> createReview({
+  Future<bool> createReview({
     required String productId,
     required ReviewRequest request,
   }) async {

@@ -122,8 +122,14 @@ class OrderHistoryWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: item.review != null ? null : () {
-                        context.push('/mypage/create-review', extra: item);
+                      onPressed: item.review != null
+                      ? null
+                      : () async {
+                        final result = await context.push('/mypage/create-review', extra: item);
+                        if (result == true) {
+                          final vm = context.read<OrderViewModel>();
+                          await vm.fetchOrders();
+                        }
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.resolveWith<Color>(
