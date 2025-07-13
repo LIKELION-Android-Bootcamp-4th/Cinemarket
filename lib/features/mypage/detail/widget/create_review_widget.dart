@@ -36,12 +36,36 @@ class _CreateReviewWidgetState extends State<CreateReviewWidget> {
   Future<void> _pickImages() async {
     final ImagePicker picker = ImagePicker();
     final List<XFile> picked = await picker.pickMultiImage();
-    if (picked.isNotEmpty) {
-      setState(() {
-        _newImages.addAll(picked);
-      });
+
+    if (picked.isEmpty) return;
+
+    final remainingSlots = 5 - _newImages.length;
+
+    if (remainingSlots <= 0) {
+      CommonToast.show(
+        context: context,
+        message: '이미지는 최대 5장까지 첨부할 수 있습니다.',
+        type: ToastificationType.warning,
+      );
+      return;
+    }
+
+    final imagesToAdd = picked.take(remainingSlots).toList();
+
+    setState(() {
+      _newImages.addAll(imagesToAdd);
+    });
+
+    if (picked.length > imagesToAdd.length) {
+      CommonToast.show(
+        context: context,
+        message: '최대 5장까지만 첨부됩니다. 일부 이미지는 제외되었습니다.',
+        type: ToastificationType.info,
+      );
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -244,12 +268,37 @@ class _CreateReviewWidgetState extends State<CreateReviewWidget> {
       child: Wrap(
         spacing: 8,
         runSpacing: 8,
-        children: _newImages
-            .map((e) => Image.file(File(e.path), width: 100, height: 100, fit: BoxFit.cover))
-            .toList(),
+        children: _newImages.asMap().entries.map((entry) {
+          final index = entry.key;
+          final image = entry.value;
+
+          return Stack(
+            children: [
+              Image.file(
+                File(image.path),
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _newImages.removeAt(index);
+                    });
+                  },
+                  child: const Icon(Icons.cancel, color: Colors.red),
+                ),
+              ),
+            ],
+          );
+        }).toList(),
       ),
     );
   }
+
 
   Widget _buildSelectPicture() {
     return Container(
