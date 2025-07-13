@@ -73,9 +73,15 @@ class OrderHistoryWidget extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
+        Text(
+          _getStatusLabel(order.status),
+          style: AppTextStyle.body.copyWith(
+            color: _getStatusColor(order.status),
+          ),
+        ),
+        const SizedBox(height: 8),
         Text('주문번호: ${order.orderNumber}', style: AppTextStyle.bodySmall),
-        const SizedBox(height: 4),
-        Text(order.status, style: AppTextStyle.bodySmall),
+
         const SizedBox(height: 16.0),
 
         // 각 상품 출력 및 버튼 처리
@@ -182,3 +188,41 @@ class OrderHistoryWidget extends StatelessWidget {
     );
   }
 }
+
+String _getStatusLabel(String status) {
+  switch (status) {
+    case 'pending':
+      return '주문 접수';
+    case 'preparing':
+      return '상품 준비 중';
+    case 'shipped':
+      return '배송 시작';
+    case 'delivered':
+      return '배송 완료';
+    case 'confirmed':
+      return '구매 확정';
+    case 'cancelled':
+      return '주문 취소';
+    case 'refunded':
+      return '환불 완료';
+    default:
+      return status;
+  }
+}
+
+Color _getStatusColor(String status) {
+  switch (status) {
+    case 'preparing':
+    case 'shipped':
+      return Colors.green;
+    case 'delivered':
+    case 'confirmed':
+      return Colors.blue;
+    case 'cancelled':
+    case 'refunded':
+      return Colors.red;
+    default:
+      return Colors.white;
+  }
+}
+
