@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class PrimaryImageWidget extends StatefulWidget {
   final String imageUrl;
   final bool isFavorite;
+  final void Function() onTap;
 
   const PrimaryImageWidget({
     super.key,
     required this.imageUrl,
     required this.isFavorite,
+    required this.onTap,
   });
 
   @override
@@ -28,9 +30,12 @@ class _PrimaryImageWidgetState extends State<PrimaryImageWidget> {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.network(widget.imageUrl, fit: BoxFit.cover),
+        GestureDetector(
+          onTap: widget.onTap,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.network(widget.imageUrl, fit: BoxFit.cover),
+          ),
         ),
         IconButton(
           icon: Icon(
