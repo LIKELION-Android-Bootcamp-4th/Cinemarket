@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class GoodsItem extends StatefulWidget {
+  final String goodsId;
   final String imageUrl;
   final String goodsName;
-  final String movieName;
+  final String movieTitle;
   final String price;
   final double rating;
   final int reviewCount;
@@ -18,9 +19,10 @@ class GoodsItem extends StatefulWidget {
 
   const GoodsItem({
     super.key,
+    required this.goodsId,
     required this.imageUrl,
     required this.goodsName,
-    required this.movieName,
+    required this.movieTitle,
     required this.price,
     required this.rating,
     required this.reviewCount,
@@ -73,7 +75,7 @@ class _GoodsItemState extends State<GoodsItem> {
                       favoriteRepository: FavoriteRepository(
                         favoriteService: FavoriteService(),
                       ),
-                    ).toggleFavorite(goodsId: widget.movieName);  // todo: movieName이 goodsId임 !!  // 변경 필수 !!
+                    ).toggleFavorite(goodsId: widget.goodsId);
 
                     if (!success) { setState(() => isFavorite = !isFavorite);}
 
@@ -124,7 +126,7 @@ class _GoodsItemState extends State<GoodsItem> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              widget.movieName,
+              widget.movieTitle,
               style: AppTextStyle.bodySmall,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

@@ -22,9 +22,10 @@ Widget buildBestGoodsGrid(List<BestGoods> goodsList,String movieName) {
           context.push('/goods/${item.id}');
         },
         child: GoodsItem(
+          goodsId: item.id,
           imageUrl: item.images.main,
           goodsName: item.name,
-          movieName: movieName,
+          movieTitle: movieName,
           price: '${item.price} 원',
           rating: item.reviewStats.averageRating,
           reviewCount: item.reviewCount,
