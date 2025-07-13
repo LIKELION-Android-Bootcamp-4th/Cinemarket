@@ -90,7 +90,7 @@ class GoodsDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const BottomButtonsWidget(),
+                BottomButtonsWidget(item: item,),
               ],
             ),
           )
