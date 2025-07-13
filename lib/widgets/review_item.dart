@@ -93,6 +93,21 @@ class _ReviewItemState extends State<ReviewItem> {
                       width: 100.0,
                       height: 100.0,
                       fit: BoxFit.cover,
+                      errorBuilder: (context,error,stackTrace) {
+                        return Container(
+                          width: 100.0,
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            color: AppColors.widgetBackground,
+                            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          child: const Icon(
+                            Icons.broken_image,
+                            color: AppColors.innerWidget,
+                            size: 40,
+                          ),
+                        );
+                      },
                     )
                     : Container(
                       width: 100.0,
@@ -105,7 +120,7 @@ class _ReviewItemState extends State<ReviewItem> {
                       ),
                       child: const Icon(
                         Icons.image_not_supported,
-                        color: Colors.white70,
+                        color: AppColors.widgetBackground,
                       ),
                     ),
           ),
@@ -159,6 +174,21 @@ class _ReviewItemState extends State<ReviewItem> {
                 width: 60.0,
                 height: 60.0,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: AppColors.widgetBackground,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: const Icon(
+                      Icons.broken_image,
+                      color: AppColors.innerWidget,
+                      size: 30,
+                    ),
+                  );
+                },
               ),
             ),
           );
@@ -263,13 +293,30 @@ class _ReviewItemState extends State<ReviewItem> {
                 boundaryMargin: const EdgeInsets.all(20),
                 minScale: 0.5,
                 maxScale: 4,
-                child: Image.network(imageUrl),
+                child: Image.network(
+                  imageUrl,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 200,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: AppColors.widgetBackground,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: const Icon(
+                        Icons.broken_image,
+                        color: AppColors.innerWidget,
+                        size: 100,
+                      ),
+                    );
+                  },
+                ),
               ),
               Positioned(
                 top: 0,
                 right: 0,
                 child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  icon: const Icon(Icons.close, color: AppColors.widgetBackground, size: 30),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
