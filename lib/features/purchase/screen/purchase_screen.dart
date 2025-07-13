@@ -143,6 +143,7 @@ class _PurchaseScreen extends State<PurchaseScreen> {
           try {
             await purchaseViewModel.updateQuantitiesToServer();
             await purchaseViewModel.checkout(
+              context: context,
               cartIds: cartItems.map((e) => e.cartId).toList(),
               recipient: name,
               address: '$address ${address2Controller.text}',

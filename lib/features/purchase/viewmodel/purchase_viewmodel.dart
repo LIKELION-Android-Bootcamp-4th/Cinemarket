@@ -1,7 +1,9 @@
 import 'package:cinemarket/features/cart/service/cart_service.dart';
+import 'package:cinemarket/features/cart/viewmodel/cart_viewmodel.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/features/purchase/service/purchase_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PurchaseViewModel extends ChangeNotifier {
   final CartService _cartService = CartService();
@@ -43,6 +45,7 @@ class PurchaseViewModel extends ChangeNotifier {
   }
 
   Future<void> checkout({
+    required BuildContext context,
     required List<String> cartIds,
     required String recipient,
     required String address,
@@ -58,6 +61,7 @@ class PurchaseViewModel extends ChangeNotifier {
       zipCode: zipCode,
       memo: memoController.text,
     );
+    context.read<CartViewModel>().fetchCartCount();
   }
 
   @override
