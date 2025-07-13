@@ -15,9 +15,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => CartViewModel(),
-      child: Scaffold(
+    return  Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.black,
@@ -122,7 +120,6 @@ class CartScreen extends StatelessWidget {
             );
           },
         ),
-      ),
     );
   }
 }
