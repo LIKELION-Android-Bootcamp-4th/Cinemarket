@@ -32,7 +32,7 @@ class SortDropdown extends StatelessWidget {
     return DropdownButtonHideUnderline(
       child: DropdownButton2<String>(
         isExpanded: false,
-        value: selectedValue,
+        value: selectedValue ?? sortOptions.first,
         items: sortOptions
             .map((String item) =>
             DropdownMenuItem<String>(
