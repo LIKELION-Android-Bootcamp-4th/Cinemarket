@@ -17,6 +17,8 @@ class ReviewViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  bool _isSuccess = false;
+  bool get isSuccess => _isSuccess;
 
   Future<void> loadReviews({
     int page = 1,
@@ -68,21 +70,26 @@ class ReviewViewModel extends ChangeNotifier {
       newImages: newImages,
     );
   }
-  Future<bool> createReview({
+
+
+  Future<void> submitReview({
     required String productId,
-    String? orderId,
-    required int rating,
-    required String comment,
-    required List<File> newImages,
+    required ReviewRequest request,
   }) async {
-    final request = ReviewRequest(
-      productId: productId,
-      orderId: orderId,
-      rating: rating,
-      comment: comment,
-      images: newImages,
-    );
-    return await _repository.createReview(request);
+    _isLoading = true;
+    _errorMessage = null;
+    _isSuccess = false;
+    notifyListeners();
+
+    try {
+      await _repository.createReview(productId: productId, request: request);
+      _isSuccess = true;
+    } catch (e) {
+      _errorMessage = '리뷰 작성 실패: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
 

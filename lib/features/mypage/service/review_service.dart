@@ -95,29 +95,24 @@ class ReviewService {
     }
   }
 
-  Future<bool> createReview(ReviewRequest request) async {
-    try {
-      final formData = FormData.fromMap({
-        if (request.orderId != null) 'orderId': request.orderId,
-        'rating': request.rating,
-        'comment': request.comment,
-        'images': [
-          for (final image in request.images)
-            await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
-        ]
-      });
+  Future<void> createReview({
+    required String productId,
+    required ReviewRequest request,
+  }) async {
+    final dio = ApiClient.dio;
 
-      final response = await _dio.post(
-        '/api/products/${request.productId}/reviews',
-        data: formData,
-      );
+    final formData = request.toFormData();
 
-      return response.data['success'] == true;
-    } catch (e) {
-      print('리뷰 생성 실패: $e');
-      return false;
+    final response = await dio.post(
+      '/api/products/$productId/reviews',
+      data: formData,
+    );
+
+    if (response.statusCode != 200 || response.data['success'] != true) {
+      throw Exception('리뷰 작성 실패: ${response.data['message']}');
     }
   }
+
 
 
 }

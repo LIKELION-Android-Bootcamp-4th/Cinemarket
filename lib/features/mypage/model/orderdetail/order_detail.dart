@@ -1,5 +1,5 @@
-import 'package:cinemarket/features/mypage/model/order/shipping_Info.dart';
 import 'package:cinemarket/features/mypage/model/order/status_history.dart';
+import 'package:cinemarket/features/mypage/model/orderdetail/detail_shipping_info.dart';
 import 'package:cinemarket/features/mypage/model/orderdetail/order_detail_item.dart';
 
 class OrderDetail {
@@ -12,7 +12,7 @@ class OrderDetail {
   final String memo;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final ShippingInfo shippingInfo;
+  final DetailShippingInfo shippingInfo;
   final List<OrderDetailItem> items;
   final List<StatusHistory> statusHistory;
 
@@ -42,7 +42,7 @@ class OrderDetail {
       memo: json['memo'] as String,
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
-      shippingInfo: ShippingInfo.fromJson(json['shippingInfo']),
+      shippingInfo: DetailShippingInfo.fromJson(json['shippingInfo']),
       items: (json['items'] as List)
           .map((item) => OrderDetailItem.fromJson(item))
           .toList(),

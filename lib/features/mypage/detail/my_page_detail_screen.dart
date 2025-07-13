@@ -42,8 +42,7 @@ class MyPageDetailScreen extends StatelessWidget {
         break;
       case 'order_detail':
         title = '주문상세내역';
-        bodyWidget = const OrderHistoryWidget();
-        // bodyWidget = OrderDetailWidget(orderId: orderId!);
+        bodyWidget = OrderDetailWidget(orderId: orderId!);
         break;
       case 'my_review':
         title = '나의 리뷰';
