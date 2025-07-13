@@ -206,7 +206,7 @@ String _getStatusLabel(String status) {
     case 'delivered':
       return '배송 완료';
     case 'confirmed':
-      return '구매 확정';
+      return '주문 확정';
     case 'cancelled':
       return '주문 취소';
     case 'refunded':
@@ -220,9 +220,9 @@ Color _getStatusColor(String status) {
   switch (status) {
     case 'preparing':
     case 'shipped':
+    case 'confirmed':
       return Colors.green;
     case 'delivered':
-    case 'confirmed':
       return Colors.blue;
     case 'cancelled':
     case 'refunded':

@@ -55,26 +55,19 @@ class _OrderTrackingWidgetState extends State<OrderTrackingWidget> {
   }
 
 
-  Widget _buildOrderStatusHeader(Order? order) {
-    if (order == null) {
-      return Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Text('주문을 선택해주세요.', style: AppTextStyle.body, textAlign: TextAlign.center),
-      );
-    }
-
-    final List<String> steps = ['pending', 'preparing', 'shipped', 'delivered'];
-    final List<String> stepLabels = ['주문 접수', '상품 준비 중', '배송 시작', '배송 완료'];
+  Widget _buildOrderStatusHeader(Order order) {
+    final steps = ['pending', 'confirmed', 'preparing', 'shipped', 'delivered'];
+    final labels = ['주문 접수', '주문 확정', '상품 준비 중', '배송 시작', '배송 완료'];
     final currentStep = steps.indexOf(order.status);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
       child: Column(
         children: [
+          // 1. 원 + 선
           Row(
             children: List.generate(steps.length * 2 - 1, (index) {
               if (index.isEven) {
-                //상태 표시 원
                 final stepIndex = index ~/ 2;
                 final isActive = stepIndex <= currentStep;
                 return CircleAvatar(
@@ -82,58 +75,37 @@ class _OrderTrackingWidgetState extends State<OrderTrackingWidget> {
                   backgroundColor: isActive ? AppColors.pointAccent : AppColors.widgetBackground,
                 );
               } else {
-                // 선 -> 절반을 나눠서 증가하는 듯한 표현
                 final lineIndex = index ~/ 2;
-                final isBeforeCurrent = lineIndex < currentStep;
-                final isCurrentTransition = lineIndex == currentStep;
-
+                final isActive = lineIndex < currentStep;
                 return Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 2,
-                          color: isBeforeCurrent || isCurrentTransition
-                              ? AppColors.pointAccent
-                              : AppColors.widgetBackground,
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          height: 2,
-                          color: isBeforeCurrent
-                              ? AppColors.pointAccent
-                              : AppColors.widgetBackground,
-                        ),
-                      ),
-                    ],
+                  child: Container(
+                    height: 2,
+                    color: isActive ? AppColors.pointAccent : AppColors.widgetBackground,
                   ),
                 );
               }
             }),
           ),
-
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
+          // 2. 텍스트 라벨
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: stepLabels.map((label) {
+            children: List.generate(steps.length, (index) {
               return Expanded(
                 child: Text(
-                  label,
+                  labels[index],
                   textAlign: TextAlign.center,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: stepLabels.indexOf(label) <= currentStep
-                        ? Colors.white
-                        : Colors.grey,
+                    color: index <= currentStep ? Colors.white : Colors.grey,
                   ),
                 ),
               );
-            }).toList(),
+            }),
           ),
         ],
       ),
     );
   }
+
 
 
   Widget _buildOrderListView(List<Order> orders) {
