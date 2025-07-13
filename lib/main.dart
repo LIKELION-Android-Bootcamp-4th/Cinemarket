@@ -8,6 +8,7 @@ import 'package:cinemarket/features/favorite/service/favorite_service.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_review_viewmodel.dart';
 import 'package:cinemarket/features/movies/viewmodel/movie_detail_viewmodel.dart';
+import 'package:cinemarket/features/purchase/viewmodel/purchase_viewmodel.dart';
 import 'package:cinemarket/features/search/viewmodel/search_view_model.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_all_viewmodel.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_detail_viewmodel.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
               ),
         ),
         ChangeNotifierProvider(create: (_) => GoodsReviewsViewModel()),
+        ChangeNotifierProvider(create: (_) => PurchaseViewModel()),
       ],
       child: MaterialApp.router(title: 'CineMarket', routerConfig: router),
     );
