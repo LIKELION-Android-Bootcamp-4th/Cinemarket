@@ -17,6 +17,7 @@ class HeaderGoodsDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PrimaryImageWidget(
+              goodsId: item.id,
               imageUrl: item.images.main,
               isFavorite: item.isFavorite,
             ),

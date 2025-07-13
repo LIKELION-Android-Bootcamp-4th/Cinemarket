@@ -51,7 +51,7 @@ class RecommendGoodsWidget extends StatelessWidget {
                         child: GoodsItem(
                           imageUrl: item.images.main,
                           goodsName: item.name,
-                          movieName: '없음',
+                          goodsId: '없음',
                           price: '￦${item.price}',
                           // rating: item.reviewStats.averageRating,
                           reviewCount: item.reviewCount,
