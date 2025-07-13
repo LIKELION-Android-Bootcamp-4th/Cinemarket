@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
 import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/home/model/tmdb_movie.dart';
@@ -10,8 +11,12 @@ class FavoriteViewModel extends ChangeNotifier {
 
   bool _isLoading = true;
   bool get isLoading => _isLoading;
+  bool _isLogin = false;
+  bool get isLogin => _isLogin;
+
   List<Goods> favoriteGoods = [];
   List<TmdbMovie> favoriteMovies = [];
+
   final Logger logger = Logger();
 
   FavoriteViewModel({FavoriteRepository? favoriteRepository}) : _favoriteRepository = FavoriteRepository();
@@ -19,6 +24,9 @@ class FavoriteViewModel extends ChangeNotifier {
   Future<void> getAllFavorites() async {
     _isLoading = true;
     notifyListeners();
+
+    final token = await TokenStorage.getAccessToken();
+    _isLogin = token != null;
 
     await Future.wait([
       getAllFavoriteGoods(),

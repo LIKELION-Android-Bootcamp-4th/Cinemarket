@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
@@ -67,16 +68,29 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   children: [
                     RefreshIndicator(
                       onRefresh: _refreshGoods,
-                      child: CommonGridview(
-                        itemType: ItemType.goods,
-                        // items: dummyGoods,
-                        items: viewModel.favoriteGoods,
-                      ),
+                      child:
+                          viewModel.favoriteGoods.isEmpty || !viewModel.isLogin
+                              ? ListView(
+                                children: const [
+                                  SizedBox(height: 150),
+                                  Center(
+                                    child: Text(
+                                      '굿즈 찜 목록이 비어있어요..!!',
+                                      style: AppTextStyle.headline,
+                                    ),
+                                  ),
+                                ],
+                              )
+                              : CommonGridview(
+                                itemType: ItemType.goods,
+                                // items: dummyGoods,
+                                items: viewModel.favoriteGoods,
+                              ),
                     ),
                     RefreshIndicator(
                       onRefresh: _refreshMovies,
                       child:
-                          viewModel.favoriteMovies.isEmpty
+                          viewModel.favoriteMovies.isEmpty || !viewModel.isLogin
                               ? ListView(
                                 children: const [
                                   SizedBox(height: 150),
