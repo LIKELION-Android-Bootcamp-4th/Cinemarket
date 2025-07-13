@@ -53,6 +53,7 @@ class RecommendGoodsWidget extends StatelessWidget {
                           goodsName: item.name,
                           movieName: '없음',
                           price: '￦${item.price}',
+                          stock: item.stock,
                           // rating: item.reviewStats.averageRating,
                           reviewCount: item.reviewCount,
                           rating: 0.0,

@@ -66,6 +66,7 @@ class BestGoodsWidget extends StatelessWidget {
                           goodsName: goods.name,
                           movieName: '없음',
                           price: '￦${goods.price}',
+                          stock: 0,  // todo: 논의 필요
                           // rating: goods.reviewStats.averageRating,
                           // reviewCount: goods.reviewCount,
                           rating: 0.0,

@@ -12,6 +12,7 @@ class GoodsItem extends StatefulWidget {
   final String goodsName;
   final String movieName;
   final String price;
+  final int stock;
   final double rating;
   final int reviewCount;
   final bool isFavorite;
@@ -22,6 +23,7 @@ class GoodsItem extends StatefulWidget {
     required this.goodsName,
     required this.movieName,
     required this.price,
+    required this.stock,
     required this.rating,
     required this.reviewCount,
     required this.isFavorite,
@@ -42,7 +44,6 @@ class _GoodsItemState extends State<GoodsItem> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       padding: const EdgeInsets.all(4),
       child: Column(
@@ -73,41 +74,87 @@ class _GoodsItemState extends State<GoodsItem> {
                       favoriteRepository: FavoriteRepository(
                         favoriteService: FavoriteService(),
                       ),
-                    ).toggleFavorite(goodsId: widget.movieName);  // todo: movieName이 goodsId임 !!  // 변경 필수 !!
+                    ).toggleFavorite(
+                      goodsId: widget.movieName,
+                    ); // todo: movieName이 goodsId임 !!  // 변경 필수 !!
 
-                    if (!success) { setState(() => isFavorite = !isFavorite);}
+                    if (!success) {
+                      setState(() => isFavorite = !isFavorite);
+                    }
 
                     final accessToken = await TokenStorage.getAccessToken();
 
-                    if (!mounted) return;  // state의 화면 부착 여부
+                    if (!mounted) return; // state의 화면 부착 여부
 
-                    if (accessToken == null) {  // 비회원의 경우
+                    if (accessToken == null) {
+                      // 비회원의 경우
 
                       final shouldNavigate = await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('로그인이 필요합니다', style: AppTextStyle.section,),
-                            content: const Text('로그인 화면으로 이동하시겠습니까?', style: AppTextStyle.body,),
-                            backgroundColor: AppColors.widgetBackground,
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(false),
-                                child: const Text('취소', style: AppTextStyle.bodyPointRed,),
+                        context: context,
+                        builder:
+                            (context) => AlertDialog(
+                              title: const Text(
+                                '로그인이 필요합니다',
+                                style: AppTextStyle.section,
                               ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(true),
-                                child: const Text('이동', style: AppTextStyle.bodyPointBlue,),
+                              content: const Text(
+                                '로그인 화면으로 이동하시겠습니까?',
+                                style: AppTextStyle.body,
                               ),
-                            ],
-                          ),
+                              backgroundColor: AppColors.widgetBackground,
+                              actions: [
+                                TextButton(
+                                  onPressed:
+                                      () => Navigator.of(context).pop(false),
+                                  child: const Text(
+                                    '취소',
+                                    style: AppTextStyle.bodyPointRed,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed:
+                                      () => Navigator.of(context).pop(true),
+                                  child: const Text(
+                                    '이동',
+                                    style: AppTextStyle.bodyPointBlue,
+                                  ),
+                                ),
+                              ],
+                            ),
                       );
 
-                      if(shouldNavigate == true && mounted) {
-                        context.push('/login', );
+                      if (shouldNavigate == true && mounted) {
+                        context.push('/login');
                       }
                     }
                   },
                 ),
+
+                if (widget.stock == 0) ...[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(0, 0, 0, 0.5),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                  Positioned(
+                    bottom: 8,
+                    left: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(0, 0, 0, 0.5),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 2),
+                      child: const Text(
+                        '품절',
+                        style: AppTextStyle.bodySmall,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
