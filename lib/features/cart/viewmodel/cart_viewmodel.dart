@@ -10,9 +10,11 @@ class CartViewModel extends ChangeNotifier {
 
   List<CartItem> _items = [];
   bool _isLoading = false;
+  bool _isLoggedIn = false;
 
   List<CartItem> get items => _items;
   bool get isLoading => _isLoading;
+  bool get isLoggedIn => _isLoggedIn;
 
   int get totalPrice => _items
       .where((item) => item.isSelected)
@@ -20,10 +22,15 @@ class CartViewModel extends ChangeNotifier {
 
   int _cartCount = 0;
   int get cartCount => _cartCount;
+
   Future<void> fetchCartCount() async {
     try {
-      _cartCount = await _cartService.fetchCartCount();
-      print('[DEBUG] 장바구니 수량: $_cartCount');
+      _isLoggedIn = await TokenStorage.isLoggedIn(); // 로그인 상태 확인
+      if (_isLoggedIn) {
+        _cartCount = await _cartService.fetchCartCount();
+      } else {
+        _cartCount = 0;
+      }
       notifyListeners();
     } catch (e) {
       print('장바구니 개수 조회 실패: $e');
@@ -92,7 +99,8 @@ class CartViewModel extends ChangeNotifier {
         options: options,
         discount: discount,
       );
-      await fetchCart(); // 추가 후 장바구니 새로고침
+      await fetchCart();// 추가 후 장바구니 새로고침
+      await fetchCartCount();// 추가된 수량까지 반영해서 count 갱신
     } catch (e) {
       print('상품 추가 실패: $e');
     }
@@ -102,6 +110,7 @@ class CartViewModel extends ChangeNotifier {
     try {
       await _cartService.removeItemsFromCart(cartIds);
       await fetchCart(); // 삭제 후 장바구니 갱신
+      await fetchCartCount(); //count 갱신
     } catch (e) {
       print('상품 삭제 실패: $e');
     }
