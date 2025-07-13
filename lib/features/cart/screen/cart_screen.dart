@@ -15,6 +15,13 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cartViewModel = context.read<CartViewModel>();
+      cartViewModel.fetchCart();
+      cartViewModel.fetchCartCount();
+      cartViewModel.clearSelections();
+    });
+
     return  Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(

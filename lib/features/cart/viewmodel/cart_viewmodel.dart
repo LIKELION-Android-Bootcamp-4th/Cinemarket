@@ -155,4 +155,11 @@ class CartViewModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void clearSelections() {
+    for (final item in _items) {
+      item.isSelected = false;
+    }
+    notifyListeners();
+  }
 }
