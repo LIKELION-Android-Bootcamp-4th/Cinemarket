@@ -81,26 +81,26 @@ class _CreateReviewWidgetState extends State<CreateReviewWidget> {
                             minimumSize: const Size(double.infinity, 55),
                           ),
                           onPressed: () async {
-                            final success = await vm.createReview(
-                              productId: widget.orderItem.productId.id ?? '',
-                              rating: _selectedStar,
-                              comment: _reviewController.text,
-                              newImages: _newImages.map((e) => File(e.path)).toList(),
-                            );
-                            if (success) {
-                              CommonToast.show(
-                                context: context,
-                                message: '리뷰가 등록되었습니다.',
-                                type: ToastificationType.success,
-                              );
-                              Navigator.pop(context, true);
-                            } else {
-                              CommonToast.show(
-                                context: context,
-                                message: '리뷰 등록에 실패했습니다.',
-                                type: ToastificationType.error,
-                              );
-                            }
+                            // final success = await vm.createReview(
+                            //   productId: widget.orderItem.productId.id ?? '',
+                            //   rating: _selectedStar,
+                            //   comment: _reviewController.text,
+                            //   newImages: _newImages.map((e) => File(e.path)).toList(),
+                            // );
+                            // if (success) {
+                            //   CommonToast.show(
+                            //     context: context,
+                            //     message: '리뷰가 등록되었습니다.',
+                            //     type: ToastificationType.success,
+                            //   );
+                            //   Navigator.pop(context, true);
+                            // } else {
+                            //   CommonToast.show(
+                            //     context: context,
+                            //     message: '리뷰 등록에 실패했습니다.',
+                            //     type: ToastificationType.error,
+                            //   );
+                            // }
                           },
                           child: const Text("리뷰 등록하기"),
                         ),
@@ -139,8 +139,8 @@ class _CreateReviewWidgetState extends State<CreateReviewWidget> {
               children: [
                 Text(widget.orderItem.productName ?? '상품명 없음', style: AppTextStyle.bodyLarge,maxLines: 2, overflow: TextOverflow.ellipsis,),
                 const SizedBox(height: 10),
-                Text(widget.orderItem.movieTitle ?? '', style: AppTextStyle.body),
-                
+                // Text(widget.orderItem.movieTitle ?? '', style: AppTextStyle.body),
+
                 Text(widget.orderItem.quantity.toString() + '개', style: AppTextStyle.body)
                 // 가격..
               ],
