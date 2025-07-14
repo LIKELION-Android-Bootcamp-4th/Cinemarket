@@ -1,7 +1,5 @@
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
 import 'package:cinemarket/features/cart/viewmodel/cart_viewmodel.dart';
-import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
-import 'package:cinemarket/features/favorite/service/favorite_service.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_review_viewmodel.dart';
 import 'package:cinemarket/features/home/viewmodel/best_goods_viewmodel.dart';
@@ -38,14 +36,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MovieDetailViewModel()),
         ChangeNotifierProvider(create: (_) => MyPageViewModel()),
         ChangeNotifierProvider(create: (_) => CartViewModel()..fetchCartCount()),
-        ChangeNotifierProvider(
-          create:
-              (_) => FavoriteViewModel(
-                favoriteRepository: FavoriteRepository(
-                  favoriteService: FavoriteService(),
-                ),
-              ),
-        ),
+        ChangeNotifierProvider(create: (_) => FavoriteViewModel()),
         ChangeNotifierProvider(create: (_) => GoodsReviewsViewModel()),
         ChangeNotifierProvider(create: (_) => BestGoodsViewModel()),
         ChangeNotifierProvider(create: (_) => BestMovieViewModel()),

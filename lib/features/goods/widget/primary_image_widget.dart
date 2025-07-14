@@ -1,12 +1,15 @@
+import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryImageWidget extends StatefulWidget {
+  final String goodsId;
   final String imageUrl;
   final bool isFavorite;
   final void Function() onTap;
 
   const PrimaryImageWidget({
     super.key,
+    required this.goodsId,
     required this.imageUrl,
     required this.isFavorite,
     required this.onTap,
@@ -43,7 +46,12 @@ class _PrimaryImageWidgetState extends State<PrimaryImageWidget> {
             color: Colors.red,
           ),
           onPressed: () {
-            setState(() => isFavorite = !isFavorite);
+            toggleFavorite(context: context,
+                id: widget.goodsId,
+                isFavorite: isFavorite,
+                onStateChanged: (newState) {
+                  setState(() => isFavorite = newState);
+                });
           },
         ),
       ],

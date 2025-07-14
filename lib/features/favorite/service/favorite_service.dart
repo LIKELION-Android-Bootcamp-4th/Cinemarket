@@ -53,4 +53,53 @@ class FavoriteService {
       return false;
     }
   }
+
+  Future<bool> toggleMovieFavorite({
+    required String contentProductId,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/api/content-product/$contentProductId/like-toggle',
+      );
+
+      Logger().i('message: ${response.data['message']}');
+      return response.data['success'] == true;
+
+    } on DioException catch (e) {
+      final message = e.response?.data['message'] ?? e.message;
+      Logger().i('😢😢😢 영화 찜 실패: $message');
+
+      return false;
+    }
+  }
+
+  /**
+   * 이제 찜한 콘텐츠 목록 조회   통신
+   * 받는 건 List<id> -> id == tmdb ID
+   *   이 id로 tmdb 상세 통신하여 -> 포스터, 타이틀 받아내기
+   *   라우터로 이동 <- movie_item에서 이미 처리 완료
+   */
+  Future<List<int>> getAllFavoriteMovies({
+    int page = 1,
+    int limit = 20,
+}) async {
+    try {
+      final response = await _dio.get(
+        '/api/mypage/contents',
+          queryParameters: {
+            'page': page,
+            'limit': limit,
+          },
+      );
+
+      final List<dynamic> items = response.data['data']['items'];
+      final tmdbIds = items.map((item) => item['contentId'] as int).toList();
+
+      return tmdbIds;
+
+    } on DioException catch (e) {
+      final message = e.response?.data['message'] ?? e.message;
+      throw('😢😢😢 영화 찜 목록 조회 실패: $message');
+    }
+  }
 }

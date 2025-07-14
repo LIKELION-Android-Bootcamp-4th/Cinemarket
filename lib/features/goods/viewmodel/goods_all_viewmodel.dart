@@ -46,4 +46,8 @@ class GoodsAllViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> getMovieTitleFromGoodsId({required String goodsId}) {
+    return _goodsRepository.tempGetMovieTitleFromGoodsId(goodsId: goodsId); // 서버 api에서 title 제공 시 삭제 예정
+    // return _goodsRepository.getMovieTitleFromGoodsId(goodsId: goodsId);
+  }
 }
