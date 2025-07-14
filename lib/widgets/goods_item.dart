@@ -5,6 +5,7 @@ import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
 
 class GoodsItem extends StatefulWidget {
@@ -12,7 +13,7 @@ class GoodsItem extends StatefulWidget {
   final String imageUrl;
   final String goodsName;
   final String movieTitle;
-  final String price;
+  final int price;
   final int stock;
   final double rating;
   final int reviewCount;
@@ -72,38 +73,57 @@ class _GoodsItemState extends State<GoodsItem> {
                   onPressed: () async {
                     setState(() => isFavorite = !isFavorite);
 
-                    final success = await FavoriteViewModel()
-                        .toggleFavorite(goodsId: widget.goodsId);
+                    final success = await FavoriteViewModel().toggleFavorite(
+                      goodsId: widget.goodsId,
+                    );
 
-                    if (!success) { setState(() => isFavorite = !isFavorite);}
+                    if (!success) {
+                      setState(() => isFavorite = !isFavorite);
+                    }
 
                     final accessToken = await TokenStorage.getAccessToken();
 
-                    if (!mounted) return;  // state의 화면 부착 여부
+                    if (!mounted) return; // state의 화면 부착 여부
 
-                    if (accessToken == null) {  // 비회원의 경우
+                    if (accessToken == null) {
+                      // 비회원의 경우
 
                       final shouldNavigate = await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('로그인이 필요합니다', style: AppTextStyle.section,),
-                            content: const Text('로그인 화면으로 이동하시겠습니까?', style: AppTextStyle.body,),
-                            backgroundColor: AppColors.widgetBackground,
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(false),
-                                child: const Text('취소', style: AppTextStyle.bodyPointRed,),
+                        context: context,
+                        builder:
+                            (context) => AlertDialog(
+                              title: const Text(
+                                '로그인이 필요합니다',
+                                style: AppTextStyle.section,
                               ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(true),
-                                child: const Text('이동', style: AppTextStyle.bodyPointBlue,),
+                              content: const Text(
+                                '로그인 화면으로 이동하시겠습니까?',
+                                style: AppTextStyle.body,
                               ),
-                            ],
-                          ),
+                              backgroundColor: AppColors.widgetBackground,
+                              actions: [
+                                TextButton(
+                                  onPressed:
+                                      () => Navigator.of(context).pop(false),
+                                  child: const Text(
+                                    '취소',
+                                    style: AppTextStyle.bodyPointRed,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed:
+                                      () => Navigator.of(context).pop(true),
+                                  child: const Text(
+                                    '이동',
+                                    style: AppTextStyle.bodyPointBlue,
+                                  ),
+                                ),
+                              ],
+                            ),
                       );
 
-                      if(shouldNavigate == true && mounted) {
-                        context.push('/login', );
+                      if (shouldNavigate == true && mounted) {
+                        context.push('/login');
                       }
                     }
                   },
@@ -126,11 +146,12 @@ class _GoodsItemState extends State<GoodsItem> {
                         color: const Color.fromRGBO(0, 0, 0, 0.5),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 2),
-                      child: const Text(
-                        '품절',
-                        style: AppTextStyle.bodySmall,
+                      padding: const EdgeInsets.only(
+                        left: 4,
+                        right: 4,
+                        bottom: 2,
                       ),
+                      child: const Text('품절', style: AppTextStyle.bodySmall),
                     ),
                   ),
                 ],
@@ -168,7 +189,7 @@ class _GoodsItemState extends State<GoodsItem> {
                 ),
                 Spacer(),
                 Text(
-                  widget.price,
+                  '${NumberFormat('#,###').format(widget.price)}원',
                   style: AppTextStyle.body,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
