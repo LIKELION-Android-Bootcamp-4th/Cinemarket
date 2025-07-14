@@ -95,6 +95,7 @@ class CommonGridview<T> extends StatelessWidget {
               cumulativeSales: item.cumulativeSales,
               providers: item.providers,
               movieId: item.id,
+              isFavorite: false,
               isFavoriteScreen: isFavoriteScreen,
             ),
           );

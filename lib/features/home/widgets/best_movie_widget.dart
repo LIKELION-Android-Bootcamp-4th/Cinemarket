@@ -74,6 +74,7 @@ class BestMovieWidget extends StatelessWidget {
                           cumulativeSales: movie.cumulativeSales,
                           providers: movie.providers,
                           movieId: movie.id,
+                          isFavorite: false,
                         ),
                       ),
                     );
