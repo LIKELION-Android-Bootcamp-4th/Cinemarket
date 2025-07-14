@@ -69,11 +69,7 @@ Widget getTabsReviewWidget({
               productName: goodsName,
               movieTitle: movieTitle,
               productImage: goodsImage,
-                // photoUrls: review.images.map((item) => item.url).toList(),
-              photoUrls: const [
-                'https://i.ebayimg.com/images/g/I6sAAeSwZFtoY1td/s-l140.webp',
-                'https://i.ebayimg.com/images/g/kkUAAeSwfRloY1tQ/s-l140.webp',
-              ],
+                photoUrls: review.images.map((item) => item.url).toList(),
               initialRating: review.rating.toDouble(),
               initialReviewText: review.comment,
             );

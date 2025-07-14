@@ -27,6 +27,7 @@ class GoodsReviewsViewModel extends ChangeNotifier {
       _reviews = await _goodsRepository.getGoodsReviews(goodsId: goodsId);
       Logger().i("✅ 리뷰 불러오기 성공");
       Logger().i(_reviews[0].comment);
+      Logger().i(reviews[0].images.first.url);
     } catch (e, stackTrace) {
       _errorMessage = '리뷰 불러오기 실패: $e';
       Logger().e("❌ 리뷰 불러오기 실패", error: e, stackTrace: stackTrace);
