@@ -7,12 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
-class MovieItem extends StatefulWidget {
+class MovieItem extends StatelessWidget {
   final String imageUrl;
   final String movieName;
   final int cumulativeSales;
   final List<Map<String, String>> providers;
-  final bool isFavorite;
   final int movieId;
 
   const MovieItem({
@@ -21,22 +20,8 @@ class MovieItem extends StatefulWidget {
     required this.movieName,
     required this.cumulativeSales,
     required this.providers,
-    required this.isFavorite,
     required this.movieId,
   });
-
-  @override
-  State<MovieItem> createState() => _MovieItemState();
-}
-
-class _MovieItemState extends State<MovieItem> {
-  late bool isFavorite;
-
-  @override
-  void initState() {
-    super.initState();
-    isFavorite = widget.isFavorite;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,67 +34,31 @@ class _MovieItemState extends State<MovieItem> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: Stack(
-              children: [
-                Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      widget.imageUrl,
+            child: Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  errorBuilder: (context,error,stackTrace) {
+                    return Image.asset(
+                      'assets/images/default_poster.png',
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
-                      errorBuilder: (context,error,stackTrace) {
-                        return Image.asset(
-                          'assets/images/default_poster.png',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        );
-                      },
-                    ),
-                  ),
+                    );
+                  },
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () async {
-                      // 로그인 요청  // 하지 않는다면 바로 action 종료
-                      if (!await requireLoginBeforeAction(context)) return;
-
-                      if (await updateFavoriteStatus(
-                        movieId: widget.movieId.toString(),
-                      )) {
-                        if (!context.mounted) return;
-
-                        setState(() => isFavorite = !isFavorite);
-                        CommonToast.show(
-                          context: context,
-                          message: isFavorite ? '찜 추가 완료 !' : '찜 삭제 완료 !',
-                          type: ToastificationType.success,
-                        );
-                      } else {
-                        CommonToast.show(
-                            context: context,
-                            message: '에러 발생',
-                            type: ToastificationType.error,
-                        );
-                      }
-                    },
-                    icon: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
           const SizedBox(height: 2),
           Padding(
             padding: const EdgeInsets.only(left: 4),
             child: Text(
-              widget.movieName,
+              movieName,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyle.bodyLarge,
@@ -126,16 +75,16 @@ class _MovieItemState extends State<MovieItem> {
                   color: AppColors.textPrimary,
                 ),
                 const SizedBox(width: 4),
-                Text('${widget.cumulativeSales}', style: AppTextStyle.bodySmall),
+                Text('${cumulativeSales}', style: AppTextStyle.bodySmall),
               ],
             ),
           ),
           const SizedBox(height: 2),
           Padding(
             padding: const EdgeInsets.only(left: 4, bottom: 4,),
-            child: widget.providers.isNotEmpty
+            child: providers.isNotEmpty
               ? Row(
-                  children: widget.providers.map((provider) {
+                  children: providers.map((provider) {
                     //TMDB watcha 로고 오류 -> 네트워크 이미지로 대체
                     final isWatcha = provider['providerName']?.toLowerCase() == 'watcha';
                     final logoUrl = isWatcha
