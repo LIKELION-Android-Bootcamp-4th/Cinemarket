@@ -96,15 +96,15 @@ class _MovieItemState extends State<MovieItem> {
                             context: context,
                             message: '에러 발생',
                             type: ToastificationType.error,
-                          );
-                        }
-                      },
-                      icon: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: Colors.red,
-                      ),
+                        );
+                      }
+                    },
+                    icon: Icon(
+                      widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.red,
                     ),
                   ),
+                ),
               ],
             ),
           ),
