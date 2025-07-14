@@ -50,9 +50,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   vertical: 32.0,
                 ),
                 child:
-                    _viewModel.hasToken
-                        ? _buildLoggedInView()
-                        : _buildLoggedOutView(),
+                _viewModel.hasToken
+                    ? _buildLoggedInView()
+                    : _buildLoggedOutView(),
               ),
             ),
           ],
@@ -75,58 +75,77 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 color: AppColors.widgetBackground,
               ),
               child:
-                  _viewModel.profileImage != null &&
-                          _viewModel.profileImage!.isNotEmpty
-                      ? ClipOval(
-                        child: Image.network(
-                          _viewModel.profileImage!,
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.widgetBackground,
-                              ),
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 40,
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                      : Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.widgetBackground,
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 40,
-                        ),
+              _viewModel.profileImage != null &&
+                  _viewModel.profileImage!.isNotEmpty
+                  ? ClipOval(
+                child: Image.network(
+                  _viewModel.profileImage!,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.widgetBackground,
                       ),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    );
+                  },
+                ),
+              )
+                  : Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.widgetBackground,
+                ),
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
             ),
             const SizedBox(width: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  _viewModel.nickname ?? 'nickName',
-                  style: AppTextStyle.headline,
+                SizedBox(
+                  width: 250,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _viewModel.nickname ?? 'nickName',
+                      style: AppTextStyle.headline,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  _viewModel.email ?? 'user@example.com',
-                  style: AppTextStyle.headline,
+
+                SizedBox(
+                  width: 250,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _viewModel.email ?? 'user@example.com',
+                      style: AppTextStyle.headline,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
+
+
               ],
             ),
           ],
