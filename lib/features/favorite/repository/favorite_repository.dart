@@ -1,4 +1,5 @@
 import 'package:cinemarket/features/favorite/model/favorite_item.dart';
+import 'package:cinemarket/features/favorite/model/favorite_movie.dart';
 import 'package:cinemarket/features/favorite/service/favorite_service.dart';
 import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/services/goods_service.dart';
@@ -60,19 +61,23 @@ class FavoriteRepository {
   }
 
   Future<List<TmdbMovie>> getAllFavoriteMovies() async {
-    final List<int> tmdbIds = await _favoriteService.getAllFavoriteMovies();
+    final response = await _favoriteService.getAllFavoriteMovies();
+    final List<dynamic> items = response.data['data']['items'];
+    final tmdbIds = items.map((item) => FavoriteMovie.fromJson(item)).toList();
+
 
     final List<TmdbMovie> movies = await Future.wait(
-      tmdbIds.map((movieId) async {
-        final response = await _moviesService.fetchMovieDetail(movieId);
+      tmdbIds.map((favoriteMovie) async {
+        final response = await _moviesService.fetchMovieDetail(favoriteMovie.contentId);
         return TmdbMovie(
-          id: movieId,
+          id: favoriteMovie.contentId,
           title: response.title,
           overview: 'overview',
           posterPath: response.posterPath,
           releaseDate: 'releaseDate',
           voteAverage: 0,
           popularity: 0,
+          isFavorite: favoriteMovie.isLikedByMe,
         );
       }).toList(),
     );

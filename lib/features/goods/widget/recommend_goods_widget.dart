@@ -47,7 +47,7 @@ class RecommendGoodsWidget extends StatelessWidget {
                         context.push('/goods/${item.id}');
                       },
                       child: SizedBox(
-                        width: 200,
+                        width: 150,
                         child: GoodsItem(
                           goodsId: item.id,
                           imageUrl: item.images.main,

@@ -5,28 +5,22 @@ import 'package:cinemarket/features/goods/services/goods_recommended_service.dar
 class GoodsRecommendedRepository {
   final GoodsRecommendedService _service = GoodsRecommendedService();
 
-  Future<ListResponse<Goods>> getRecommendedGoods({
+  Future<List<Goods>> getRecommendedGoods({
     required String contentId,
     required String excludeProductId,
   }) async {
     try {
       final response = await _service.fetchMovieProducts(contentId);
+      final data = response.data;
 
-      final parsed = ListResponse<Goods>.fromJson(
-        response.data,
-            (json) => Goods.fromJson(json as Map<String, dynamic>),
-      );
+      final rawItems = data['data']['items'] as List<dynamic>? ?? [];
 
-      // 현재 상품 제외
-      final filtered = parsed.items.where((g) => g.id != excludeProductId).toList();
+      final goodsList = rawItems
+          .map((item) => Goods.fromJson(Map<String, dynamic>.from(item)))
+          .where((g) => g.id != excludeProductId)
+          .toList();
 
-      return ListResponse<Goods>(
-        success: parsed.success,
-        message: parsed.message,
-        items: filtered,
-        pagination: parsed.pagination,
-        timestamp: parsed.timestamp,
-      );
+      return goodsList;
     } catch (e) {
       throw Exception('추천 굿즈 조회 실패: $e');
     }
