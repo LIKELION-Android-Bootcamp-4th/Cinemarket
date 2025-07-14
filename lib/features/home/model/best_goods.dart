@@ -4,7 +4,6 @@ import 'package:cinemarket/features/goods/model/review_stats.dart';
 class BestGoods {
   final String id;
   final String name;
-  // final String movieName;
   final GoodsImages images;
   final int price;
   final ReviewStats reviewStats;
@@ -16,7 +15,6 @@ class BestGoods {
   BestGoods({
     required this.id,
     required this.name,
-    // required this.movieName,
     required this.images,
     required this.price,
     required this.reviewStats,

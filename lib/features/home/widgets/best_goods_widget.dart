@@ -58,17 +58,18 @@ class BestGoodsWidget extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final goods = vm.goodsList[index];
                     final formattedPrice = '${formatter.format(goods.price)}원';
+                    final movieName = vm.movieTitleMap[goods.id] ?? '불러오는 중입니다..';
                     return GestureDetector(
                       onTap: () {
                         context.push('/goods/${goods.id}');
                       },
                       child: SizedBox(
-                        width: 200,
+                        width: 150,
                         child: GoodsItem(
                           goodsId: goods.id,
                           imageUrl: goods.images.main,
                           goodsName: goods.name,
-                          movieTitle: '없음',
+                          movieTitle: movieName,
                           price: formattedPrice,
                           stock: goods.stock,
                           rating: goods.reviewStats.averageRating,
