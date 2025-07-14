@@ -14,6 +14,7 @@ import 'package:cinemarket/features/mypage/detail/widget/create_review_widget.da
 import 'package:cinemarket/features/mypage/detail/widget/fix_review_widget.dart';
 import 'package:cinemarket/features/mypage/detail/my_page_detail_screen.dart';
 import 'package:cinemarket/features/mypage/model/order/order_item.dart';
+import 'package:cinemarket/features/mypage/model/orderdetail/order_detail_item.dart';
 import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:cinemarket/features/mypage/screen/my_page_screen.dart';
 import 'package:cinemarket/features/purchase/screen/purchase_screen.dart';
@@ -123,7 +124,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/mypage/create-review',
       builder: (context, state) {
-        final orderItem = state.extra as OrderItem;
+        final orderItem = state.extra as OrderDetailItem;
         return CreateReviewWidget(orderItem: orderItem);
       },
     ),
