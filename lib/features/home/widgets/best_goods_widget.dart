@@ -3,6 +3,7 @@ import 'package:cinemarket/features/home/viewmodel/best_goods_viewmodel.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class BestGoodsWidget extends StatelessWidget {
@@ -10,6 +11,7 @@ class BestGoodsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = NumberFormat('#,###');
     return ChangeNotifierProvider(
       create: (_) {
         final vm = BestGoodsViewModel();
@@ -55,19 +57,21 @@ class BestGoodsWidget extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(width: 12),
                   itemBuilder: (context, index) {
                     final goods = vm.goodsList[index];
+                    final formattedPrice = '${formatter.format(goods.price)}원';
+                    final movieName = vm.movieTitleMap[goods.id] ?? '불러오는 중입니다..';
                     return GestureDetector(
                       onTap: () {
                         context.push('/goods/${goods.id}');
                       },
                       child: SizedBox(
-                        width: 200,
+                        width: 150,
                         child: GoodsItem(
                           goodsId: goods.id,
                           imageUrl: goods.images.main,
                           goodsName: goods.name,
-                          movieTitle: '없음',
-                          price: '￦${goods.price}',
-                          stock: 0,  // todo: 논의 필요
+                          movieTitle: movieName,
+                          price: formattedPrice,
+                          stock: goods.stock,
                           rating: goods.reviewStats.averageRating,
                           reviewCount: goods.reviewCount,
                           isFavorite: goods.isFavorite,
