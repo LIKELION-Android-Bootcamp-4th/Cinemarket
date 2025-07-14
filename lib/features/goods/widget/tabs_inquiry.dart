@@ -5,7 +5,7 @@ List<Widget> getTabsInquiryWidgets() {
   return [
     const SizedBox(
       height: 400,
-      child: Center(child: Text('구현 중..', style: AppTextStyle.headline)),
+      child: Center(child: Text('준비 중 입니다.', style: AppTextStyle.headline)),
     ),
   ];
 }
