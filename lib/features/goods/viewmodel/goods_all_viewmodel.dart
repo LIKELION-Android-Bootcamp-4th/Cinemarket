@@ -8,26 +8,30 @@ class GoodsAllViewModel extends ChangeNotifier {
   List<Goods> goodsList = [];
   bool _isLoaded = false;
 
-
   GoodsAllViewModel({GoodsRepository? goodsRepository})
     : _goodsRepository = goodsRepository ?? GoodsRepository();
 
   bool get isLoaded => _isLoaded;
 
-
-  Future<void> getAllGoods({bool force = false}) async {
+  Future<void> getAllGoods({
+    bool force = false,
+    String? sortBy,
+    String sortOrder = 'desc',
+  }) async {
     if (!force && _isLoaded) return;
 
     try {
-      goodsList = await _goodsRepository.getAllGoodsList();
+      goodsList = await _goodsRepository.getAllGoodsList(
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+      );
       notifyListeners();
       _isLoaded = true;
-
 
       // 로그 출력
       print("😍😍😍");
       goodsList.forEach((goods) {
-        print(goods);  // 👍👍👍 toString()이 오버라이드되어 있어 보기 좋게 출력됨
+        print(goods); // 👍👍👍 toString()이 오버라이드되어 있어 보기 좋게 출력됨
       });
     } catch (e, stackTrace) {
       print(e);

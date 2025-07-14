@@ -68,10 +68,8 @@ class BestGoodsWidget extends StatelessWidget {
                           movieTitle: '없음',
                           price: '￦${goods.price}',
                           stock: 0,  // todo: 논의 필요
-                          // rating: goods.reviewStats.averageRating,
-                          // reviewCount: goods.reviewCount,
-                          rating: 0.0,
-                          reviewCount:10,
+                          rating: goods.reviewStats.averageRating,
+                          reviewCount: goods.reviewCount,
                           isFavorite: goods.isFavorite,
                         ),
                       ),
