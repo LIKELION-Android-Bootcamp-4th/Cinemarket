@@ -11,8 +11,16 @@ class CommonTabView extends StatelessWidget {
     required this.tabViews,
   }) : assert(tabTitles.length == tabViews.length, '탭과 뷰의 개수는 같아야 합니다.');
 
+  double _getFontSizeByTabCount(int count) {
+    if (count == 4) return 14;
+    if (count == 3) return 16;
+    return 18;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final fontSize = _getFontSizeByTabCount(tabTitles.length);
+
     return DefaultTabController(
       length: tabTitles.length,
       child: Container(
@@ -26,9 +34,9 @@ class CommonTabView extends StatelessWidget {
                     .map((title) => Tab(
                     child: Text(
                         title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Pretendard',
-                          fontSize: 20,
+                          fontSize: fontSize,
                           fontWeight: FontWeight.w600,
                         )
                     )

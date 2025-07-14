@@ -1,16 +1,15 @@
 import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
-import 'package:cinemarket/features/favorite/service/favorite_service.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class GoodsItem extends StatefulWidget {
+  final String goodsId;
   final String imageUrl;
   final String goodsName;
-  final String movieName;
+  final String movieTitle;
   final String price;
   final double rating;
   final int reviewCount;
@@ -18,9 +17,10 @@ class GoodsItem extends StatefulWidget {
 
   const GoodsItem({
     super.key,
+    required this.goodsId,
     required this.imageUrl,
     required this.goodsName,
-    required this.movieName,
+    required this.movieTitle,
     required this.price,
     required this.rating,
     required this.reviewCount,
@@ -69,11 +69,8 @@ class _GoodsItemState extends State<GoodsItem> {
                   onPressed: () async {
                     setState(() => isFavorite = !isFavorite);
 
-                    final success = await FavoriteViewModel(
-                      favoriteRepository: FavoriteRepository(
-                        favoriteService: FavoriteService(),
-                      ),
-                    ).toggleFavorite(goodsId: widget.movieName);  // todo: movieName이 goodsId임 !!  // 변경 필수 !!
+                    final success = await FavoriteViewModel()
+                        .toggleFavorite(goodsId: widget.goodsId);
 
                     if (!success) { setState(() => isFavorite = !isFavorite);}
 
@@ -124,7 +121,7 @@ class _GoodsItemState extends State<GoodsItem> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              widget.movieName,
+              widget.movieTitle,
               style: AppTextStyle.bodySmall,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
