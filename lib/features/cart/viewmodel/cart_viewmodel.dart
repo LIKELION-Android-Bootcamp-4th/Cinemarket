@@ -131,7 +131,7 @@ class CartViewModel extends ChangeNotifier {
     } else {
       CommonToast.show(
         context: context,
-        message: '최대 수량은 ${maxQuantity}개까지 가능합니다.',
+        message: '남은 재고가 ${maxQuantity}개 입니다.',
         type: ToastificationType.warning,
       );
     }
