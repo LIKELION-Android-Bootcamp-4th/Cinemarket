@@ -141,9 +141,10 @@ class MyPageViewModel extends ChangeNotifier {
     _checkTokenAndLoadProfile();
   }
 
-  void setAddress(String address1, String zipCode) {
+  void setAddress(String address1, String zipCode, String address2) {
     _address1 = address1;
     _zipCode = zipCode;
+    _address2 = address2;
     notifyListeners();
   }
 

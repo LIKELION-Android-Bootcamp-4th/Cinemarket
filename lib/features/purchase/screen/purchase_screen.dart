@@ -1,7 +1,8 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
-import 'package:cinemarket/features/cart/service/cart_service.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
+import 'package:cinemarket/features/purchase/viewmodel/purchase_viewmodel.dart';
 import 'package:cinemarket/features/purchase/widgets/bottom_action_button.dart';
 import 'package:cinemarket/features/purchase/widgets/delivery_info_cart.dart';
 import 'package:cinemarket/features/purchase/widgets/goods_summary_card.dart';
@@ -22,50 +23,44 @@ class PurchaseScreen extends StatefulWidget {
 }
 
 class _PurchaseScreen extends State<PurchaseScreen> {
-  late List<CartItem> cartItems;
-  final CartService _cartService = CartService();
   final memoController = TextEditingController();
+  final address2Controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    cartItems = widget.cartItems;
+    final myPageViewModel = context.read<MyPageViewModel>();
+    final purchaseViewModel = context.read<PurchaseViewModel>();
+    myPageViewModel.initialize().then((_) {
+      // 상세주소 값
+      address2Controller.text =
+      myPageViewModel.address2 != null && myPageViewModel.address2!.trim().isNotEmpty
+          ? myPageViewModel.address2!
+          : '';
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<MyPageViewModel>().initialize();
+      purchaseViewModel.items = widget.cartItems;
+      memoController.text = purchaseViewModel.memoController.text;
+
+
     });
   }
 
   @override
   void dispose() {
     memoController.dispose();
+    address2Controller.dispose();
     super.dispose();
   }
-
-  void increaseQuantity(int index) {
-    setState(() {
-      cartItems[index].quantity++;
-    });
-  }
-
-  void decreaseQuantity(int index) {
-    setState(() {
-      if (cartItems[index].quantity > 1) {
-        cartItems[index].quantity--;
-      }
-    });
-  }
-
-
-
-  int get totalPrice =>
-      cartItems.fold(0, (sum, item) => sum + item.price * item.quantity);
 
   @override
   Widget build(BuildContext context) {
     final myPageViewModel = context.watch<MyPageViewModel>();
+    final purchaseViewModel = context.watch<PurchaseViewModel>();
+    final cartItems = purchaseViewModel.items;
+
     final address = myPageViewModel.address1;
     final zipCode = myPageViewModel.zipCode;
+    final address2 = myPageViewModel.address2;
     final name = myPageViewModel.recipientName;
 
     return Scaffold(
@@ -78,19 +73,25 @@ class _PurchaseScreen extends State<PurchaseScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          const Text('굿즈', style: AppTextStyle.headline),
+          const SizedBox(height: 8),
           // 상품 리스트
           ...cartItems.asMap().entries.map((entry) {
             final index = entry.key;
             final item = entry.value;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: GoodsSummaryCard(
-                name: item.name,
-                quantity: item.quantity,
-                onAdd: () => increaseQuantity(index),
-                onRemove: () => decreaseQuantity(index),
-                pricePerItem: item.price,
-              ),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoodsSummaryCard(
+                  name: item.name,
+                  imageUrl: item.imageUrl,
+                  quantity: item.quantity,
+                  onAdd: () => purchaseViewModel.increaseQuantity(index),
+                  onRemove: () => purchaseViewModel.decreaseQuantity(index),
+                  pricePerItem: item.price,
+                ),
+                const SizedBox(height: 16),
+              ],
             );
           }),
           const SizedBox(height: 16),
@@ -99,26 +100,38 @@ class _PurchaseScreen extends State<PurchaseScreen> {
           DeliveryInfoCard(
             address: address,
             zipCode: zipCode,
+            address2: address2,
+            address2Controller: address2Controller,
             onAddressChanged: (newAddress, newZip) {
-              myPageViewModel.setAddress(newAddress, newZip);
+              myPageViewModel.setAddress(newAddress, newZip, address2Controller.text);
             },
           ),
 
           const SizedBox(height: 16),
           PaymentInfoCard(items: cartItems),
-
           const SizedBox(height: 16),
-          // TextField(
-          //   controller: memoController,
-          //   style: const TextStyle(color: Colors.white),
-          //   decoration: const InputDecoration(
-          //     labelText: '배송 메모 (선택)',
-          //     labelStyle: TextStyle(color: Colors.white),
-          //     filled: true,
-          //     fillColor: Colors.grey,
-          //     border: OutlineInputBorder(),
-          //   ),
-          // ),
+
+          const Text('배송 메모', style: AppTextStyle.section),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.innerWidget,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: TextField(
+              controller: memoController,
+              style: AppTextStyle.body,
+              decoration: const InputDecoration.collapsed(
+                hintText: '배송 메모를 입력하세요',
+                hintStyle: AppTextStyle.body,
+              ),
+              onChanged: (text) {
+                purchaseViewModel.memoController.text = text;
+              },
+            ),
+          ),
+
           const SizedBox(height: 80),
         ],
       ),
@@ -135,15 +148,17 @@ class _PurchaseScreen extends State<PurchaseScreen> {
           }
 
           try {
-            final cartIds = cartItems.map((e) => e.cartId).toList();
-            await _cartService.checkoutCart(
-              cartIds: cartIds,
+            await purchaseViewModel.updateQuantitiesToServer();
+            await purchaseViewModel.checkout(
+              context: context,
+              cartIds: cartItems.map((e) => e.cartId).toList(),
               recipient: name,
-              address: address,
+              address: '$address ${address2Controller.text}',
               phone: myPageViewModel.safePhone,
               zipCode: zipCode!,
               memo: memoController.text,
             );
+
             CommonToast.show(
               context: context,
               message: '구매가 완료되었습니다.',

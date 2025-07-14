@@ -76,38 +76,6 @@ class CartService {
     }
   }
 
-  Future<void> checkoutCart({
-    required List<String> cartIds,
-    required String recipient,
-    required String address,
-    required String phone,
-    required String zipCode,
-    String memo = '',
-  }) async {
-    try {
-      final body = {
-        "shippingInfo": {
-          "recipient": recipient,
-          "address": address,
-          "phone": phone,
-          "zipCode": zipCode,
-        },
-        "memo": memo,
-        "cartIds": cartIds,
-      };
-
-      final response = await _dio.post('/api/cart/checkout', data: body);
-
-      if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception('주문 생성 실패: ${response.statusCode}');
-      }
-
-      print('[주문 생성 성공] ${response.data}');
-    } catch (e) {
-      print('[주문 생성 실패] $e');
-      rethrow;
-    }
-  }
 
   Future<int> fetchCartCount() async {
     try {
@@ -121,6 +89,27 @@ class CartService {
       }
     } catch (e) {
       throw Exception('장바구니 개수 조회 오류: $e');
+    }
+  }
+
+  Future<void> updateCartItemQuantity({
+    required String cartId,
+    required int quantity,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        '/api/cart/$cartId',
+        data: {'quantity': quantity},
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('수량 수정 실패: ${response.statusCode}');
+      }
+
+      print('[수량 수정 성공] cartId: $cartId, quantity: $quantity');
+    } catch (e) {
+      print('[수량 수정 실패] $e');
+      rethrow;
     }
   }
 }

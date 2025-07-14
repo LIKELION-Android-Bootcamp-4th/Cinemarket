@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class CartItemTile extends StatelessWidget {
   final CartItem item;
   final ValueChanged<bool> onChanged;
-  final VoidCallback onIncrease;
+  final void Function(BuildContext context) onIncrease;
   final VoidCallback onDecrease;
 
   const CartItemTile({
@@ -101,7 +101,7 @@ class CartItemTile extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: onIncrease,
+                          onPressed: () => onIncrease(context),
                           icon: const Icon(Icons.add, color: Colors.white),
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
@@ -137,7 +137,7 @@ class CartItemTile extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: onIncrease,
+                          onPressed: () => onIncrease(context),
                           icon: const Icon(Icons.add, color: Colors.white),
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),

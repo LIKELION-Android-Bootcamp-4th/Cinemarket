@@ -1,3 +1,4 @@
+import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,9 +15,14 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => CartViewModel(),
-      child: Scaffold(
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cartViewModel = context.read<CartViewModel>();
+      cartViewModel.fetchCart();
+      cartViewModel.fetchCartCount();
+      cartViewModel.clearSelections();
+    });
+
+    return  Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.black,
@@ -91,7 +97,7 @@ class CartScreen extends StatelessWidget {
                       return CartItemTile(
                         item: item,
                         onChanged: (_) => viewModel.toggleSelect(index),
-                        onIncrease: () => viewModel.increaseQuantity(index),
+                        onIncrease: (context) => viewModel.increaseQuantity(index, context),
                         onDecrease: () => viewModel.decreaseQuantity(index),
                       );
                     },
@@ -121,7 +127,6 @@ class CartScreen extends StatelessWidget {
             );
           },
         ),
-      ),
     );
   }
 }

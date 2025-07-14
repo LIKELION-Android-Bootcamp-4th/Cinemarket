@@ -1,5 +1,8 @@
+import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 import '../service/cart_service.dart';
 
 class CartViewModel extends ChangeNotifier {
@@ -7,9 +10,11 @@ class CartViewModel extends ChangeNotifier {
 
   List<CartItem> _items = [];
   bool _isLoading = false;
+  bool _isLoggedIn = false;
 
   List<CartItem> get items => _items;
   bool get isLoading => _isLoading;
+  bool get isLoggedIn => _isLoggedIn;
 
   int get totalPrice => _items
       .where((item) => item.isSelected)
@@ -17,10 +22,15 @@ class CartViewModel extends ChangeNotifier {
 
   int _cartCount = 0;
   int get cartCount => _cartCount;
+
   Future<void> fetchCartCount() async {
     try {
-      _cartCount = await _cartService.fetchCartCount();
-      print('[DEBUG] 장바구니 수량: $_cartCount');
+      _isLoggedIn = await TokenStorage.isLoggedIn(); // 로그인 상태 확인
+      if (_isLoggedIn) {
+        _cartCount = await _cartService.fetchCartCount();
+      } else {
+        _cartCount = 0;
+      }
       notifyListeners();
     } catch (e) {
       print('장바구니 개수 조회 실패: $e');
@@ -30,6 +40,15 @@ class CartViewModel extends ChangeNotifier {
   CartViewModel() {
     fetchCart();
     fetchCartCount();
+  }
+
+  Future<void> checkLoginAndFetchCount() async {
+    final isLoggedIn = await TokenStorage.isLoggedIn();
+    if (isLoggedIn) {
+      await fetchCartCount();
+    } else {
+      _cartCount = 0;
+    }
   }
 
   Future<void> fetchCart() async {
@@ -49,6 +68,7 @@ class CartViewModel extends ChangeNotifier {
           name: e.name,
           quantity: e.quantity,
           price: e.price,
+          stock: e.stock,
           imageUrl: safeImage,
           isSelected: false,
         );
@@ -79,7 +99,8 @@ class CartViewModel extends ChangeNotifier {
         options: options,
         discount: discount,
       );
-      await fetchCart(); // 추가 후 장바구니 새로고침
+      await fetchCart();// 추가 후 장바구니 새로고침
+      await fetchCartCount();// 추가된 수량까지 반영해서 count 갱신
     } catch (e) {
       print('상품 추가 실패: $e');
     }
@@ -89,6 +110,7 @@ class CartViewModel extends ChangeNotifier {
     try {
       await _cartService.removeItemsFromCart(cartIds);
       await fetchCart(); // 삭제 후 장바구니 갱신
+      await fetchCartCount(); //count 갱신
     } catch (e) {
       print('상품 삭제 실패: $e');
     }
@@ -99,9 +121,20 @@ class CartViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void increaseQuantity(int index) {
-    _items[index].quantity++;
-    notifyListeners();
+  void increaseQuantity(int index, BuildContext context) {
+    final item = _items[index];
+    final maxQuantity = item.stock;
+
+    if (item.quantity < maxQuantity) {
+      item.quantity++;
+      notifyListeners();
+    } else {
+      CommonToast.show(
+        context: context,
+        message: '최대 수량은 ${maxQuantity}개까지 가능합니다.',
+        type: ToastificationType.warning,
+      );
+    }
   }
 
   void decreaseQuantity(int index) {
@@ -119,6 +152,13 @@ class CartViewModel extends ChangeNotifier {
   void toggleSelectAll(bool selectAll) {
     for (final item in _items) {
       item.isSelected = selectAll;
+    }
+    notifyListeners();
+  }
+
+  void clearSelections() {
+    for (final item in _items) {
+      item.isSelected = false;
     }
     notifyListeners();
   }

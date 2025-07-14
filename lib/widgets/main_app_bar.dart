@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/cart/viewmodel/cart_viewmodel.dart';
@@ -35,7 +36,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                     icon: const Icon(Icons.shopping_cart),
                     onPressed: onCartPressed,
                   ),
-                  if (viewModel.cartCount > 0)
+                  if (viewModel.isLoggedIn && viewModel.cartCount > 0)
                     Positioned(
                       right: 6,
                       top: 6,
