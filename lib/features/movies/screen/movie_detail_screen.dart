@@ -69,6 +69,12 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                             message: isFavorite ? '찜 추가 완료 !' : '찜 삭제 완료 !',
                             type: ToastificationType.success,
                           );
+                        } else {
+                          CommonToast.show(
+                            context: context,
+                            message: '에러 발생',
+                            type: ToastificationType.error,
+                          );
                         }
                       },
                       title: movieDetail.title,
