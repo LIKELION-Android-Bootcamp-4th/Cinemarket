@@ -141,6 +141,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
           },
         ),
         _buildMenuItem(
+          title: '배송 조회',
+          textStyle: AppTextStyle.body,
+          onTap: () {
+            print('배송 조회 클릭');
+            context.push('/mypage/detail', extra: 'order_tracking');
+          },
+        ),
+
+        _buildMenuItem(
           title: '주문 내역',
           textStyle: AppTextStyle.body,
           onTap: () {

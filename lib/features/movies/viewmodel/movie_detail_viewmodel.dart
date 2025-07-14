@@ -34,8 +34,11 @@ class MovieDetailViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _movieDetail = await _repository.getMovieDetail(movieId);
+      final detail = await _repository.getMovieDetail(movieId);
       _castList = await _repository.getMovieCredits(movieId);
+      final providers = await _repository.getMovieProviders(movieId);
+
+      _movieDetail = detail.copyWithProviders(providers);
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -50,23 +53,18 @@ class MovieDetailViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final listResponse = await _repository.fetchMovieProducts(contentId);
-      _success = listResponse.success;
-      _message = listResponse.message;
-
-      if (_success == true) {
-        _goodsList = listResponse.items;
-      } else {
-        _goodsList = [];
-        _error = listResponse.message;
-      }
+      final goodsList = await _repository.fetchMovieProducts(contentId);
+      _goodsList = goodsList;
+      _success = true;
     } catch (e) {
       _goodsList = [];
       _error = e.toString();
+      _success = false;
     } finally {
       _isGoodsLoading = false;
       notifyListeners();
     }
   }
+
 }
 

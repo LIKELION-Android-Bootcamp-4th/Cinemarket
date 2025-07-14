@@ -4,14 +4,58 @@ import 'package:cinemarket/features/mypage/viewmodel/order_detail_viewmodel.dart
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 class OrderDetailWidget extends StatelessWidget {
   final String orderId;
 
+  String formatCurrency(int amount) {
+    final formatter = NumberFormat('#,###');
+    return '${formatter.format(amount)}원';
+  }
+
+  String getStatusLabel(String status) {
+    switch (status) {
+      case 'pending':
+        return '주문 접수';
+      case 'preparing':
+        return '상품 준비 중';
+      case 'shipped':
+        return '배송 시작';
+      case 'delivered':
+        return '배송 완료';
+      case 'confirmed':
+        return '주문 확정';
+      case 'cancelled':
+        return '주문 취소';
+      case 'refunded':
+        return '환불 완료';
+      default:
+        return status;
+    }
+  }
+
+  Color getStatusColor(String status) {
+    switch (status) {
+      case 'confirmed':
+      case 'preparing':
+      case 'shipped':
+        return Colors.green;
+      case 'delivered':
+        return Colors.blue;
+      case 'cancelled':
+      case 'refunded':
+        return Colors.red;
+      default:
+        return Colors.white;
+    }
+  }
+
+
   const OrderDetailWidget({super.key, required this.orderId});
-  
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<OrderDetailViewModel>(
@@ -77,36 +121,60 @@ class OrderDetailWidget extends StatelessWidget {
 
   }
 
-  Widget _buildPaymentInfo(order) {
-    final item = order.items.isNotEmpty ? order.items.first : null;
-    if (item == null) return const SizedBox();
 
+  Widget _buildPaymentInfo(order) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('결제 정보', style: AppTextStyle.section),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16),
+
+          // 각 아이템 별 금액
+          ...order.items.map((item) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${item.productName}',style: AppTextStyle.bodyLarge,),
+                SizedBox(height: 8,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('${formatCurrency(item.unitPrice)}', style: AppTextStyle.body),
+                    Row(
+                      children: [
+                        Text('x ${item.quantity}', style: AppTextStyle.body),
+                        SizedBox(width: 10,),
+                        Text(formatCurrency(item.totalPrice), style: AppTextStyle.body),
+                      ],
+                    )
+                  ],
+                ),
+                Divider(thickness: 1,color: AppColors.widgetBackground,)
+              ],
+            )
+          )),
+
+
+          // 배송비
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('상품 금액', style: AppTextStyle.body),
-              Text('${item.unitPrice}원', style: AppTextStyle.body),
+              Text('배송비', style: AppTextStyle.bodyLarge),
+              Text(formatCurrency(order.shippingCost), style: AppTextStyle.body),
             ],
           ),
+
+          const Divider(thickness: 1, color: AppColors.widgetBackground),
+
+          // 총 결제 금액
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('수량', style: AppTextStyle.body),
-              Text('x${item.quantity}', style: AppTextStyle.body),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('총 금액', style: AppTextStyle.body),
-              Text('${order.totalAmount}원', style: AppTextStyle.body),
+              Text('총 결제 금액', style: AppTextStyle.bodyLarge),
+              Text(formatCurrency(order.totalAmount), style: AppTextStyle.section),
             ],
           ),
         ],
@@ -114,69 +182,87 @@ class OrderDetailWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildGoodsInfo(context, order) {
-    final item = order.items.isNotEmpty ? order.items.first : null;
-    if (item == null) return const SizedBox();
 
+  Widget _buildGoodsInfo(BuildContext context, order) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("주문 정보", style: AppTextStyle.section),
-          SizedBox(height: 16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF292929),
-                  borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    image: NetworkImage(item.productImage),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: Column(
+          const SizedBox(height: 16),
+          ...order.items.map((item) => Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.productName, style: AppTextStyle.body),
-                    const SizedBox(height: 10),
-                    Text(item.productDescription ?? '', style: AppTextStyle.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis),
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF292929),
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: NetworkImage(item.productImage),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.productName, style: AppTextStyle.body),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text('${formatCurrency(item.unitPrice)}', style: AppTextStyle.bodySmall),
+                              SizedBox(width: 10,),
+                              Text('x ${item.quantity}', style: AppTextStyle.bodySmall),
+                            ]
+                          ),
+                          Text('${formatCurrency(item.totalPrice)}', style: AppTextStyle.bodySmall),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: ElevatedButton(
-              onPressed: () {
-                final productId = item.productId ?? '';
-                if (productId.isNotEmpty) {
-                  GoRouter.of(context).push('/goods/$productId');
-                } else {
-                  CommonToast.show(context: context, message: '상품 정보가 없습니다.',type: ToastificationType.error);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.widgetBackground,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final productId = item.productId ?? '';
+                      if (productId.isNotEmpty) {
+                        GoRouter.of(context).push('/goods/$productId');
+                      } else {
+                        CommonToast.show(
+                          context: context,
+                          message: '상품 정보가 없습니다.',
+                          type: ToastificationType.error,
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.widgetBackground,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: Text("재구매", style: AppTextStyle.body),
+                  ),
                 ),
-              ),
-              child: Text("재구매", style: AppTextStyle.body),
+              ],
             ),
-          ),
+          )),
         ],
       ),
     );
   }
+
 
   Widget _buildDeliveryInfo(order) {
     return Container(
@@ -200,6 +286,7 @@ class OrderDetailWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
@@ -209,8 +296,7 @@ class OrderDetailWidget extends StatelessWidget {
               Text('주문번호 : ${order.orderNumber}', style: AppTextStyle.body),
             ],
           ),
-          Spacer(),
-          Text('구매 상태 : ${order.status}', style: AppTextStyle.body),
+          Text(getStatusLabel(order.status), style: AppTextStyle.body.copyWith(color: getStatusColor(order.status))),
         ],
       ),
     );
