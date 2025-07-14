@@ -67,10 +67,6 @@ class MyPageViewModel extends ChangeNotifier {
       _nickname = data['nickName'] ?? 'nickName';
       _email = data['email'] ?? 'user@example.com';
       _phone = data['phone'];
-      print("@@@@");
-      print(data);
-      print(data['profileImage']);
-      print("@@@@");
       _profileImage = data['profileImage'];
       final addressRaw = data['address'];
 

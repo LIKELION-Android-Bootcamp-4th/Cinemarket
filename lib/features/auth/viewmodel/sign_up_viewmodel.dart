@@ -52,7 +52,6 @@ class SignUpViewModel extends ChangeNotifier {
         final response = await _authRepository.checkValidNickName(nickName);
         final data = response.data['data'];
         print(data.toString());
-        print(data['message'].toString());
         if (data['available'] == true) {
           _nickName = null;
           _error = null;
@@ -77,7 +76,6 @@ class SignUpViewModel extends ChangeNotifier {
     try {
       final response = await _authRepository.signUp(email, password, nickName);
       final data = response.data;
-      print(data.toString());
       if (data['success'] == true) {
         _email = null;
         _nickName = null;
