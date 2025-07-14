@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,19 @@ class CastItem extends StatelessWidget {
               fit: BoxFit.cover,
               width: 150,
               height: 150,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 150,
+                  height: 150,
+                  color: AppColors.widgetBackground,
+                  alignment: Alignment.center,
+                  child: const Icon(
+                    Icons.person,
+                    size: 80,
+                    color: AppColors.innerWidget,
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(height: 8),

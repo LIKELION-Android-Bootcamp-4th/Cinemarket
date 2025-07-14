@@ -1,9 +1,11 @@
 import 'package:cinemarket/widgets/goods_item.dart' show toggleFavorite, updateGoodsFavoriteStatus;
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryImageWidget extends StatefulWidget {
   final String goodsId;
   final String imageUrl;
+  final int stock;
   final bool isFavorite;
   final void Function() onTap;
 
@@ -11,6 +13,7 @@ class PrimaryImageWidget extends StatefulWidget {
     super.key,
     required this.goodsId,
     required this.imageUrl,
+    required this.stock,
     required this.isFavorite,
     required this.onTap,
   });
@@ -58,6 +61,30 @@ class _PrimaryImageWidgetState extends State<PrimaryImageWidget> {
             );
           },
         ),
+
+        if (widget.stock == 0) ...[
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(0, 0, 0, 0.5),
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: 8,
+            left: 8,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(0, 0, 0, 0.5),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              padding: const EdgeInsets.only(left: 4, right: 4, bottom: 2),
+              child: const Text('품절', style: AppTextStyle.bodyLarge),
+            ),
+          ),
+        ],
       ],
     );
   }

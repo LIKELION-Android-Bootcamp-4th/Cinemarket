@@ -13,112 +13,124 @@ import 'package:toastification/toastification.dart';
 class BottomButtonsWidget extends StatelessWidget {
   final Goods item;
 
-  const BottomButtonsWidget({
-    super.key,
-    required this.item,
-  });
+  const BottomButtonsWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     final cartService = CartService();
+
+    final bool isSoldOut = item.stock == 0;
 
     return SafeArea(
       top: false,
       child: Container(
         color: AppColors.background,
         padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
-        child: Row(
-          children: [
-
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await cartService.addItemToCart(
-                      productId: item.id,
-                      quantity: 1,
-                      unitPrice: item.price,
-                    );
-                    context.read<CartViewModel>().fetchCartCount();
-                    CommonToast.show(
-                      context: context,
-                      message: '장바구니에 추가되었습니다.',
-                      type: ToastificationType.success,
-                    );
-                  } catch (e) {
-                    CommonToast.show(
-                      context: context,
-                      message: '장바구니 추가 실패',
-                      type: ToastificationType.error,
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: AppColors.textPrimary,
-                  backgroundColor: AppColors.widgetBackground,
-                  textStyle: AppTextStyle.body,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
+        child:
+            (isSoldOut)
+                ? ElevatedButton(
+                  onPressed: null,
+                  style: ElevatedButton.styleFrom(
+                    disabledForegroundColor: AppColors.textPrimary, // 비활성 상태 텍스트
+                    disabledBackgroundColor: AppColors.widgetBackground, // 비활성 상태 배경
+                    textStyle: AppTextStyle.body,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
                   ),
+                  child: const Center(child: Text("품절")),
+                )
+                : Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          try {
+                            await cartService.addItemToCart(
+                              productId: item.id,
+                              quantity: 1,
+                              unitPrice: item.price,
+                            );
+                            context.read<CartViewModel>().fetchCartCount();
+                            CommonToast.show(
+                              context: context,
+                              message: '장바구니에 추가되었습니다.',
+                              type: ToastificationType.success,
+                            );
+                          } catch (e) {
+                            CommonToast.show(
+                              context: context,
+                              message: '장바구니 추가 실패',
+                              type: ToastificationType.error,
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: AppColors.textPrimary,
+                          backgroundColor: AppColors.widgetBackground,
+                          textStyle: AppTextStyle.body,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        child: const Text("장바구니"),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          try {
+                            // 1. 장바구니에 임시 추가
+                            await cartService.addItemToCart(
+                              productId: item.id,
+                              quantity: 1,
+                              unitPrice: item.price,
+                            );
+
+                            // 2. 장바구니 최신 목록 불러오기
+                            final allItems = await cartService.fetchCartItems();
+
+                            // 3. 해당 productId의 cartItem 찾기
+                            final match = allItems.firstWhere(
+                              (e) => e.productId == item.id,
+                              orElse: () => throw Exception('장바구니에 상품이 없습니다.'),
+                            );
+
+                            // 4. CartItem 변환해서 구매화면으로 이동
+                            final cartItem = CartItem(
+                              cartId: match.cartId,
+                              productId: match.productId,
+                              name: match.name,
+                              quantity: match.quantity,
+                              price: match.price,
+                              stock: match.stock,
+                              imageUrl: match.image,
+                              isSelected: true,
+                            );
+
+                            context.push('/purchase', extra: [cartItem]);
+                          } catch (e) {
+                            CommonToast.show(
+                              context: context,
+                              message: '바로구매 실패: ${e.toString()}',
+                              type: ToastificationType.error,
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: AppColors.textPrimary,
+                          backgroundColor: AppColors.widgetBackground,
+                          textStyle: AppTextStyle.body,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        child: const Text("바로 구매"),
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text("장바구니"),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    // 1. 장바구니에 임시 추가
-                    await cartService.addItemToCart(
-                      productId: item.id,
-                      quantity: 1,
-                      unitPrice: item.price,
-                    );
-
-                    // 2. 장바구니 최신 목록 불러오기
-                    final allItems = await cartService.fetchCartItems();
-
-                    // 3. 해당 productId의 cartItem 찾기
-                    final match = allItems.firstWhere(
-                          (e) => e.productId == item.id,
-                      orElse: () => throw Exception('장바구니에 상품이 없습니다.'),
-                    );
-
-                    // 4. CartItem 변환해서 구매화면으로 이동
-                    final cartItem = CartItem(
-                      cartId: match.cartId,
-                      productId: match.productId,
-                      name: match.name,
-                      quantity: match.quantity,
-                      price: match.price,
-                      stock: match.stock,
-                      imageUrl: match.image,
-                      isSelected: true,
-                    );
-
-                    context.push('/purchase', extra: [cartItem]);
-                  } catch (e) {
-                    CommonToast.show(
-                      context: context,
-                      message: '바로구매 실패: ${e.toString()}',
-                      type: ToastificationType.error,
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: AppColors.textPrimary,
-                  backgroundColor: AppColors.widgetBackground,
-                  textStyle: AppTextStyle.body,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                ),
-                child: const Text("바로 구매"),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

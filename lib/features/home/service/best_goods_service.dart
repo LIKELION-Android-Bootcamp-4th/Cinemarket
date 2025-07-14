@@ -7,7 +7,7 @@ class BestGoodsService {
   Future<Response> fetchBestGoods({
     int page = 1,
     int limit = 10,
-    String sortBy = 'latest',
+    String sortBy = 'sales',
     String sortOrder = 'asc',
   }) {
     return _dio.get('/api/products', queryParameters: {
