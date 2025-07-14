@@ -2,12 +2,8 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/mypage/model/order/order.dart';
 import 'package:cinemarket/features/mypage/model/order/order_item.dart';
-import 'package:cinemarket/features/mypage/viewmodel/order_viewmodel.dart';
-import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:toastification/toastification.dart';
 class OrderCard extends StatefulWidget {
   final Order order;
   final String Function(int) formatCurrency;
@@ -145,55 +141,6 @@ class _OrderCardState extends State<OrderCard> with TickerProviderStateMixin {
             ],
           ),
           const SizedBox(height: 12),
-          // Row(
-          //   children: [
-          //     Expanded(
-          //       child: OutlinedButton.icon(
-          //         onPressed: item.review != null
-          //             ? null
-          //             : () async {
-          //           final result = await context.push('/mypage/create-review', extra: item);
-          //           if (result == true) {
-          //             final vm = context.read<OrderViewModel>();
-          //             await vm.fetchOrders();
-          //           }
-          //         },
-          //         icon: Icon(
-          //           item.review != null ? Icons.check_circle : Icons.edit,
-          //           color: item.review != null ? Colors.white : AppColors.pointAccent,
-          //         ),
-          //         label: Text(item.review != null ? '리뷰 완료' : '리뷰 작성',style: AppTextStyle.body,),
-          //         style: OutlinedButton.styleFrom(
-          //           backgroundColor: AppColors.widgetBackground,
-          //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          //         ),
-          //       ),
-          //     ),
-          //     const SizedBox(width: 8),
-          //     Expanded(
-          //       child: ElevatedButton.icon(
-          //         onPressed: () {
-          //           final productId = item.id ?? '';
-          //           if (productId.isNotEmpty) {
-          //             context.push('/goods/$productId');
-          //           } else {
-          //             CommonToast.show(
-          //               context: context,
-          //               message: '상품 정보가 없습니다.',
-          //               type: ToastificationType.info,
-          //             );
-          //           }
-          //         },
-          //         icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
-          //         label: const Text('다시 구매', style: AppTextStyle.body),
-          //         style: ElevatedButton.styleFrom(
-          //           backgroundColor: AppColors.widgetBackground,
-          //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
         ],
       ),
     );
