@@ -21,6 +21,7 @@ class HeaderGoodsDetail extends StatelessWidget {
             PrimaryImageWidget(
               goodsId: item.id,
               imageUrl: item.images.main,
+              stock: item.stock,
               isFavorite: item.isFavorite,
               onTap: () => _showImageViewer(context, allImages, 0),
             ),
