@@ -19,7 +19,8 @@ class BestGoodsViewModel extends ChangeNotifier {
   String? get message => _message;
 
 
-  Future<void> loadBestGoods() async {
+  Future<void> loadBestGoods({bool force = false}) async {
+    if (!force && goodsList.isNotEmpty) return;
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();

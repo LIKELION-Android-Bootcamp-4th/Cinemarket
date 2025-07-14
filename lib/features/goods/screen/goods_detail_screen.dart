@@ -28,6 +28,7 @@ class GoodsDetailScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Scaffold(
+            backgroundColor: AppColors.background,
             body: Center(child: CircularProgressIndicator()),
           );
         }

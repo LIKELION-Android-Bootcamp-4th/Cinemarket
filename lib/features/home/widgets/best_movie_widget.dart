@@ -47,7 +47,7 @@ class BestMovieWidget extends StatelessWidget {
                         },
                         child: const Text(
                           '영화 더보기',
-                          style: TextStyle(color: Colors.grey),
+                          style: AppTextStyle.point
                         )
                     )
                   ]
@@ -73,7 +73,8 @@ class BestMovieWidget extends StatelessWidget {
                           movieName: movie.title,
                           cumulativeSales: 12112, //추후 API 연동..
                           providers: movie.providers,
-                          isFavorite: false, //추후 추가 예정
+                          isFavorite: false, //추후 추가 예정  // todo:
+                          movieId: movie.id,
                         ),
                       ),
                     );

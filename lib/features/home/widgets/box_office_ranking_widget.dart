@@ -2,6 +2,7 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/home/viewmodel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -114,59 +115,64 @@ class _BoxOfficeRankingWidgetState extends State<BoxOfficeRankingWidget> {
                       ? 'https://image.tmdb.org/t/p/w500${movie.posterPath}'
                       : 'https://via.placeholder.com/300x450?text=No+Image';
 
-                  return Container(
-                    key: ValueKey(movie.id),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Transform.scale(
-                          scale: index == _currentPage ? 1 : 0.9,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
+                  return GestureDetector(
+                    onTap: () {
+                      context.push('/movies/${movie.id}');
+                    },
+                    child: Container(
+                      key: ValueKey(movie.id),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Transform.scale(
+                            scale: index == _currentPage ? 1 : 0.9,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
                                 posterUrl,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) =>
-                                    const Center(child: Icon(Icons.broken_image)),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                movie.title,
-                                style: AppTextStyle.section,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                const Center(child: Icon(Icons.broken_image)),
                               ),
                             ),
-                            Row(
-                              children: [
-                                const Icon(Icons.star_border, size: 20, color: Colors.amber),
-                                const SizedBox(width: 4),
-                                Text(
-                                  movie.voteAverage.toStringAsFixed(1),
-                                  style: const TextStyle(
-                                      fontFamily: 'Pretendard',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.amber),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  movie.title,
+                                  style: AppTextStyle.section,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                              movie.releaseDate,
-                              style: AppTextStyle.point,
-                        )
-                      ],
-                    ),
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.star_border, size: 20, color: Colors.amber),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    movie.voteAverage.toStringAsFixed(1),
+                                    style: const TextStyle(
+                                        fontFamily: 'Pretendard',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.amber),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            movie.releaseDate,
+                            style: AppTextStyle.bodySmall,
+                          )
+                        ],
+                      ),
+                    )
                   );
                 },
               ),

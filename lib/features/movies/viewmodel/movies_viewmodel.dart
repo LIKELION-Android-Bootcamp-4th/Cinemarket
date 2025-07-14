@@ -8,6 +8,10 @@ extension MovieSortTypeExtension on MovieSortType {
     switch (this) {
       case MovieSortType.rating:
         return '평점순';
+      case MovieSortType.popularity:
+        return '인기순';
+      case MovieSortType.reviewCount:
+        return '흥행순';
       case MovieSortType.latest:
       default:
         return '최신순';
@@ -18,6 +22,10 @@ extension MovieSortTypeExtension on MovieSortType {
     switch (label) {
       case '평점순':
         return MovieSortType.rating;
+      case '인기순':
+        return MovieSortType.popularity;
+      case '흥행순':
+        return MovieSortType.reviewCount;
       case '최신순':
       default:
         return MovieSortType.latest;
@@ -57,7 +65,13 @@ class MoviesViewModel extends ChangeNotifier {
     loadMovies();
   }
 
-  Future<void> loadMovies() async {
+  Future<void> loadMovies({bool force = false}) async {
+    if (!force && (_isLoading || !_hasMore)) return;
+
+    if (force) {
+      clearMovies();
+    }
+
     if (_isLoading || !_hasMore) {
       return;
     }
@@ -79,5 +93,12 @@ class MoviesViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearMovies() {
+    _movies.clear();
+    _currentPage = 1;
+    _hasMore = true;
+    notifyListeners();
   }
 }

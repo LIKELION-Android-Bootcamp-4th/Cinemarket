@@ -21,7 +21,7 @@ class SortDropdown extends StatelessWidget {
       case ItemType.goods:
         return ['최신순', '오래된순', '인기순'];
       case ItemType.movie:
-        return ['최신순', '평점순', '굿즈판매량순'];
+        return ['최신순', '평점순', '인기순','흥행순'];
     }
   }
 
@@ -32,7 +32,7 @@ class SortDropdown extends StatelessWidget {
     return DropdownButtonHideUnderline(
       child: DropdownButton2<String>(
         isExpanded: false,
-        value: selectedValue,
+        value: selectedValue ?? sortOptions.first,
         items: sortOptions
             .map((String item) =>
             DropdownMenuItem<String>(

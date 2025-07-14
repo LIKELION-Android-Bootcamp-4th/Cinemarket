@@ -67,8 +67,10 @@ class ReviewRepository {
     );
   }
 
-  Future<bool> createReview(ReviewRequest request) {
-    return _service.createReview(request);
+  Future<bool> createReview({
+    required String productId,
+    required ReviewRequest request,
+  }) async {
+    return _service.createReview(productId: productId, request: request);
   }
-
 }
