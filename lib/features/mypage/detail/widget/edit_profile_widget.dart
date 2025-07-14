@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
+import 'package:cinemarket/features/auth/viewmodel/sign_up_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +23,17 @@ class EditProfileWidget extends StatefulWidget {
 
 class _EditProfileWidgetState extends State<EditProfileWidget> {
   final MyPageViewModel _viewModel = MyPageViewModel();
-
-  late final TextEditingController _nicknameController;
+  final signupViewModel = SignUpViewModel();
+  bool _hasValidNickname = false;
+  late final TextEditingController _nickNameController;
   late final TextEditingController _phoneController;
   late final TextEditingController _addressController;
   late final TextEditingController _addressDetailController;
   String zipCode = '';
   String _profileImageUrl = '';
   XFile? imageFile;
+  String collectNickname = '';
+
 
   @override
   void initState() {
@@ -37,7 +41,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     _viewModel.addListener(_onViewModelChanged);
     _viewModel.initialize();
 
-    _nicknameController = TextEditingController(text: '');
+    _nickNameController = TextEditingController(text: '');
     _phoneController = TextEditingController(text: '');
     _addressController = TextEditingController(text: '주소를 입력해주세요');
     _addressDetailController = TextEditingController(text: '');
@@ -45,7 +49,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
 
   void _onViewModelChanged() {
     setState(() {
-      _nicknameController.text = _viewModel.nickname ?? '';
+      _nickNameController.text = _viewModel.nickname ?? '';
       final rawPhone = _viewModel.phone.toString();
       final formattedPhone = PhoneNumberFormatter.format(rawPhone);
       _profileImageUrl = _viewModel.profileImage ?? '';
@@ -60,7 +64,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   void dispose() {
     _viewModel.removeListener(_onViewModelChanged);
     _viewModel.dispose();
-    _nicknameController.dispose();
+    _nickNameController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
     _addressDetailController.dispose();
@@ -77,7 +81,54 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           const SizedBox(height: 20),
           _buildProfilePhotoEditor(),
           const SizedBox(height: 40),
-          _buildTextField(label: '닉네임', controller: _nicknameController),
+          _buildTextField(label: '닉네임', controller: _nickNameController),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              final nickName = _nickNameController.text.trim();
+              if (nickName.isEmpty) {
+                CommonToast.show(
+                  context: context,
+                  message: "닉네임을 입력해주세요.",
+                  type: ToastificationType.info,
+                );
+                return;
+              }
+              try {
+                await signupViewModel.checkValidNickName(nickName);
+                if (signupViewModel.error != null) {
+
+                  CommonToast.show(
+                    context: context,
+                    message: signupViewModel.error.toString(),
+                    type: ToastificationType.info,
+                  );
+                } else {
+                  _hasValidNickname = true;
+                  collectNickname = _nickNameController.text.toString();
+                  CommonToast.show(
+                    context: context,
+                    message: signupViewModel.message.toString(),
+                    type: ToastificationType.success,
+                  );
+                }
+              } catch (e) {
+                CommonToast.show(
+                  context: context,
+                  message: signupViewModel.error.toString(),
+                  type: ToastificationType.error,
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.textPoint,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text('중복 확인'),
+          ),
           const SizedBox(height: 24),
           _buildTextField(
             label: '핸드폰 번호',
@@ -106,7 +157,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                 imageFile != null
                     ? Image.file(File(imageFile!.path)).image
                     : (_profileImageUrl.isNotEmpty
-                        ? Image.memory(base64Decode(_viewModel.profileImage.toString())).image
+                        ? Image.memory(
+                          base64Decode(_viewModel.profileImage.toString()),
+                        ).image
                         : null),
           ),
           Positioned(
@@ -260,26 +313,42 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           );
           return;
         }
-        if(imageFile != null) {
+        if (imageFile != null) {
           final imageBytes = await imageFile!.readAsBytes();
           final base64Image = base64Encode(imageBytes);
           _profileImageUrl = base64Image;
         }
 
-        _viewModel.editProfile(
-          nickName: _nicknameController.text,
-          phone: _phoneController.text,
-          profileImage: _profileImageUrl,
-          address1: _addressController.text,
-          address2: _addressDetailController.text,
-          zipCode: zipCode,
-        );
-        CommonToast.show(
-          context: context,
-          message: "수정이 완료 되었습니다.",
-          type: ToastificationType.success,
-        );
-        context.go('/home');
+        print("@@");
+        print(_nickNameController.text);
+        print(_viewModel.nickname);
+        print("@@");
+        if (_nickNameController.text.toString() !=
+            _viewModel.nickname.toString() && _hasValidNickname == false) {
+          CommonToast.show(
+            context: context,
+            message: "닉네임 중복 확인을 해주세요.",
+            type: ToastificationType.error,
+          );
+          return;
+        }
+
+        if ((_nickNameController.text.toString() == _viewModel.nickname.toString()) || (_hasValidNickname == true && _nickNameController.text.toString() == collectNickname)) {
+          _viewModel.editProfile(
+            nickName: _nickNameController.text,
+            phone: _phoneController.text,
+            profileImage: _profileImageUrl,
+            address1: _addressController.text,
+            address2: _addressDetailController.text,
+            zipCode: zipCode,
+          );
+          CommonToast.show(
+            context: context,
+            message: "수정이 완료 되었습니다.",
+            type: ToastificationType.success,
+          );
+          context.go('/home');
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.pointAccent,
