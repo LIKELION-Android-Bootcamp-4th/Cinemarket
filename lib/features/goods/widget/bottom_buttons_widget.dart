@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/cart/service/cart_service.dart';
@@ -33,6 +34,15 @@ class BottomButtonsWidget extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () async {
+                  final isLoggedIn = await TokenStorage.isLoggedIn();
+                  if (!isLoggedIn) {
+                    CommonToast.show(
+                      context: context,
+                      message: '로그인이 필요합니다.',
+                      type: ToastificationType.warning,
+                    );
+                    return;
+                  }
                   try {
                     await cartService.addItemToCart(
                       productId: item.id,
@@ -68,6 +78,15 @@ class BottomButtonsWidget extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () async {
+                  final isLoggedIn = await TokenStorage.isLoggedIn();
+                  if (!isLoggedIn) {
+                    CommonToast.show(
+                      context: context,
+                      message: '로그인이 필요합니다.',
+                      type: ToastificationType.warning,
+                    );
+                    return;
+                  }
                   try {
                     // 1. 장바구니에 임시 추가
                     await cartService.addItemToCart(
