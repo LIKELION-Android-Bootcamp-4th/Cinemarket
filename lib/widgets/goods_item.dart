@@ -1,8 +1,6 @@
 import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/features/favorite/repository/favorite_repository.dart';
-import 'package:cinemarket/features/favorite/service/favorite_service.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +8,10 @@ import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
 class GoodsItem extends StatefulWidget {
+  final String goodsId;
   final String imageUrl;
   final String goodsName;
-  final String goodsId;
+  final String movieTitle;
   final String price;
   final double rating;
   final int reviewCount;
@@ -20,9 +19,10 @@ class GoodsItem extends StatefulWidget {
 
   const GoodsItem({
     super.key,
+    required this.goodsId,
     required this.imageUrl,
     required this.goodsName,
-    required this.goodsId,
+    required this.movieTitle,
     required this.price,
     required this.rating,
     required this.reviewCount,
@@ -68,14 +68,42 @@ class _GoodsItemState extends State<GoodsItem> {
                     color: Colors.red,
                   ),
                   onPressed: () async {
-                    await toggleFavorite(
-                      context: context,
-                      id: widget.goodsId,
-                      isFavorite: isFavorite,
-                      onStateChanged: (newState) {
-                        setState(() => isFavorite = newState);
-                      },
-                    );
+                    setState(() => isFavorite = !isFavorite);
+
+                    final success = await FavoriteViewModel()
+                        .toggleFavorite(goodsId: widget.goodsId);
+
+                    if (!success) { setState(() => isFavorite = !isFavorite);}
+
+                    final accessToken = await TokenStorage.getAccessToken();
+
+                    if (!mounted) return;  // state의 화면 부착 여부
+
+                    if (accessToken == null) {  // 비회원의 경우
+
+                      final shouldNavigate = await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('로그인이 필요합니다', style: AppTextStyle.section,),
+                            content: const Text('로그인 화면으로 이동하시겠습니까?', style: AppTextStyle.body,),
+                            backgroundColor: AppColors.widgetBackground,
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: const Text('취소', style: AppTextStyle.bodyPointRed,),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(true),
+                                child: const Text('이동', style: AppTextStyle.bodyPointBlue,),
+                              ),
+                            ],
+                          ),
+                      );
+
+                      if(shouldNavigate == true && mounted) {
+                        context.push('/login', );
+                      }
+                    }
                   },
                 ),
               ],
@@ -94,7 +122,7 @@ class _GoodsItemState extends State<GoodsItem> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              widget.goodsId,
+              widget.movieTitle,
               style: AppTextStyle.bodySmall,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

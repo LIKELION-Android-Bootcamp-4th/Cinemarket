@@ -7,6 +7,7 @@ class TmdbMovieDetail {
   final String overview;
   final String title;
   final double voteAverage;
+  final List<Map<String, String>>? providers;
 
   TmdbMovieDetail({
     required this.backdropPath,
@@ -17,6 +18,7 @@ class TmdbMovieDetail {
     required this.overview,
     required this.title,
     required this.voteAverage,
+    required this.providers,
   });
 
   factory TmdbMovieDetail.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,23 @@ class TmdbMovieDetail {
       overview: json['overview'] ?? '',
       title: json['title'] ?? '',
       voteAverage: (json['vote_average'] ?? 0).toDouble(),
+      providers: json['providers'] != null
+          ? List<Map<String, String>>.from(json['providers'])
+          : [],
+    );
+  }
+
+  TmdbMovieDetail copyWithProviders(List<Map<String, String>> newProviders) {
+    return TmdbMovieDetail(
+      backdropPath: backdropPath,
+      posterPath: posterPath,
+      genres: genres,
+      releaseYear: releaseYear,
+      runtime: runtime,
+      overview: overview,
+      title: title,
+      voteAverage: voteAverage,
+      providers: newProviders,
     );
   }
 }
