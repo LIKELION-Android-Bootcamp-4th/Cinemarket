@@ -39,17 +39,18 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
 
     _nicknameController = TextEditingController(text: '');
     _phoneController = TextEditingController(text: '');
-    _addressController = TextEditingController(text: '주소를 선택해주세요');
+    _addressController = TextEditingController(text: '주소를 입력해주세요');
     _addressDetailController = TextEditingController(text: '');
   }
 
   void _onViewModelChanged() {
     setState(() {
       _nicknameController.text = _viewModel.nickname ?? '';
-      final rawPhone = _viewModel.phone ?? '';
+      final rawPhone = _viewModel.phone.toString();
       final formattedPhone = PhoneNumberFormatter.format(rawPhone);
-      _phoneController.text = formattedPhone;
-      _addressController.text = _viewModel.address1 ?? '주소를 선택해주세요';
+      _profileImageUrl = _viewModel.profileImage ?? '';
+      _phoneController.text = _viewModel.phone ?? '';
+      _addressController.text = _viewModel.address1 ?? '주소를 입력해주세요.';
       _addressDetailController.text = _viewModel.address2 ?? '';
       zipCode = _viewModel.zipCode ?? '';
     });
@@ -105,7 +106,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                 imageFile != null
                     ? Image.file(File(imageFile!.path)).image
                     : (_profileImageUrl.isNotEmpty
-                        ? Image.network(_profileImageUrl).image
+                        ? Image.memory(base64Decode(_viewModel.profileImage.toString())).image
                         : null),
           ),
           Positioned(
@@ -160,6 +161,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           inputFormatters: inputFormatters,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
+            hintText: _viewModel.phone == null ? "010-0000-0000" : null,
+            hintStyle: const TextStyle(color: Colors.white54),
             filled: true,
             fillColor: AppColors.widgetBackground,
             border: OutlineInputBorder(
@@ -257,9 +260,16 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           );
           return;
         }
+        if(imageFile != null) {
+          final imageBytes = await imageFile!.readAsBytes();
+          final base64Image = base64Encode(imageBytes);
+          _profileImageUrl = base64Image;
+        }
+
         _viewModel.editProfile(
           nickName: _nicknameController.text,
           phone: _phoneController.text,
+          profileImage: _profileImageUrl,
           address1: _addressController.text,
           address2: _addressDetailController.text,
           zipCode: zipCode,

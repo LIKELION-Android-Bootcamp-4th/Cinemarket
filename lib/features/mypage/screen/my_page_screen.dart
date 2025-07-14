@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
@@ -78,8 +79,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
               _viewModel.profileImage != null &&
                   _viewModel.profileImage!.isNotEmpty
                   ? ClipOval(
-                child: Image.network(
-                  _viewModel.profileImage!,
+                child: Image.memory(
+                  base64Decode(_viewModel.profileImage.toString()),
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,

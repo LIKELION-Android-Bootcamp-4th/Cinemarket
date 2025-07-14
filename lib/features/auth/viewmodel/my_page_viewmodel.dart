@@ -7,7 +7,7 @@ class MyPageViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
 
   MyPageViewModel({AuthRepository? authRepository})
-      : _authRepository = authRepository ?? AuthRepository();
+    : _authRepository = authRepository ?? AuthRepository();
 
   bool _hasToken = false;
   String? _nickname;
@@ -28,17 +28,15 @@ class MyPageViewModel extends ChangeNotifier {
   String? get address2 => _address2;
   String? get zipCode => _zipCode;
   String? get error => _error;
-
   String get fullAddress {
     final parts = [_address1, _address2];
     return parts.where((p) => p != null && p!.isNotEmpty).join(' ');
   }
 
   String get recipientName => _nickname ?? '고객';
-  String get safePhone => _phone ?? '010-0000-0000';
 
+  String get safePhone => _phone ?? '';
 
-  // 초기화 - 토큰 확인 및 프로필 조회
   Future<void> initialize() async {
     await _checkTokenAndLoadProfile();
   }
@@ -49,7 +47,7 @@ class MyPageViewModel extends ChangeNotifier {
     try {
       final String? accessToken = await TokenStorage.getAccessToken();
       _hasToken = accessToken != null && accessToken.isNotEmpty;
-      
+
       if (_hasToken) {
         print('불러온 액세스 토큰: $accessToken');
         await _fetchProfile(accessToken!);
@@ -66,12 +64,16 @@ class MyPageViewModel extends ChangeNotifier {
     try {
       final response = await _authRepository.getProfile(accessToken);
       final data = response.data['data'];
-      print(data);
       _nickname = data['nickName'] ?? 'nickName';
       _email = data['email'] ?? 'user@example.com';
-      _profileImage = data['profileImage'];
       _phone = data['phone'];
+      print("@@@@");
+      print(data);
+      print(data['profileImage']);
+      print("@@@@");
+      _profileImage = data['profileImage'];
       final addressRaw = data['address'];
+
       Map<String, dynamic>? addressMap;
       if (addressRaw is String) {
         addressMap = jsonDecode(addressRaw);
@@ -83,7 +85,6 @@ class MyPageViewModel extends ChangeNotifier {
       _address1 = addressMap?['address1'] ?? '';
       _address2 = addressMap?['address2'] ?? '';
       _zipCode = addressMap?['zipCode'] ?? '';
-      
     } catch (e) {
       _error = '프로필 조회에 실패했습니다.';
       print('프로필 조회 실패: $e');
@@ -115,19 +116,21 @@ class MyPageViewModel extends ChangeNotifier {
   Future<void> editProfile({
     required String nickName,
     required String phone,
+    required String profileImage,
     required String address1,
     required String address2,
     required String zipCode,
   }) async {
     try {
-      await _authRepository.editProfile(
+      final response = await _authRepository.editProfile(
         nickName: nickName,
         phone: phone,
+        profileImage: profileImage,
         address1: address1,
         address2: address2,
         zipCode: zipCode,
       );
-      await _checkTokenAndLoadProfile();
+      final data = response.data['data'];
     } catch (e) {
       _error = '프로필 수정에 실패했습니다.';
       notifyListeners();
@@ -152,4 +155,4 @@ class MyPageViewModel extends ChangeNotifier {
     _error = null;
     notifyListeners();
   }
-} 
+}

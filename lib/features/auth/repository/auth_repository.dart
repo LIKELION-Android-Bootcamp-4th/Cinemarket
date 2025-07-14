@@ -31,6 +31,7 @@ class AuthRepository {
   Future<Response> editProfile({
     required String nickName,
     required String phone,
+    required String profileImage,
     required String address1,
     required String address2,
     required String zipCode,
@@ -38,6 +39,7 @@ class AuthRepository {
     return await _authService.editProfile(
       nickName: nickName,
       phone: phone,
+      profileImage: profileImage,
       address1: address1,
       address2: address2,
       zipCode: zipCode,
