@@ -8,6 +8,10 @@ extension MovieSortTypeExtension on MovieSortType {
     switch (this) {
       case MovieSortType.rating:
         return '평점순';
+      case MovieSortType.popularity:
+        return '인기순';
+      case MovieSortType.reviewCount:
+        return '흥행순';
       case MovieSortType.latest:
       default:
         return '최신순';
@@ -18,6 +22,10 @@ extension MovieSortTypeExtension on MovieSortType {
     switch (label) {
       case '평점순':
         return MovieSortType.rating;
+      case '인기순':
+        return MovieSortType.popularity;
+      case '흥행순':
+        return MovieSortType.reviewCount;
       case '최신순':
       default:
         return MovieSortType.latest;

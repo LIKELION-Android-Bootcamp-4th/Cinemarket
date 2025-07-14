@@ -15,15 +15,26 @@ class MovieDetailRepository {
     return _service.fetchMovieCredits(movieId);
   }
 
-  Future<ListResponse<BestGoods>> fetchMovieProducts(String contentId) async {
+  Future<List<BestGoods>> fetchMovieProducts(String contentId) async {
     final response = await _service.fetchMovieProducts(contentId);
-    for (var item in response.data['data']['items']) {
-      print(item);
-    }
-    final listResponse = ListResponse<BestGoods>.fromJson(
-      response.data,
-          (json) => BestGoods.fromJson(json),
-    );
-    return listResponse;
+
+    final data = response.data;
+
+    final success = data['success'] == true;
+    if (!success) throw Exception(data['message'] ?? '굿즈 정보 불러오기 실패');
+
+    final itemsJson = data['data']?['items'] as List<dynamic>? ?? [];
+
+    final goodsList = itemsJson
+        .map((item) => BestGoods.fromJson(item as Map<String, dynamic>))
+        .toList();
+
+    return goodsList;
   }
+
+  Future<List<Map<String, String>>> getMovieProviders(int movieId) {
+    return _service.fetchProviders(movieId);
+  }
+
+
 }
