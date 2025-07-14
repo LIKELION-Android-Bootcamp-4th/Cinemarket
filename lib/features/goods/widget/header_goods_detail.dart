@@ -10,6 +10,8 @@ class HeaderGoodsDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> allImages = [item.images.main, ...item.images.sub];
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -20,32 +22,39 @@ class HeaderGoodsDetail extends StatelessWidget {
               goodsId: item.id,
               imageUrl: item.images.main,
               isFavorite: item.isFavorite,
+              onTap: () => _showImageViewer(context, allImages, 0),
             ),
 
             const SizedBox(height: 8),
 
-            SizedBox(
-              height: 60,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: item.images.sub.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: SizedBox(
-                      width: 60,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.network(
-                          item.images.sub[index],
-                          fit: BoxFit.cover,
+            if (item.images.sub.isNotEmpty) ...[
+              SizedBox(
+                height: 60,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: item.images.sub.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap:
+                          () => _showImageViewer(context, allImages, index + 1),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: SizedBox(
+                          width: 60,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.network(
+                              item.images.sub[index],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
+            ],
 
             const SizedBox(height: 8),
 
@@ -55,7 +64,10 @@ class HeaderGoodsDetail extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.star_rate, color: Colors.yellow, size: 16),
-                    Text('${item.reviewStats?.averageRating}', style: AppTextStyle.bodySmall),
+                    Text(
+                      '${item.reviewStats?.averageRating}',
+                      style: AppTextStyle.bodySmall,
+                    ),
                   ],
                 ),
 
@@ -75,4 +87,35 @@ class HeaderGoodsDetail extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showImageViewer(
+  BuildContext context,
+  List<String> images,
+  int initialIndex,
+) {
+  showDialog(
+    context: context,
+    barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
+    builder: (context) {
+      return Dialog(
+        insetPadding: const EdgeInsets.all(16),
+        backgroundColor: Colors.transparent,
+        child: SizedBox(
+          // height: 500,
+          width: 300,
+          child: PageView.builder(
+            controller: PageController(initialPage: initialIndex),
+            itemCount: images.length,
+            itemBuilder: (context, index) {
+              return InteractiveViewer(
+                // pinch-zoom 가능
+                child: Image.network(images[index], fit: BoxFit.contain),
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
 }
