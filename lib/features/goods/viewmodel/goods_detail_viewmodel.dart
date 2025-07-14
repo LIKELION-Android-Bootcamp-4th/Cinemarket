@@ -9,7 +9,7 @@ class GoodsDetailViewmodel extends ChangeNotifier {
   final GoodsRepository _goodsRepository;
 
   Goods? _goods;
-  Goods get goods => _goods!;
+  Goods? get goods => _goods;
 
   Future<Goods> getDetailGoods({required String goodsId,}) async {
     try {

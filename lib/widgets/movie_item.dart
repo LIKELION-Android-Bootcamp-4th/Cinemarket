@@ -14,6 +14,7 @@ class MovieItem extends StatefulWidget {
   final List<Map<String, String>> providers;
   final bool isFavorite;
   final int movieId;
+  final bool isFavoriteScreen;
 
   const MovieItem({
     super.key,
@@ -23,6 +24,7 @@ class MovieItem extends StatefulWidget {
     required this.providers,
     required this.isFavorite,
     required this.movieId,
+    this.isFavoriteScreen = false,
   });
 
   @override
@@ -70,26 +72,27 @@ class _MovieItemState extends State<MovieItem> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () async {
-                      // 로그인 요청  // 하지 않는다면 바로 action 종료
-                      if (!await requireLoginBeforeAction(context)) return;
+                if (widget.isFavoriteScreen)
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      onPressed: () async {
+                        // 로그인 요청  // 하지 않는다면 바로 action 종료
+                        if (!await requireLoginBeforeAction(context)) return;
 
-                      if (await updateFavoriteStatus(
-                        movieId: widget.movieId.toString(),
-                      )) {
-                        if (!context.mounted) return;
+                        if (await updateFavoriteStatus(
+                          movieId: widget.movieId.toString(),
+                        )) {
+                          if (!context.mounted) return;
 
-                        setState(() => isFavorite = !isFavorite);
-                        CommonToast.show(
-                          context: context,
-                          message: isFavorite ? '찜 추가 완료 !' : '찜 삭제 완료 !',
-                          type: ToastificationType.success,
-                        );
-                      } else {
-                        CommonToast.show(
+                          setState(() => isFavorite = !isFavorite);
+                          CommonToast.show(
+                            context: context,
+                            message: isFavorite ? '찜 추가 완료 !' : '찜 삭제 완료 !',
+                            type: ToastificationType.success,
+                          );
+                        } else {
+                          CommonToast.show(
                             context: context,
                             message: '에러 발생',
                             type: ToastificationType.error,

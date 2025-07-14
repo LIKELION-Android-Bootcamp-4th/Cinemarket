@@ -21,82 +21,86 @@ class GoodsDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: context.read<GoodsDetailViewmodel>().getDetailGoods(
-        goodsId: goodsId,
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Scaffold(
-            backgroundColor: AppColors.background,
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-        final item = snapshot.data!;
+    return ChangeNotifierProvider<GoodsDetailViewmodel>(
+      create: (_) => GoodsDetailViewmodel()..getDetailGoods(goodsId: goodsId),
+      child: Consumer<GoodsDetailViewmodel>(
+        builder: (context, vm, _) {
+          final item = vm.goods;
 
-        return ChangeNotifierProvider(
-          create: (_) {
-            final vm = GoodsRecommendedViewModel();
-            vm.loadRecommendedGoods(goodsId);
-            return vm;
-          },
-          child: Scaffold(
-            appBar: CommonAppBar(title: item.name),
-            backgroundColor: AppColors.background,
-            body: Column(
-              children: [
-                Expanded(
-                  child: NestedScrollView(
-                    headerSliverBuilder:
-                        (context, _) => [HeaderGoodsDetail(item: item)],
-                    body: CommonTabView(
-                      tabTitles: tabTitles,
-                      tabViews: [
-                        CommonTabsContent(
-                          widgets: getTabsDetailWidgets(item.description),
-                        ),
-                        CommonTabsContent(
-                        widgets: [
-                          FutureBuilder<String>(
-                            future: ReviewService()
-                                .fetchContentIdByProductId(goodsId)
-                                .then((id) {
-                              if (id == null) return '';
-                              return ReviewService().fetchMovieTitleByContentId(id)
-                              .then((title) => title ?? '');
-                            }),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const SizedBox(); // 또는 로딩 위젯
-                              }
+          if (item == null) {
+            return const Scaffold(
+              backgroundColor: AppColors.background,
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-                              final movieTitle = snapshot.data!;
+          return ChangeNotifierProvider(
+            create: (_) {
+              final recommendedVM = GoodsRecommendedViewModel();
+              recommendedVM.loadRecommendedGoods(goodsId);
+              return recommendedVM;
+            },
+            child: Scaffold(
+              appBar: CommonAppBar(title: item.name),
+              backgroundColor: AppColors.background,
+              body: Column(
+                children: [
+                  Expanded(
+                    child: NestedScrollView(
+                      headerSliverBuilder: (context, _) => [
+                        HeaderGoodsDetail(item: item),
+                      ],
+                      body: CommonTabView(
+                        tabTitles: tabTitles,
+                        tabViews: [
+                          CommonTabsContent(
+                            widgets: getTabsDetailWidgets(item.description),
+                          ),
+                          CommonTabsContent(
+                            widgets: [
+                              FutureBuilder<String>(
+                                future: ReviewService()
+                                    .fetchContentIdByProductId(goodsId)
+                                    .then((id) {
+                                  if (id == null) return '';
+                                  return ReviewService()
+                                      .fetchMovieTitleByContentId(id)
+                                      .then((title) => title ?? '');
+                                }),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const SizedBox();
+                                  }
 
-                              return getTabsReviewWidget(
-                                  context: context,
-                                  goodsId: goodsId,
-                                  goodsName: item.name,
-                                  movieTitle: movieTitle,
-                                  goodsImage: item.images.main,
-                              );
-                            },
+                                  final movieTitle = snapshot.data!;
+                                  return getTabsReviewWidget(
+                                    context: context,
+                                    goodsId: goodsId,
+                                    goodsName: item.name,
+                                    movieTitle: movieTitle,
+                                    goodsImage: item.images.main,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          CommonTabsContent(
+                            widgets: getTabsDeliveryRefundWidgets(),
+                          ),
+                          CommonTabsContent(
+                            widgets: getTabsInquiryWidgets(),
                           ),
                         ],
                       ),
-                        CommonTabsContent(
-                          widgets: getTabsDeliveryRefundWidgets(),
-                        ),
-                        CommonTabsContent(widgets: getTabsInquiryWidgets()),
-                      ],
                     ),
                   ),
-                ),
-                BottomButtonsWidget(item: item,),
-              ],
+                  BottomButtonsWidget(item: item),
+                ],
+              ),
             ),
-          )
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
