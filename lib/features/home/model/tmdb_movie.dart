@@ -8,6 +8,7 @@ class TmdbMovie {
   final double popularity;
   final List<Map<String, String>> providers;
   final int cumulativeSales;
+  final bool isFavorite;
 
 
   TmdbMovie({
@@ -20,6 +21,7 @@ class TmdbMovie {
     required this.popularity,
     this.providers = const [],
     this.cumulativeSales = 0,
+    this.isFavorite = false,
   });
 
   factory TmdbMovie.fromJson(Map<String, dynamic> json) {
