@@ -24,34 +24,11 @@ import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
   debugLogDiagnostics: true,
-  initialLocation: '/home',
+  initialLocation: '/',
   routes: [
-    ShellRoute(
-      builder: (context, state, child) {
-        return MainScreen(child: child);
-      },
-      routes: [
-        GoRoute(
-          path: '/wishlist',
-          builder: (context, state) => const FavoriteScreen(),
-        ),
-        GoRoute(
-          path: '/goods',
-          builder: (context, state) => const GoodsAllScreen(),
-        ),
-        GoRoute(
-          path: '/home',
-          builder: (context, state) => const HomeScreen(),
-        ),
-        GoRoute(
-          path: '/movieslist',
-          builder: (context, state) => const MoviesScreen(),
-        ),
-        GoRoute(
-          path: '/mypage',
-          builder: (context, state) => const MyPageScreen(),
-        ),
-      ],
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const MainScreen(),
     ),
     GoRoute(
       path: '/search',
