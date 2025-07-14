@@ -1,8 +1,5 @@
-import 'package:cinemarket/core/storage/token_storage.dart';
-import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
-import 'package:cinemarket/features/goods/screen/goods_detail_screen.dart';
 import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/widgets/common_tab_view.dart';
@@ -48,15 +45,47 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     return CommonTabView(
       tabTitles: _tabTitles,
       tabViews: [
-        CommonGridview(
-          itemType: ItemType.goods,
-          // items: dummyGoods,
-          items: viewModel.favoriteGoods,
+        RefreshIndicator(
+          onRefresh: _refreshGoods,
+          child:
+          viewModel.favoriteGoods.isEmpty || !viewModel.isLogin
+              ? ListView(
+            children: const [
+              SizedBox(height: 150),
+              Center(
+                child: Text(
+                  '굿즈 찜 목록이 비어있어요..!!',
+                  style: AppTextStyle.headline,
+                ),
+              ),
+            ],
+          )
+              : CommonGridview(
+            itemType: ItemType.goods,
+            // items: dummyGoods,
+            items: viewModel.favoriteGoods,
+          ),
         ),
-        const CommonGridview(
-          itemType: ItemType.movie,
-          // items: dummyMovies,
-          items: [],
+        RefreshIndicator(
+          onRefresh: _refreshMovies,
+          child:
+          viewModel.favoriteMovies.isEmpty || !viewModel.isLogin
+              ? ListView(
+            children: const [
+              SizedBox(height: 150),
+              Center(
+                child: Text(
+                  '영화 찜 목록이 비어있어요..!!',
+                  style: AppTextStyle.headline,
+                ),
+              ),
+            ],
+          )
+              : CommonGridview(
+            itemType: ItemType.movie,
+            // items: dummyMovies,
+            items: viewModel.favoriteMovies,
+          ),
         ),
       ],
     );
