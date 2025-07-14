@@ -2,6 +2,7 @@ import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
+import 'package:cinemarket/features/goods/screen/goods_detail_screen.dart';
 import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/widgets/common_tab_view.dart';
@@ -11,13 +12,14 @@ import 'package:provider/provider.dart';
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
 
-  static const List<String> _tabTitles = ['굿즈', '영화'];
-
   @override
   State<FavoriteScreen> createState() => _FavoriteScreenState();
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
+
+  static const List<String> _tabTitles = ['굿즈', '영화'];
+
   Future<void> _refreshGoods() async {
     await context.read<FavoriteViewModel>().getAllFavoriteGoods();
   }

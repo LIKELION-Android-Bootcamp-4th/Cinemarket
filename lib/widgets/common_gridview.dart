@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/features/goods/model/goods.dart';
+import 'package:cinemarket/features/goods/viewmodel/goods_all_viewmodel.dart';
 import 'package:cinemarket/features/home/model/tmdb_movie.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:cinemarket/widgets/movie_item.dart';
@@ -54,16 +55,28 @@ class CommonGridview<T> extends StatelessWidget {
         if (item is Goods) {
           return GestureDetector(
             onTap: () {
-              context.push('/goods/${item.id}', );
+              context.push('/goods/${item.id}');
             },
-            child: GoodsItem(
-              imageUrl: item.images.main,
-              goodsName: item.name,
-              movieName: item.id,  // todo: 이거 상품 id임
-              price: '${item.price} 원',
-              rating: item.reviewStats?.averageRating ?? 0.0,
-              reviewCount: item.reviewCount,
-              isFavorite: item.isFavorite,
+            child: FutureBuilder(
+              future: GoodsAllViewModel().getMovieTitleFromGoodsId(goodsId: item.id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final movieName = snapshot.data ?? '';
+
+                return GoodsItem(
+                  goodsId: item.id,
+                  imageUrl: item.images.main,
+                  goodsName: item.name,
+                  movieTitle: movieName,
+                  price: '${item.price} 원',
+                  rating: item.reviewStats?.averageRating ?? 0.0,
+                  reviewCount: item.reviewCount,
+                  isFavorite: item.isFavorite,
+                );
+              },
             ),
           );
         }

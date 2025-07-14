@@ -61,4 +61,15 @@ class GoodsService {
       rethrow;
     }
   }
+  
+  Future<Response> getMovieTitleFromGoodsId({required String goodsId}) async {
+    try {
+      return await _dio.get('/api/content-product/contents/$goodsId');
+    } on DioException catch (e) {
+      Logger().e(e.message);
+      Logger().e(e.stackTrace);
+
+      rethrow;
+    }
+  } 
 }
