@@ -1,4 +1,4 @@
-import 'package:cinemarket/widgets/goods_item.dart';
+import 'package:cinemarket/widgets/goods_item.dart' show toggleFavorite, updateGoodsFavoriteStatus;
 import 'package:flutter/material.dart';
 
 class PrimaryImageWidget extends StatefulWidget {
@@ -46,12 +46,16 @@ class _PrimaryImageWidgetState extends State<PrimaryImageWidget> {
             color: Colors.red,
           ),
           onPressed: () {
-            toggleFavorite(context: context,
-                id: widget.goodsId,
-                isFavorite: isFavorite,
-                onStateChanged: (newState) {
-                  setState(() => isFavorite = newState);
-                });
+            toggleFavorite(
+              context: context,
+              id: widget.goodsId,
+              isFavorite: isFavorite,
+              onStateChanged: (newState) {
+                setState(() => isFavorite = newState);
+              },
+              updateFavoriteStatus:
+                  (id) => updateGoodsFavoriteStatus(goodsId: id),
+            );
           },
         ),
       ],
