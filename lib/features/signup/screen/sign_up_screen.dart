@@ -214,7 +214,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     setState(() {
                       _hasValidEmail = false;
                     });
-
                   } else {
                     setState(() {
                       _hasValidEmail = true;
@@ -354,6 +353,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ElevatedButton(
               onPressed: () async {
                 if (_hasValidEmail && _hasValidNickName) {
+                  //비밀번호 확인 로직
+                  if (passwordController.text != passwordCheckController.text) {
+                    CommonToast.show(
+                      context: context,
+                      message: "비밀번호가 일치하지 않습니다.",
+                      type: ToastificationType.error,
+                    );
+                    return;
+                  } else {
+                    if (!_validatePassword(password)) {
+                      CommonToast.show(
+                        context: context,
+                        message: "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.",
+                        type: ToastificationType.error,
+                      );
+                    }
+                  }
+
+                  //실제 통신 로직
                   await signupViewModel.signUp(email, password, nickName);
                   if (signupViewModel.error != null) {
                     CommonToast.show(
@@ -391,7 +409,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 '회원가입',
                 style:
                     (_hasValidEmail && _hasValidNickName)
-                        ? AppTextStyle.section.copyWith(color: AppColors.textPoint)
+                        ? AppTextStyle.section.copyWith(
+                          color: AppColors.textPoint,
+                        )
                         : AppTextStyle.section.copyWith(color: Colors.black54),
               ),
             ),
@@ -400,5 +420,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ],
     );
+  }
+
+  bool _validatePassword(String password) {
+    final RegExp passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$');
+    
+    if (password.isEmpty) {
+      CommonToast.show(
+        context: context,
+        message: "이메일과 닉네임 중복체크를 해주세요.",
+        type: ToastificationType.info,
+      );
+      return false;
+    }
+    
+    if (passwordRegex.hasMatch(password)) {
+      return true;
+    } else return false;
   }
 }
