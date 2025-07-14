@@ -13,6 +13,7 @@ class GoodsItem extends StatefulWidget {
   final String goodsName;
   final String movieTitle;
   final String price;
+  final int stock;
   final double rating;
   final int reviewCount;
   final bool isFavorite;
@@ -24,6 +25,7 @@ class GoodsItem extends StatefulWidget {
     required this.goodsName,
     required this.movieTitle,
     required this.price,
+    required this.stock,
     required this.rating,
     required this.reviewCount,
     required this.isFavorite,
@@ -106,6 +108,32 @@ class _GoodsItemState extends State<GoodsItem> {
                     }
                   },
                 ),
+
+                if (widget.stock == 0) ...[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(0, 0, 0, 0.5),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                  Positioned(
+                    bottom: 8,
+                    left: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(0, 0, 0, 0.5),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 2),
+                      child: const Text(
+                        '품절',
+                        style: AppTextStyle.bodySmall,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -183,9 +211,7 @@ Future<void> toggleFavorite({
 }
 
 Future<bool> updateGoodsFavoriteStatus({required String goodsId}) async {
-  return await FavoriteViewModel(
-    favoriteRepository: FavoriteRepository(favoriteService: FavoriteService()),
-  ).toggleFavorite(goodsId: goodsId);
+  return await FavoriteViewModel().toggleFavorite(goodsId: goodsId);
 }
 
 Future<bool> requireLoginBeforeAction(BuildContext context) async {

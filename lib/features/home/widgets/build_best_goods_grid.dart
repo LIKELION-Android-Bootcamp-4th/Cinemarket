@@ -28,6 +28,7 @@ Widget buildBestGoodsGrid(List<BestGoods> goodsList,String movieName) {
           goodsName: item.name,
           movieTitle: movieName,
           price: formattedPrice,
+          stock: 1, // todo: 논의 필요
           rating: item.reviewStats.averageRating,
           reviewCount: item.reviewCount,
           isFavorite: item.isFavorite,
