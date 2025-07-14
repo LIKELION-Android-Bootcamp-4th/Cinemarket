@@ -3,6 +3,7 @@ import 'package:cinemarket/features/mypage/detail/widget/fix_review_widget.dart'
 import 'package:cinemarket/features/mypage/detail/widget/my_review_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/order_detail_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/order_history_widget.dart';
+import 'package:cinemarket/features/mypage/detail/widget/order_tracking_widget.dart';
 import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,8 @@ class MyPageDetailScreen extends StatelessWidget {
         title = '주문상세내역';
         bodyWidget = OrderDetailWidget(orderId: orderId!);
         break;
+      case 'order_tracking':
+        return const OrderTrackingWidget();
       case 'my_review':
         title = '나의 리뷰';
         bodyWidget = const MyReviewWidget();

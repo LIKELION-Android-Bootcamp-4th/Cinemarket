@@ -62,9 +62,10 @@ class BestGoodsWidget extends StatelessWidget {
                       child: SizedBox(
                         width: 200,
                         child: GoodsItem(
+                          goodsId: goods.id,
                           imageUrl: goods.images.main,
                           goodsName: goods.name,
-                          movieName: '없음',
+                          movieTitle: '없음',
                           price: '￦${goods.price}',
                           stock: 0,  // todo: 논의 필요
                           // rating: goods.reviewStats.averageRating,
