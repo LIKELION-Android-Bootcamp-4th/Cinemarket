@@ -16,6 +16,8 @@ class GoodsAllScreen extends StatefulWidget {
 
 class _GoodsAllScreenState extends State<GoodsAllScreen> {
   bool _isFirst = true;
+  String selectedSort = '최신순';
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -48,11 +50,29 @@ class _GoodsAllScreenState extends State<GoodsAllScreen> {
               padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
-                  const Align(
+                  Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
-                      padding: EdgeInsets.only(right: 4),
-                      child: SortDropdown(itemType: ItemType.goods),
+                      padding: const EdgeInsets.only(right: 4),
+                      child: SortDropdown(
+                        itemType: ItemType.goods,
+                        selectedValue: selectedSort,
+                        onSelected: (value) { // todo: enum?
+                          setState(() {
+                            selectedSort = value;
+                          });
+
+                          if (value == '인기순') {
+                            vm.getAllGoods(force: true, sortBy: 'popular');
+                          }
+                          if (value == '최신순') {
+                            vm.getAllGoods(force: true, sortOrder: 'desc');
+                          }
+                          if (value == '오래된순') {
+                            vm.getAllGoods(force: true, sortOrder: 'asc');
+                          }
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
