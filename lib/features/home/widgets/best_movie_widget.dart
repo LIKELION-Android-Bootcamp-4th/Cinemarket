@@ -54,7 +54,7 @@ class BestMovieWidget extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               SizedBox(
-                height: 200,
+                height: 250,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
