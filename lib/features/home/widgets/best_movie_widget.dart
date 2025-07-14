@@ -71,7 +71,7 @@ class BestMovieWidget extends StatelessWidget {
                         child: MovieItem(
                           imageUrl: 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                           movieName: movie.title,
-                          cumulativeSales: 12112, //추후 API 연동..
+                          cumulativeSales: movie.cumulativeSales,
                           providers: movie.providers,
                           movieId: movie.id,
                         ),
