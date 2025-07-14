@@ -31,10 +31,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => GoodsAllViewModel()),
-        ChangeNotifierProvider(create: (_) => GoodsDetailViewmodel()),
         ChangeNotifierProvider(create: (_) => MoviesViewModel()),
         ChangeNotifierProvider(create: (_) => SearchViewModel()),
-        ChangeNotifierProvider(create: (_) => MovieDetailViewModel()),
         ChangeNotifierProvider(create: (_) => MyPageViewModel()),
         ChangeNotifierProvider(create: (_) => CartViewModel()..fetchCartCount()),
         ChangeNotifierProvider(create: (_) => FavoriteViewModel()),
