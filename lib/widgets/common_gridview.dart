@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 class CommonGridview<T> extends StatelessWidget {
   final List<T> items;
   final ItemType itemType;
+  final bool isFavoriteScreen;
   final bool isInScrollView;
   final ScrollController? scrollController;
 
@@ -17,6 +18,7 @@ class CommonGridview<T> extends StatelessWidget {
     super.key,
     required this.itemType,
     required this.items,
+    this.isFavoriteScreen = false,
     this.isInScrollView = false,
     this.scrollController,
   });
@@ -93,6 +95,7 @@ class CommonGridview<T> extends StatelessWidget {
               cumulativeSales: item.cumulativeSales,
               providers: item.providers,
               movieId: item.id,
+              isFavoriteScreen: isFavoriteScreen,
             ),
           );
         }
