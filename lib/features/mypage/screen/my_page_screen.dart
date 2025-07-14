@@ -1,9 +1,11 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/cart/viewmodel/cart_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
 
@@ -197,6 +199,11 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               Navigator.of(dialogContext).pop();
                               try {
                                 await _viewModel.logout();
+
+                                if (mounted) {
+                                  final cartViewModel = context.read<CartViewModel>();
+                                  await cartViewModel.fetchCartCount();
+                                }
                                 CommonToast.show(
                                   context: context,
                                   message: "로그아웃 되었습니다.",

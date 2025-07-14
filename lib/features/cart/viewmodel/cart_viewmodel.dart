@@ -123,7 +123,7 @@ class CartViewModel extends ChangeNotifier {
 
   void increaseQuantity(int index, BuildContext context) {
     final item = _items[index];
-    final maxQuantity = item.stock - 10;
+    final maxQuantity = item.stock;
 
     if (item.quantity < maxQuantity) {
       item.quantity++;
