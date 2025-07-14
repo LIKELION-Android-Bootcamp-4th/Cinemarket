@@ -54,7 +54,7 @@ class BestMovieWidget extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               SizedBox(
-                height: 200,
+                height: 250,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -71,10 +71,10 @@ class BestMovieWidget extends StatelessWidget {
                         child: MovieItem(
                           imageUrl: 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                           movieName: movie.title,
-                          cumulativeSales: 12112, //추후 API 연동..
+                          cumulativeSales: movie.cumulativeSales,
                           providers: movie.providers,
-                          isFavorite: false, //추후 추가 예정  // todo:
                           movieId: movie.id,
+                          isFavorite: false,
                         ),
                       ),
                     );
