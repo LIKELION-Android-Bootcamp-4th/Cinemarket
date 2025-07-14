@@ -59,6 +59,14 @@ class _MovieItemState extends State<MovieItem> {
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
+                      errorBuilder: (context,error,stackTrace) {
+                        return Image.asset(
+                          'assets/images/default_poster.png',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -104,7 +112,7 @@ class _MovieItemState extends State<MovieItem> {
               widget.movieName,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyle.body,
+              style: AppTextStyle.bodyLarge,
             ),
           ),
           const SizedBox(height: 2),
@@ -118,26 +126,21 @@ class _MovieItemState extends State<MovieItem> {
                   color: AppColors.textPrimary,
                 ),
                 const SizedBox(width: 4),
-                Text(
-                  '${widget.cumulativeSales}',
-                  style: AppTextStyle.bodySmall,
-                ),
+                Text('${widget.cumulativeSales}', style: AppTextStyle.bodySmall),
               ],
             ),
           ),
           const SizedBox(height: 2),
           Padding(
-            padding: const EdgeInsets.only(left: 4, bottom: 4),
-            child: Row(
-              children:
-                  widget.providers.map((provider) {
-                    //watcha 로고 이상하게 나오는 TMDB 상 오류 -> 네트워크 샘플 이미지로 대체 -> 추후 변경
-                    final isWatcha =
-                        provider['providerName']?.toLowerCase() == 'watcha';
-                    final logoUrl =
-                        isWatcha
-                            ? 'https://play-lh.googleusercontent.com/vAkKvTtE8kdb0MWWxOVaqYVf0_suB-WMnfCR1MslBsGjhI49dAfF1IxcnhtpL3PnjVY'
-                            : provider['logoUrl'] ?? '';
+            padding: const EdgeInsets.only(left: 4, bottom: 4,),
+            child: widget.providers.isNotEmpty
+              ? Row(
+                  children: widget.providers.map((provider) {
+                    //TMDB watcha 로고 오류 -> 네트워크 이미지로 대체
+                    final isWatcha = provider['providerName']?.toLowerCase() == 'watcha';
+                    final logoUrl = isWatcha
+                        ? 'https://play-lh.googleusercontent.com/vAkKvTtE8kdb0MWWxOVaqYVf0_suB-WMnfCR1MslBsGjhI49dAfF1IxcnhtpL3PnjVY'
+                        : provider['logoUrl'] ?? '';
 
                     return Padding(
                       padding: const EdgeInsets.only(right: 4),
@@ -147,13 +150,13 @@ class _MovieItemState extends State<MovieItem> {
                           logoUrl,
                           width: 15,
                           height: 15,
-                          errorBuilder:
-                              (context, error, stackTrace) => const SizedBox(),
+                          errorBuilder: (context, error, stackTrace) => const SizedBox(),
                         ),
                       ),
                     );
                   }).toList(),
-            ),
+                )
+              : const SizedBox(height: 15,)
           ),
         ],
       ),
