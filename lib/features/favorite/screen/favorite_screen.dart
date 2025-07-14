@@ -85,6 +85,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             itemType: ItemType.movie,
             // items: dummyMovies,
             items: viewModel.favoriteMovies,
+            isFavoriteScreen: true,
           ),
         ),
       ],

@@ -7,15 +7,7 @@ class BestGoodsRepository {
 
   Future<ListResponse<BestGoods>> fetchBestGoods() async {
     final response = await _service.fetchBestGoods();
-    print('[RESPONSE ITEMS]');
-    // for (var item in response.data) {
-    //   print(item['pagination']);
-    // }
-    for (var item in response.data['data']['items']) {
-      print(item);
-    }
 
-    print('[STATUS CODE] ${response.statusCode}');
     final listResponse = ListResponse<BestGoods>.fromJson(
       response.data,
           (json) => BestGoods.fromJson(json),

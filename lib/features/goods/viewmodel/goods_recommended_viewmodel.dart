@@ -25,17 +25,12 @@ class GoodsRecommendedViewModel extends ChangeNotifier {
         _errorMessage = '연결된 영화 정보를 찾을 수 없습니다.';
         _recommendedGoods = [];
       } else {
-        final response = await _repository.getRecommendedGoods(
+        final goodsList = await _repository.getRecommendedGoods(
           contentId: contentId,
           excludeProductId: productId,
         );
 
-        if (response.success) {
-          _recommendedGoods = response.items;
-        } else {
-          _errorMessage = response.message;
-          _recommendedGoods = [];
-        }
+        _recommendedGoods = goodsList;
       }
     } catch (e) {
       _errorMessage = '추천 굿즈 로딩 실패: $e';
