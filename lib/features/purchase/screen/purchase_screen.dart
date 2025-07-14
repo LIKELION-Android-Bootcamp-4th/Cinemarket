@@ -31,11 +31,18 @@ class _PurchaseScreen extends State<PurchaseScreen> {
     super.initState();
     final myPageViewModel = context.read<MyPageViewModel>();
     final purchaseViewModel = context.read<PurchaseViewModel>();
-    myPageViewModel.initialize();
-    purchaseViewModel.items = widget.cartItems;
+    myPageViewModel.initialize().then((_) {
+      // 상세주소 값
+      address2Controller.text =
+      myPageViewModel.address2 != null && myPageViewModel.address2!.trim().isNotEmpty
+          ? myPageViewModel.address2!
+          : '';
 
-    address2Controller.text = myPageViewModel.address2 ?? '';
-    memoController.text = purchaseViewModel.memoController.text;
+      purchaseViewModel.items = widget.cartItems;
+      memoController.text = purchaseViewModel.memoController.text;
+
+
+    });
   }
 
   @override

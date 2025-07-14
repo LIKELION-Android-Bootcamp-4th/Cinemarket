@@ -44,7 +44,7 @@ class DeliveryInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayText = (address != null && zipCode != null && address!.isNotEmpty && zipCode!.isNotEmpty)
-        ? '($zipCode) $address ${address2 ?? ''}'
+        ? '($zipCode) $address'
         : '배송지 정보가 없습니다.';
 
     return Column(
