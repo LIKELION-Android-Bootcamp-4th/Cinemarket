@@ -70,7 +70,7 @@ class BestGoodsWidget extends StatelessWidget {
                           goodsName: goods.name,
                           movieTitle: '없음',
                           price: formattedPrice,
-                          stock: 0,  // todo: 논의 필요
+                          stock: goods.stock,
                           rating: goods.reviewStats.averageRating,
                           reviewCount: goods.reviewCount,
                           isFavorite: goods.isFavorite,
