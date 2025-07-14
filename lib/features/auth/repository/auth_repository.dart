@@ -24,7 +24,11 @@ class AuthRepository {
     return await _authService.checkValidNickName(nickName);
   }
 
-  Future<Response> signUp(String email, String password, String nickName) async {
+  Future<Response> signUp(
+    String email,
+    String password,
+    String nickName,
+  ) async {
     return await _authService.signUp(email, password, nickName);
   }
 
@@ -48,5 +52,17 @@ class AuthRepository {
 
   Future emailAuth(String email, String emailAuthCode) async {
     return await _authService.emailAuth(email, emailAuthCode);
+  }
+
+  Future changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    return await _authService.changePassword(
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+    );
   }
 }

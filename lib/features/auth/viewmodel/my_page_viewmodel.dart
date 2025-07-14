@@ -60,6 +60,32 @@ class MyPageViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> fetchPassword(
+    String currentPassword,
+    String newPassword,
+    String confirmPassword,
+  ) async {
+    _error = null;
+    if (newPassword != confirmPassword) {
+      _error = "새 비밀번호가 일치하지 않습니다.";
+      return;
+    } else if (currentPassword == newPassword) {
+      _error = "현재 비밀번호와 동일합니다.\n새로운 비밀번호를 입력해주세요.";
+      return;
+    }
+    try {
+      final response = await _authRepository.changePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+        confirmPassword: confirmPassword,
+      );
+      return response;
+    } catch (e) {
+      _error = "현재 비밀번호가 일치하지 않습니다.";
+      print(e);
+    }
+  }
+
   Future<void> _fetchProfile(String accessToken) async {
     try {
       final response = await _authRepository.getProfile(accessToken);

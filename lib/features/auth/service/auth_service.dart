@@ -75,6 +75,30 @@ class AuthService {
     }
   }
 
+  Future<Response> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    try {
+      print("@@2");
+      final formData = {
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+        'confirmPassword': confirmPassword,
+      };
+      print("@@3");
+      final response = await _dio.patch(
+        '/api/mypage/change-password',
+        data: formData,
+      );
+      print("@@4");
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Response> signUp(
     String email,
     String password,
@@ -98,10 +122,7 @@ class AuthService {
 
   Future<Response> emailAuth(String email, String emailAuthCode) async {
     try {
-      final formData ={
-        'email': email,
-        'verificationCode': emailAuthCode,
-      };
+      final formData = {'email': email, 'verificationCode': emailAuthCode};
       final response = await _dio.post(
         '/api/auth/verify-email',
         data: jsonEncode(formData),

@@ -97,7 +97,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
               try {
                 await signupViewModel.checkValidNickName(nickName);
                 if (signupViewModel.error != null) {
-
                   CommonToast.show(
                     context: context,
                     message: signupViewModel.error.toString(),
@@ -138,6 +137,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           ),
           const SizedBox(height: 24),
           _buildAddressEditor(),
+          const SizedBox(height: 24),
+          _buildChangePasswordButton(),
           const SizedBox(height: 60),
           _buildSaveButton(),
         ],
@@ -154,13 +155,17 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
             radius: 60,
             backgroundColor: AppColors.widgetBackground,
             backgroundImage:
-                imageFile != null
-                    ? Image.file(File(imageFile!.path)).image
-                    : (_profileImageUrl.isNotEmpty
-                        ? Image.memory(
-                          base64Decode(_viewModel.profileImage.toString()),
-                        ).image
-                        : null),
+            imageFile != null
+                ? Image
+                .file(File(imageFile!.path))
+                .image
+                : (_profileImageUrl.isNotEmpty
+                ? Image
+                .memory(
+              base64Decode(_viewModel.profileImage.toString()),
+            )
+                .image
+                : null),
           ),
           Positioned(
             bottom: 0,
@@ -259,7 +264,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                   context,
                   MaterialPageRoute(
                     builder:
-                        (__) => KpostalView(
+                        (__) =>
+                        KpostalView(
                           useLocalServer: true,
                           localPort: 1024,
                           callback: (Kpostal result) {
@@ -302,6 +308,22 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     );
   }
 
+  Widget _buildChangePasswordButton() {
+    return ElevatedButton(
+      onPressed: () {
+        print('비밀번호 변경 클릭');
+        context.push('/mypage/detail', extra: 'edit_password');
+      }, style: ElevatedButton.styleFrom(
+      backgroundColor: AppColors.textPoint,
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+      child:
+      Text("비밀번호 변경", style: AppTextStyle.body,),);
+  }
+
   Widget _buildSaveButton() {
     return ElevatedButton(
       onPressed: () async {
@@ -319,10 +341,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           _profileImageUrl = base64Image;
         }
 
-        print("@@");
-        print(_nickNameController.text);
-        print(_viewModel.nickname);
-        print("@@");
         if (_nickNameController.text.toString() !=
             _viewModel.nickname.toString() && _hasValidNickname == false) {
           CommonToast.show(
@@ -333,7 +351,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           return;
         }
 
-        if ((_nickNameController.text.toString() == _viewModel.nickname.toString()) || (_hasValidNickname == true && _nickNameController.text.toString() == collectNickname)) {
+        if ((_nickNameController.text.toString() ==
+            _viewModel.nickname.toString()) || (_hasValidNickname == true &&
+            _nickNameController.text.toString() == collectNickname)) {
           _viewModel.editProfile(
             nickName: _nickNameController.text,
             phone: _phoneController.text,
@@ -372,17 +392,17 @@ class PhoneNumberFormatter extends TextInputFormatter {
     } else if (digits.length <= 7) {
       return '${digits.substring(0, 3)}-${digits.substring(3)}';
     } else if (digits.length <= 11) {
-      return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7)}';
+      return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits
+          .substring(7)}';
     } else {
-      return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7, 11)}';
+      return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits
+          .substring(7, 11)}';
     }
   }
 
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue,
+      TextEditingValue newValue,) {
     String formatted = format(newValue.text);
     return TextEditingValue(
       text: formatted,
