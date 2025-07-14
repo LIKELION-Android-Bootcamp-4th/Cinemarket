@@ -39,15 +39,42 @@ class _FixReviewWidgetState extends State<FixReviewWidget> {
     _reviewController.dispose();
     super.dispose();
   }
+
   Future<void> _pickImages() async {
     final ImagePicker picker = ImagePicker();
     final List<XFile> picked = await picker.pickMultiImage();
+
+    final totalImages = _keepImageIds.length + _newImages.length;
+
     if (picked.isNotEmpty) {
-      setState(() {
-        _newImages.addAll(picked);
-      });
+      if (totalImages + picked.length > 5) {
+        final available = 5 - totalImages;
+        if (available <= 0) {
+          CommonToast.show(
+            context: context,
+            message: '이미지는 최대 5개까지 첨부할 수 있습니다.',
+            type: ToastificationType.error,
+          );
+          return;
+        }
+
+        setState(() {
+          _newImages.addAll(picked.take(available));
+        });
+
+        CommonToast.show(
+          context: context,
+          message: '$available장 추가되었습니다. 최대 5장까지 가능합니다.',
+          type: ToastificationType.info,
+        );
+      } else {
+        setState(() {
+          _newImages.addAll(picked);
+        });
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -204,6 +231,7 @@ class _FixReviewWidgetState extends State<FixReviewWidget> {
     );
   }
 
+
   Widget _buildPhotoPreview() {
     final keptImages = widget.review.images.where((e) => _keepImageIds.contains(e.id)).toList();
 
@@ -213,6 +241,7 @@ class _FixReviewWidgetState extends State<FixReviewWidget> {
         spacing: 8,
         runSpacing: 8,
         children: [
+          //기존 이미지
           ...keptImages.map((e) => Stack(
             children: [
               Image.network(e.url, width: 100, height: 100, fit: BoxFit.cover),
@@ -230,11 +259,34 @@ class _FixReviewWidgetState extends State<FixReviewWidget> {
               ),
             ],
           )),
-          ..._newImages.map((e) => Image.file(File(e.path), width: 100, height: 100, fit: BoxFit.cover)),
+
+          //새로 추가한 이미지도 삭제 가능하도록 변경
+          ..._newImages.asMap().entries.map((entry) {
+            final index = entry.key;
+            final image = entry.value;
+            return Stack(
+              children: [
+                Image.file(File(image.path), width: 100, height: 100, fit: BoxFit.cover),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _newImages.removeAt(index);
+                      });
+                    },
+                    child: const Icon(Icons.cancel, color: Colors.red),
+                  ),
+                ),
+              ],
+            );
+          }),
         ],
       ),
     );
   }
+
 
   Widget _buildSelectPicture() {
     return Container(

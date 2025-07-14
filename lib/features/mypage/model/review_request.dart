@@ -1,17 +1,26 @@
-import 'dart:io';
+import 'package:dio/dio.dart';
 
 class ReviewRequest {
-  final String productId;
-  final String? orderId;
   final int rating;
   final String comment;
-  final List<File> images;
+  final String? orderId;
+  final List<MultipartFile> images;
 
   ReviewRequest({
-    required this.productId,
-    this.orderId,
     required this.rating,
     required this.comment,
-    this.images = const [],
+    this.orderId,
+    required this.images,
   });
+
+  FormData toFormData() {
+    final formDataMap = {
+      'rating': rating.toString(),
+      'comment': comment,
+      if (orderId != null) 'orderId': orderId!,
+      'images': images,
+    };
+
+    return FormData.fromMap(formDataMap);
+  }
 }
