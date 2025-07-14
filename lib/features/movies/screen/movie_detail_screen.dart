@@ -67,6 +67,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     },
                     title: movieDetail.title,
                     voteAverage: movieDetail.voteAverage,
+                    providers: movieDetail.providers ?? [],
                   ),
 
                   MovieInfoRow(
@@ -79,14 +80,14 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
                     child: CommonTabView(
-                      tabTitles: const ['줄거리 요약', '상품', '출연진'],
+                      tabTitles: const ['줄거리 요약', '굿즈', '출연진'],
                       tabViews: [
                         Padding(
                           padding: EdgeInsets.all(16),
                           child: SynopsisText(synopsis: movieDetail.overview),
                         ),
                         vm.goodsList.isEmpty
-                            ? Center(child: Text('상품 정보가 없습니다.',style: AppTextStyle.body,))
+                            ? Center(child: Text('굿즈 정보가 없습니다.',style: AppTextStyle.body,))
                             : buildBestGoodsGrid(vm.goodsList, movieDetail.title),
                         CastGridView(
                             castList: castList
