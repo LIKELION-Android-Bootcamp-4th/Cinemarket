@@ -4,22 +4,23 @@ import 'package:cinemarket/features/goods/model/review_stats.dart';
 class BestGoods {
   final String id;
   final String name;
-  // final String movieName;
   final GoodsImages images;
   final int price;
   final ReviewStats reviewStats;
   final int reviewCount;
   final bool isFavorite;
+  final int stock;
+
 
   BestGoods({
     required this.id,
     required this.name,
-    // required this.movieName,
     required this.images,
     required this.price,
     required this.reviewStats,
     required this.reviewCount,
     required this.isFavorite,
+    required this.stock
   });
 
   factory BestGoods.fromJson(Map<String, dynamic> json) {
@@ -32,6 +33,7 @@ class BestGoods {
       reviewStats: ReviewStats.fromJson(json['reviewStats'] ?? {'averageRating': 0.0}),
       reviewCount: json['reviewCount'] is int ? json['reviewCount'] : int.tryParse('${json['reviewCount']}') ?? 0,
       isFavorite: json['isFavorite'] ?? false,
+      stock: json['stock'] is int ? json['stock'] : int.tryParse('${json['stock']}') ?? 0,
     );
   }
 
