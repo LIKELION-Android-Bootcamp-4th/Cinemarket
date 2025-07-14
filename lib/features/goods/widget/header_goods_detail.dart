@@ -58,8 +58,12 @@ class HeaderGoodsDetail extends StatelessWidget {
 
             const SizedBox(height: 8),
 
+            Text(item.name, style: AppTextStyle.section,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,),
+
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Row(
                   children: [
@@ -73,13 +77,7 @@ class HeaderGoodsDetail extends StatelessWidget {
 
                 const Spacer(),
 
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(item.name, style: AppTextStyle.section),
-                    Text('${item.price}', style: AppTextStyle.bodySmall),
-                  ],
-                ),
+                Text('₩ ${item.price} 원', style: AppTextStyle.body),
               ],
             ),
           ],
