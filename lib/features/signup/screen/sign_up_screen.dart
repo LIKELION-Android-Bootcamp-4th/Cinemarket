@@ -24,15 +24,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailAuthCode = TextEditingController();
   bool _hasSignUp = false;
   bool _hasValidEmail = false;
+  bool _hasValidNickName = false;
+
   final signupViewModel = SignUpViewModel();
 
-  //테스트용 true
-  bool _hasValidNickName = true;
-
   String get email => emailController.text;
-  String get password => passwordController.text;
-  String get nickName => nickNameController.text;
 
+  String get password => passwordController.text;
+
+  String get nickName => nickNameController.text;
 
   @override
   void dispose() {
@@ -211,8 +211,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       message: "이미 사용중인 이메일 입니다.",
                       type: ToastificationType.info,
                     );
+                    setState(() {
+                      _hasValidEmail = false;
+                    });
+
                   } else {
-                    _hasValidEmail = true;
+                    setState(() {
+                      _hasValidEmail = true;
+                    });
                     CommonToast.show(
                       context: context,
                       message: "사용 가능한 이메일 입니다.",
@@ -311,8 +317,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       message: signupViewModel.error.toString(),
                       type: ToastificationType.info,
                     );
+                    setState(() {
+                      _hasValidNickName = false;
+                    });
                   } else {
-                    _hasValidNickName = true;
+                    setState(() {
+                      _hasValidNickName = true;
+                    });
                     CommonToast.show(
                       context: context,
                       message: signupViewModel.message.toString(),
@@ -376,7 +387,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('회원가입', style: AppTextStyle.section),
+              child: Text(
+                '회원가입',
+                style:
+                    (_hasValidEmail && _hasValidNickName)
+                        ? AppTextStyle.section.copyWith(color: AppColors.textPoint)
+                        : AppTextStyle.section.copyWith(color: Colors.black54),
+              ),
             ),
             SizedBox(height: 16),
           ],

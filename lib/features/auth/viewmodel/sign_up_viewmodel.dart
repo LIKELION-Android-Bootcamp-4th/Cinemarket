@@ -16,8 +16,11 @@ class SignUpViewModel extends ChangeNotifier {
   String? _message;
 
   String? get email => _email;
+
   String? get nickName => _nickName;
+
   String? get error => _error;
+
   String? get message => _message;
 
   Future<void> checkValidEmail(String email) async {
@@ -51,7 +54,6 @@ class SignUpViewModel extends ChangeNotifier {
         print(data.toString());
         print(data['message'].toString());
         if (data['available'] == true) {
-          print("참");
           _nickName = null;
           _error = null;
           _message = data['message'].toString();
@@ -73,19 +75,13 @@ class SignUpViewModel extends ChangeNotifier {
     _error = null;
     _message = null;
     try {
-      if (email != null && password != null && nickName != null) {
-        final response = await _authRepository.signUp(
-          email,
-          password,
-          nickName,
-        );
-        final data = response.data;
-        print(data.toString());
-        if (data['success'] == true) {
-          _email = null;
-          _nickName = null;
-          _error = null;
-        }
+      final response = await _authRepository.signUp(email, password, nickName);
+      final data = response.data;
+      print(data.toString());
+      if (data['success'] == true) {
+        _email = null;
+        _nickName = null;
+        _error = null;
       }
     } catch (e) {
       _error = "실패";
