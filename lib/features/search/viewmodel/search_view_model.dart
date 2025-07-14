@@ -22,6 +22,46 @@ class SearchViewModel extends ChangeNotifier {
 
   final Set<int> _failedMovieIds = {};
 
+  int _currentGoodsPage = 1;
+  int get currentPage => _currentGoodsPage;
+  int _currentMoviePage = 1;
+  int get currentMoviePage => _currentMoviePage;
+
+  int _itemPerPage = 6;
+
+  int get totalPages => (_goodsResults.length/ _itemPerPage).ceil().clamp(1, double.infinity).toInt();
+  int get movieTotalPages => (_tmdbResults.length / _itemPerPage).ceil().clamp(1, double.infinity).toInt();
+
+  List<SearchItem> get pageGoodsResults {
+    final start = (_currentGoodsPage - 1) * _itemPerPage;
+    final end = (_currentGoodsPage * _itemPerPage).clamp(0, _goodsResults.length);
+    return _goodsResults.sublist(start, end);
+  }
+
+  List <SearchTmdbModel> get pageMovieResults {
+    final start = (_currentMoviePage - 1) * _itemPerPage;
+    final end = (_currentMoviePage * _itemPerPage).clamp(0, _tmdbResults.length);
+    return _tmdbResults.sublist(start, end);
+  }
+  void goToGoodsPage(int page) {
+    _currentGoodsPage = page.clamp(1, totalPages);
+    notifyListeners();
+  }
+
+  void goToMoviePage(int page) {
+    _currentMoviePage = page.clamp(1, movieTotalPages);
+    notifyListeners();
+  }
+
+  void reset() {
+    _goodsResults = [];
+    _tmdbResults = [];
+    _currentGoodsPage = 1;
+    _currentMoviePage = 1;
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future<void> search(String keyword) async {
     _isLoading = true;
     notifyListeners();
