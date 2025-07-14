@@ -14,6 +14,7 @@ class MovieItem extends StatefulWidget {
   final List<Map<String, String>> providers;
   final bool isFavorite;
   final int movieId;
+  final bool isFavoriteScreen;
 
   const MovieItem({
     super.key,
@@ -23,6 +24,7 @@ class MovieItem extends StatefulWidget {
     required this.providers,
     required this.isFavorite,
     required this.movieId,
+    this.isFavoriteScreen = false,
   });
 
   @override
@@ -59,7 +61,7 @@ class _MovieItemState extends State<MovieItem> {
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
-                      errorBuilder: (context,error,stackTrace) {
+                      errorBuilder: (context, error, stackTrace) {
                         return Image.asset(
                           'assets/images/default_poster.png',
                           fit: BoxFit.cover,
@@ -70,38 +72,39 @@ class _MovieItemState extends State<MovieItem> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () async {
-                      // 로그인 요청  // 하지 않는다면 바로 action 종료
-                      if (!await requireLoginBeforeAction(context)) return;
+                if (widget.isFavoriteScreen)
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      onPressed: () async {
+                        // 로그인 요청  // 하지 않는다면 바로 action 종료
+                        if (!await requireLoginBeforeAction(context)) return;
 
-                      if (await updateFavoriteStatus(
-                        movieId: widget.movieId.toString(),
-                      )) {
-                        if (!context.mounted) return;
+                        if (await updateFavoriteStatus(
+                          movieId: widget.movieId.toString(),
+                        )) {
+                          if (!context.mounted) return;
 
-                        setState(() => isFavorite = !isFavorite);
-                        CommonToast.show(
-                          context: context,
-                          message: isFavorite ? '찜 추가 완료 !' : '찜 삭제 완료 !',
-                          type: ToastificationType.success,
-                        );
-                      } else {
-                        CommonToast.show(
+                          setState(() => isFavorite = !isFavorite);
+                          CommonToast.show(
+                            context: context,
+                            message: isFavorite ? '찜 추가 완료 !' : '찜 삭제 완료 !',
+                            type: ToastificationType.success,
+                          );
+                        } else {
+                          CommonToast.show(
                             context: context,
                             message: '에러 발생',
                             type: ToastificationType.error,
-                        );
-                      }
-                    },
-                    icon: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: Colors.red,
+                          );
+                        }
+                      },
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -126,37 +129,47 @@ class _MovieItemState extends State<MovieItem> {
                   color: AppColors.textPrimary,
                 ),
                 const SizedBox(width: 4),
-                Text('${widget.cumulativeSales}', style: AppTextStyle.bodySmall),
+                Text(
+                  '${widget.cumulativeSales}',
+                  style: AppTextStyle.bodySmall,
+                ),
               ],
             ),
           ),
           const SizedBox(height: 2),
           Padding(
-            padding: const EdgeInsets.only(left: 4, bottom: 4,),
-            child: widget.providers.isNotEmpty
-              ? Row(
-                  children: widget.providers.map((provider) {
-                    //TMDB watcha 로고 오류 -> 네트워크 이미지로 대체
-                    final isWatcha = provider['providerName']?.toLowerCase() == 'watcha';
-                    final logoUrl = isWatcha
-                        ? 'https://play-lh.googleusercontent.com/vAkKvTtE8kdb0MWWxOVaqYVf0_suB-WMnfCR1MslBsGjhI49dAfF1IxcnhtpL3PnjVY'
-                        : provider['logoUrl'] ?? '';
+            padding: const EdgeInsets.only(left: 4, bottom: 4),
+            child:
+                widget.providers.isNotEmpty
+                    ? Row(
+                      children:
+                          widget.providers.map((provider) {
+                            //TMDB watcha 로고 오류 -> 네트워크 이미지로 대체
+                            final isWatcha =
+                                provider['providerName']?.toLowerCase() ==
+                                'watcha';
+                            final logoUrl =
+                                isWatcha
+                                    ? 'https://play-lh.googleusercontent.com/vAkKvTtE8kdb0MWWxOVaqYVf0_suB-WMnfCR1MslBsGjhI49dAfF1IxcnhtpL3PnjVY'
+                                    : provider['logoUrl'] ?? '';
 
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: Image.network(
-                          logoUrl,
-                          width: 15,
-                          height: 15,
-                          errorBuilder: (context, error, stackTrace) => const SizedBox(),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                )
-              : const SizedBox(height: 15,)
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 4),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Image.network(
+                                  logoUrl,
+                                  width: 15,
+                                  height: 15,
+                                  errorBuilder:
+                                      (context, error, stackTrace) =>
+                                          const SizedBox(),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                    )
+                    : const SizedBox(height: 15),
           ),
         ],
       ),
