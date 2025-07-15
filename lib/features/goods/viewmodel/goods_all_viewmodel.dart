@@ -6,47 +6,74 @@ class GoodsAllViewModel extends ChangeNotifier {
   final GoodsRepository _goodsRepository;
 
   List<Goods> goodsList = [];
-  bool _isLoaded = false;
+  int _currentPage = 1;
+  bool _hasMore = true;
+  bool _isLoading = false;
+
 
   GoodsAllViewModel({GoodsRepository? goodsRepository})
     : _goodsRepository = goodsRepository ?? GoodsRepository();
 
-  bool get isLoaded => _isLoaded;
+  bool get hasMore => _hasMore;
+  bool get isLoading => _isLoading;
 
   Future<void> getAllGoods({
     bool force = false,
     String? sortBy,
     String sortOrder = 'desc',
   }) async {
-    if (!force && _isLoaded) return;
+    if (!force && (_isLoading || !_hasMore)) return;
+
+    if (force) {
+      clearGoods();
+    }
+
+    if (_isLoading || !_hasMore) {
+      return;
+    }
+    _isLoading = true;
+    notifyListeners();
+
+    debugPrint('page👊👊👊: $_currentPage');
+    debugPrint('sortBy👊👊👊: $sortBy');
+    debugPrint('sortOrder👊👊👊: $sortOrder');
+
 
     try {
-      goodsList = await _goodsRepository.getAllGoodsList(
+      final result = await _goodsRepository.getAllGoodsList(
+        page: _currentPage,
         sortBy: sortBy,
         sortOrder: sortOrder,
       );
-      notifyListeners();
-      _isLoaded = true;
 
-      // 로그 출력
-      print("😍😍😍");
-      goodsList.forEach((goods) {
-        print(goods); // 👍👍👍 toString()이 오버라이드되어 있어 보기 좋게 출력됨
-      });
+      debugPrint("굿즈 전체 조회 result $result");
+
+
+      if (result.isEmpty) {
+        _hasMore = false;
+      } else {
+        goodsList.addAll(result);
+        _currentPage++;
+      }
+
     } catch (e, stackTrace) {
+      print("굿즈 전체 조회 err 😂😂😂 ");
       print(e);
       print('$stackTrace');
-      print("😂😂😂 err");
-      // 에러 처리
+
     } finally {
-      // notifyListeners();
-      print("😎😎😎 통과");
+      debugPrint('goodsList length 👊👊👊: ${goodsList.length}');
+
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
   void clearGoods() {
+    _currentPage = 1;
     goodsList.clear();
-    _isLoaded = false;
+    _hasMore = true;
+
     notifyListeners();
   }
 
