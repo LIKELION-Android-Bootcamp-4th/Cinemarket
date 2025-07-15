@@ -95,9 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () async {
                 final email = emailController.text.trim();
                 final password = passwordController.text.trim();
-                print(email);
-                print(password);
-
                 if (email.isEmpty || password.isEmpty) {
                   CommonToast.show(
                     context: context,

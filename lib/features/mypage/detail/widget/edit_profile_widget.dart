@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
+import 'package:cinemarket/features/auth/viewmodel/sign_up_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +23,17 @@ class EditProfileWidget extends StatefulWidget {
 
 class _EditProfileWidgetState extends State<EditProfileWidget> {
   final MyPageViewModel _viewModel = MyPageViewModel();
-
-  late final TextEditingController _nicknameController;
+  final signupViewModel = SignUpViewModel();
+  bool _hasValidNickname = false;
+  late final TextEditingController _nickNameController;
   late final TextEditingController _phoneController;
   late final TextEditingController _addressController;
   late final TextEditingController _addressDetailController;
   String zipCode = '';
   String _profileImageUrl = '';
   XFile? imageFile;
+  String collectNickname = '';
+
 
   @override
   void initState() {
@@ -37,19 +41,20 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     _viewModel.addListener(_onViewModelChanged);
     _viewModel.initialize();
 
-    _nicknameController = TextEditingController(text: '');
+    _nickNameController = TextEditingController(text: '');
     _phoneController = TextEditingController(text: '');
-    _addressController = TextEditingController(text: '주소를 선택해주세요');
+    _addressController = TextEditingController(text: '주소를 입력해주세요');
     _addressDetailController = TextEditingController(text: '');
   }
 
   void _onViewModelChanged() {
     setState(() {
-      _nicknameController.text = _viewModel.nickname ?? '';
-      final rawPhone = _viewModel.phone ?? '';
+      _nickNameController.text = _viewModel.nickname ?? '';
+      final rawPhone = _viewModel.phone.toString();
       final formattedPhone = PhoneNumberFormatter.format(rawPhone);
-      _phoneController.text = formattedPhone;
-      _addressController.text = _viewModel.address1 ?? '주소를 선택해주세요';
+      _profileImageUrl = _viewModel.profileImage ?? '';
+      _phoneController.text = _viewModel.phone ?? '';
+      _addressController.text = _viewModel.address1 ?? '주소를 입력해주세요.';
       _addressDetailController.text = _viewModel.address2 ?? '';
       zipCode = _viewModel.zipCode ?? '';
     });
@@ -59,7 +64,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   void dispose() {
     _viewModel.removeListener(_onViewModelChanged);
     _viewModel.dispose();
-    _nicknameController.dispose();
+    _nickNameController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
     _addressDetailController.dispose();
@@ -76,7 +81,53 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           const SizedBox(height: 20),
           _buildProfilePhotoEditor(),
           const SizedBox(height: 40),
-          _buildTextField(label: '닉네임', controller: _nicknameController),
+          _buildTextField(label: '닉네임', controller: _nickNameController),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              final nickName = _nickNameController.text.trim();
+              if (nickName.isEmpty) {
+                CommonToast.show(
+                  context: context,
+                  message: "닉네임을 입력해주세요.",
+                  type: ToastificationType.info,
+                );
+                return;
+              }
+              try {
+                await signupViewModel.checkValidNickName(nickName);
+                if (signupViewModel.error != null) {
+                  CommonToast.show(
+                    context: context,
+                    message: signupViewModel.error.toString(),
+                    type: ToastificationType.info,
+                  );
+                } else {
+                  _hasValidNickname = true;
+                  collectNickname = _nickNameController.text.toString();
+                  CommonToast.show(
+                    context: context,
+                    message: signupViewModel.message.toString(),
+                    type: ToastificationType.success,
+                  );
+                }
+              } catch (e) {
+                CommonToast.show(
+                  context: context,
+                  message: signupViewModel.error.toString(),
+                  type: ToastificationType.error,
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.textPoint,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text('중복 확인'),
+          ),
           const SizedBox(height: 24),
           _buildTextField(
             label: '핸드폰 번호',
@@ -86,6 +137,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           ),
           const SizedBox(height: 24),
           _buildAddressEditor(),
+          const SizedBox(height: 24),
+          _buildChangePasswordButton(),
           const SizedBox(height: 60),
           _buildSaveButton(),
         ],
@@ -102,11 +155,17 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
             radius: 60,
             backgroundColor: AppColors.widgetBackground,
             backgroundImage:
-                imageFile != null
-                    ? Image.file(File(imageFile!.path)).image
-                    : (_profileImageUrl.isNotEmpty
-                        ? Image.network(_profileImageUrl).image
-                        : null),
+            imageFile != null
+                ? Image
+                .file(File(imageFile!.path))
+                .image
+                : (_profileImageUrl.isNotEmpty
+                ? Image
+                .memory(
+              base64Decode(_viewModel.profileImage.toString()),
+            )
+                .image
+                : null),
           ),
           Positioned(
             bottom: 0,
@@ -160,6 +219,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           inputFormatters: inputFormatters,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
+            hintText: _viewModel.phone == null ? "010-0000-0000" : null,
+            hintStyle: const TextStyle(color: Colors.white54),
             filled: true,
             fillColor: AppColors.widgetBackground,
             border: OutlineInputBorder(
@@ -203,7 +264,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                   context,
                   MaterialPageRoute(
                     builder:
-                        (__) => KpostalView(
+                        (__) =>
+                        KpostalView(
                           useLocalServer: true,
                           localPort: 1024,
                           callback: (Kpostal result) {
@@ -246,6 +308,22 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     );
   }
 
+  Widget _buildChangePasswordButton() {
+    return ElevatedButton(
+      onPressed: () {
+        print('비밀번호 변경 클릭');
+        context.push('/mypage/detail', extra: 'edit_password');
+      }, style: ElevatedButton.styleFrom(
+      backgroundColor: AppColors.textPoint,
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+      child:
+      Text("비밀번호 변경", style: AppTextStyle.body,),);
+  }
+
   Widget _buildSaveButton() {
     return ElevatedButton(
       onPressed: () async {
@@ -257,19 +335,40 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           );
           return;
         }
-        _viewModel.editProfile(
-          nickName: _nicknameController.text,
-          phone: _phoneController.text,
-          address1: _addressController.text,
-          address2: _addressDetailController.text,
-          zipCode: zipCode,
-        );
-        CommonToast.show(
-          context: context,
-          message: "수정이 완료 되었습니다.",
-          type: ToastificationType.success,
-        );
-        context.go('/home');
+        if (imageFile != null) {
+          final imageBytes = await imageFile!.readAsBytes();
+          final base64Image = base64Encode(imageBytes);
+          _profileImageUrl = base64Image;
+        }
+
+        if (_nickNameController.text.toString() !=
+            _viewModel.nickname.toString() && _hasValidNickname == false) {
+          CommonToast.show(
+            context: context,
+            message: "닉네임 중복 확인을 해주세요.",
+            type: ToastificationType.error,
+          );
+          return;
+        }
+
+        if ((_nickNameController.text.toString() ==
+            _viewModel.nickname.toString()) || (_hasValidNickname == true &&
+            _nickNameController.text.toString() == collectNickname)) {
+          _viewModel.editProfile(
+            nickName: _nickNameController.text,
+            phone: _phoneController.text,
+            profileImage: _profileImageUrl,
+            address1: _addressController.text,
+            address2: _addressDetailController.text,
+            zipCode: zipCode,
+          );
+          CommonToast.show(
+            context: context,
+            message: "수정이 완료 되었습니다.",
+            type: ToastificationType.success,
+          );
+          context.go('/home');
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.pointAccent,
@@ -293,17 +392,17 @@ class PhoneNumberFormatter extends TextInputFormatter {
     } else if (digits.length <= 7) {
       return '${digits.substring(0, 3)}-${digits.substring(3)}';
     } else if (digits.length <= 11) {
-      return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7)}';
+      return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits
+          .substring(7)}';
     } else {
-      return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7, 11)}';
+      return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits
+          .substring(7, 11)}';
     }
   }
 
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue,
+      TextEditingValue newValue,) {
     String formatted = format(newValue.text);
     return TextEditingValue(
       text: formatted,

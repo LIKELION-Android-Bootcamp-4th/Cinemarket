@@ -88,7 +88,8 @@ class FavoriteViewModel extends ChangeNotifier {
       for (var movie in favoriteMovies) {
         logger.d('favoriteGoods\n'
             'id: ${movie.id}\n'
-            'title: ${movie.title}');
+            'title: ${movie.title}\n'
+        'isFavorite: ${movie.isFavorite}');
       }
 
     } catch (e, stackTrace) {
