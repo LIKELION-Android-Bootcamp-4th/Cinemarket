@@ -81,18 +81,15 @@ class AuthService {
     required String confirmPassword,
   }) async {
     try {
-      print("@@2");
       final formData = {
         'currentPassword': currentPassword,
         'newPassword': newPassword,
         'confirmPassword': confirmPassword,
       };
-      print("@@3");
       final response = await _dio.patch(
         '/api/mypage/change-password',
         data: formData,
       );
-      print("@@4");
       return response;
     } catch (e) {
       rethrow;
