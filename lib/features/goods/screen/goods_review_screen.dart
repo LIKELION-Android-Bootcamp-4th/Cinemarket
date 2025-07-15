@@ -97,7 +97,10 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                       isClicked1 = !isClicked1;
                     });
 
-                    CommonToast.show(context: context, message: '리뷰 좋아요 완료 !');
+                    isClicked1
+                        ? CommonToast.show(context: context, message: '리뷰 좋아요 완료 !')
+                        : CommonToast.show(context: context, message: '리뷰 좋아요 해제 !');
+
                   } on DioException catch(e) {
                     Logger().e('$e');
                     Logger().e('${e.stackTrace}');
@@ -106,6 +109,7 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                   }
                 },
                 isClicked1: isClicked1,
+
                 onClick2: () async {
                   Logger().i('review id : ${review.id}');
                   final response = await ApiClient.dio.post('/api/dislikes/review/${review.id}');
@@ -115,7 +119,9 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                     isClicked2 = !isClicked2;
                   });
 
-                  CommonToast.show(context: context, message: '리뷰 싫어요 완료 !');
+                  isClicked2
+                  ? CommonToast.show(context: context, message: '리뷰 싫어요 완료 !')
+                  : CommonToast.show(context: context, message: '리뷰 싫어요 해제 !');
                 },
                 isClicked2: isClicked2,
               );
