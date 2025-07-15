@@ -2,13 +2,12 @@ import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/model/goods_images.dart';
-import 'package:cinemarket/features/goods/model/review_stats.dart';
 import 'package:cinemarket/features/home/model/tmdb_movie.dart';
 import 'package:cinemarket/features/search/viewmodel/search_view_model.dart';
 import 'package:cinemarket/features/search/widgets/search_app_bar.dart';
+import 'package:cinemarket/features/search/widgets/search_common_gridView.dart';
 import 'package:cinemarket/features/search/widgets/search_empty_result.dart';
 import 'package:cinemarket/features/search/widgets/search_section_title.dart';
-import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -83,7 +82,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       if (!hasSearched || goodsResults.isEmpty)
                         const SearchEmptyResultText()
                       else ...[
-                        CommonGridview<Goods>(
+                        SearchGridview<Goods>(
                           items: goodsResults.map((item) {
                             return Goods(
                               id: item.id,
@@ -99,14 +98,13 @@ class _SearchScreenState extends State<SearchScreen> {
                               createdAt: item.createdAt,
                               images: GoodsImages(
                                 main: item.mainImage,
-                                sub: const [],
+                                sub: [],
                               ),
                               reviewStats: item.reviewStats,
                               isFavorite: item.isFavorite,
                             );
                           }).toList(),
                           itemType: ItemType.goods,
-                          isInScrollView: true,
                         ),
                         const SizedBox(height: 12),
                         Row(
@@ -143,7 +141,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       if (!hasSearched || movieResults.isEmpty)
                         const SearchEmptyResultText()
                       else ...[
-                        CommonGridview<TmdbMovie>(
+                        SearchGridview<TmdbMovie>(
                           items: movieResults.map((movie) {
                             return TmdbMovie(
                               id: movie.id,
@@ -153,11 +151,10 @@ class _SearchScreenState extends State<SearchScreen> {
                               releaseDate: movie.releaseDate,
                               voteAverage: movie.voteAverage,
                               popularity: movie.popularity,
-                              providers: [],
+                              providers: const [],
                             );
                           }).toList(),
                           itemType: ItemType.movie,
-                          isInScrollView: true,
                         ),
                         const SizedBox(height: 12),
                         Row(
