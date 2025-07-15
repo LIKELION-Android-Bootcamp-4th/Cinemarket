@@ -105,4 +105,4 @@ class GoodsDetailScreen extends StatelessWidget {
   }
 }
 
-final List<String> tabTitles = ['상세 설명', '리뷰', '배송 & 환불', '문의'];
+final List<String> tabTitles = ['상세 설명', '리뷰', '배송&환불', '문의'];
