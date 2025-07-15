@@ -259,7 +259,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
             const SizedBox(width: 8),
             ElevatedButton(
               onPressed: () async {
-                print("주소검색");
+
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -311,7 +311,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   Widget _buildChangePasswordButton() {
     return ElevatedButton(
       onPressed: () {
-        print('비밀번호 변경 클릭');
+
         context.push('/mypage/detail', extra: 'edit_password');
       }, style: ElevatedButton.styleFrom(
       backgroundColor: AppColors.textPoint,

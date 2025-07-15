@@ -52,7 +52,6 @@ class _GoodsItemState extends State<GoodsItem> {
 
   @override
   Widget build(BuildContext context) {
-    print('>> showRating: ${widget.showRatingInsteadOfViewCount}, viewCount: ${widget.viewCount}');
     return Container(
       padding: const EdgeInsets.all(4),
       child: Column(
@@ -234,7 +233,6 @@ Future<void> toggleFavorite({
   required void Function(bool) onStateChanged,
   required Future<bool> Function(String) updateFavoriteStatus,
 }) async {
-  // 로그인 요청  // 하지 않는다면 바로 action 종료
   if (!await requireLoginBeforeAction(context)) return;
 
   if (await updateFavoriteStatus(id)) {
@@ -260,10 +258,9 @@ Future<void> toggleFavorite({
 Future<bool> requireLoginBeforeAction(BuildContext context) async {
   final accessToken = await TokenStorage.getAccessToken();
 
-  if (!context.mounted) return false; // 위젯 부착 상태 확인
+  if (!context.mounted) return false;
 
   if (accessToken == null) {
-    // 비회원인 경우
     final shouldNavigate = await showDialog(
       context: context,
       builder:
@@ -291,5 +288,5 @@ Future<bool> requireLoginBeforeAction(BuildContext context) async {
     return false;
   }
 
-  return true; // 로그인된 상태
+  return true;
 }

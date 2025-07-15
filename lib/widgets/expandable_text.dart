@@ -46,7 +46,6 @@ class _ExpandableTextState extends State<ExpandableText> {
               color: AppColors.widgetBackground,
               borderRadius: BorderRadius.circular(4),
             ),
-            // child: SingleChildScrollView(child: widget.textWidget),
             child: SizedBox(width: double.infinity, child: widget.textWidget),
           ),
         ),

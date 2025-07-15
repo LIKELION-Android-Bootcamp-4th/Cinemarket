@@ -26,7 +26,7 @@ class GoodsRecommendedService {
       }
       return null;
     } catch (e) {
-      print('Error fetching contentId: $e');
+
       return null;
     }
   }

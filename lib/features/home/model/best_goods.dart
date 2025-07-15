@@ -26,7 +26,7 @@ class BestGoods {
   });
 
   factory BestGoods.fromJson(Map<String, dynamic> json) {
-    print('Parsing item: $json');
+
     return BestGoods(
       id: json['id'] ?? '',
       name: json['name'] ?? '',

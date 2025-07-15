@@ -36,7 +36,7 @@ class ReviewService {
       }
       return null;
     } catch (e) {
-      print('Error fetching contentId: $e');
+
       return null;
     }
   }
@@ -53,7 +53,7 @@ class ReviewService {
       );
       return response.data['title'] as String?;
     } catch (e) {
-      print('Error fetching movie title from TMDB: $e');
+
       return null;
     }
   }
@@ -63,7 +63,7 @@ class ReviewService {
       final response = await _dio.delete('/api/reviews/$reviewId');
       return response.data['success'] == true;
     } catch (e) {
-      print('Error deleting review: $e');
+
       return false;
     }
   }
@@ -90,7 +90,7 @@ class ReviewService {
 
       return response.data['success'] == true;
     } catch (e) {
-      print('리뷰 수정 실패: $e');
+
       return false;
     }
   }

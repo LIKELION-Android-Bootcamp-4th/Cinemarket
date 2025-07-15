@@ -23,7 +23,7 @@ class CartItemModel {
     final product = json['product'] ?? {};
     final images = product['images'] ?? {};
     final mainImage = images['main'] ?? null;
-    print('[fromJson] thumbnailImage: ${product['thumbnailImage']}');
+
 
     return CartItemModel(
       cartId: json['id'] ?? '',

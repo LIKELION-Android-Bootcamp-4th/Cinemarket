@@ -73,7 +73,7 @@ class SearchViewModel extends ChangeNotifier {
       //TMDB 영화 검색
       _tmdbResults = await _repository.searchMovies(keyword);
     } catch (e) {
-      print('TMDB 검색 실패: $e');
+      
       _tmdbResults = [];
     }
 
@@ -91,21 +91,20 @@ class SearchViewModel extends ChangeNotifier {
           if (goods.isNotEmpty) {
             fromContentId.addAll(goods);
           } else {
-            print('굿즈 없음 (movie.id: ${movie.id})');
+            
           }
         } catch (e) {
-          print('굿즈 검색 실패 (movie.id: ${movie.id}) -> 무시');
           _failedMovieIds.add(movie.id);
         }
       }
     } catch (e) {
-      print('전체 굿즈 처리 실패: $e');
+      
     }
 
     try {
       fromKeyword = await _repository.searchGoodsByKeyword(keyword);
     } catch (e) {
-      print('키워드 검색 실패 : $e');
+      
     }
 
     final allGoods = {

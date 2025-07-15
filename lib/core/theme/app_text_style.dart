@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 
-// 추후 업데이트 예정
 class AppTextStyle {
   static const _fontFamily = 'Pretendard';
 

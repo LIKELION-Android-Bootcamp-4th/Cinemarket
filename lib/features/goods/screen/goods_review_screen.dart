@@ -7,7 +7,6 @@ import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:cinemarket/widgets/review_item.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class GoodsReviewScreen extends StatefulWidget {
@@ -67,10 +66,6 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
             itemBuilder: (context, index) {
               final review = viewModel.reviews[index];
 
-              Logger().i('imageProduct: ${widget.goodsImage}');
-              Logger().i(
-                'imagePhotoFirst: ${review.images.map((item) => item.url).toList().first}',
-              );
 
               return ReviewItem(
                 title: '리뷰 목록',
@@ -82,12 +77,10 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                 initialReviewText: review.comment,
                 likeCount: review.likeCount,
                 onClick1: () async {
-                  Logger().i('review id : ${review.id}');
 
                   try {
                     final response = await ApiClient.dio.post(
                         '/api/reviews/${review.id}/like-toggle');
-                    Logger().i('${response.data['message']}');
 
                     setState(() {
                       isClicked1 = !isClicked1;
@@ -98,8 +91,6 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                         : CommonToast.show(context: context, message: '리뷰 좋아요 해제 !');
 
                   } on DioException catch(e) {
-                    Logger().e('$e');
-                    Logger().e('${e.stackTrace}');
 
                     rethrow;
                   }
@@ -107,9 +98,7 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                 isClicked1: isClicked1,
 
                 onClick2: () async {
-                  Logger().i('review id : ${review.id}');
                   final response = await ApiClient.dio.post('/api/dislikes/review/${review.id}');
-                  Logger().i('${response.data['message']}');
 
                   setState(() {
                     isClicked2 = !isClicked2;

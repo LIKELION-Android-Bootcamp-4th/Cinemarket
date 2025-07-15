@@ -33,7 +33,7 @@ class CartViewModel extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print('장바구니 개수 조회 실패: $e');
+
     }
   }
 
@@ -60,7 +60,7 @@ class CartViewModel extends ChangeNotifier {
 
       _items = fetchedItems.map((e) {
         final safeImage = (e.image != null && e.image!.trim().isNotEmpty) ? e.image : null;
-        print('[ViewModel] Safe Image: $safeImage');
+
 
         final cartItem = CartItem(
           cartId: e.cartId,
@@ -72,12 +72,12 @@ class CartViewModel extends ChangeNotifier {
           imageUrl: safeImage,
           isSelected: false,
         );
-        print('[CartItem 생성됨] name: ${cartItem.name}, price: ${cartItem.price}, quantity: ${cartItem.quantity}');
+
         return cartItem;
       }).toList();
     } catch (e) {
       _items = [];
-      print('장바구니 로딩 에러: $e');
+
     }
 
     _isLoading = false;
@@ -102,7 +102,7 @@ class CartViewModel extends ChangeNotifier {
       await fetchCart();// 추가 후 장바구니 새로고침
       await fetchCartCount();// 추가된 수량까지 반영해서 count 갱신
     } catch (e) {
-      print('상품 추가 실패: $e');
+
     }
   }
 
@@ -112,7 +112,7 @@ class CartViewModel extends ChangeNotifier {
       await fetchCart(); // 삭제 후 장바구니 갱신
       await fetchCartCount(); //count 갱신
     } catch (e) {
-      print('상품 삭제 실패: $e');
+
     }
   }
 

@@ -49,12 +49,12 @@ class MyPageViewModel extends ChangeNotifier {
       _hasToken = accessToken != null && accessToken.isNotEmpty;
 
       if (_hasToken) {
-        print('불러온 액세스 토큰: $accessToken');
+
         await _fetchProfile(accessToken!);
       }
     } catch (e) {
       _error = '토큰 확인 중 오류가 발생했습니다.';
-      print('토큰 확인 실패: $e');
+
     } finally {
       notifyListeners();
     }
@@ -82,7 +82,7 @@ class MyPageViewModel extends ChangeNotifier {
       return response;
     } catch (e) {
       _error = "현재 비밀번호가 일치하지 않습니다.";
-      print(e);
+
     }
   }
 
@@ -109,7 +109,7 @@ class MyPageViewModel extends ChangeNotifier {
       _zipCode = addressMap?['zipCode'] ?? '';
     } catch (e) {
       _error = '프로필 조회에 실패했습니다.';
-      print('프로필 조회 실패: $e');
+
     }
   }
 
@@ -129,7 +129,7 @@ class MyPageViewModel extends ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = '로그아웃 중 오류가 발생했습니다.';
-      print('로그아웃 실패: $e');
+
     } finally {
       notifyListeners();
     }

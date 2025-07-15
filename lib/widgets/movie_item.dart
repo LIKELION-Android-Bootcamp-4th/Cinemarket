@@ -125,7 +125,6 @@ class _MovieItemState extends State<MovieItem> {
             child: widget.providers.isNotEmpty
               ? Row(
                   children: widget.providers.map((provider) {
-                    //TMDB watcha 로고 오류 -> 네트워크 이미지로 대체
                     final isWatcha = provider['providerName']?.toLowerCase() == 'watcha';
                     final logoUrl = isWatcha
                         ? 'https://play-lh.googleusercontent.com/vAkKvTtE8kdb0MWWxOVaqYVf0_suB-WMnfCR1MslBsGjhI49dAfF1IxcnhtpL3PnjVY'

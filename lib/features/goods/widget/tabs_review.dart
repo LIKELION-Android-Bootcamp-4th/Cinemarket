@@ -3,7 +3,6 @@ import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_review_viewmodel.dart';
 import 'package:cinemarket/widgets/review_item.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 const previewReviewCount = 3;
@@ -25,7 +24,6 @@ Widget getTabsReviewWidget({
       }
 
       if (viewModel.errorMessage != null) {
-        Logger().i('에러 분기 진입');
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -39,7 +37,6 @@ Widget getTabsReviewWidget({
       final reviews = viewModel.reviews;
       final previewReviews = reviews.take(previewReviewCount).toList();
 
-      Logger().i('정상 분기 진입');
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

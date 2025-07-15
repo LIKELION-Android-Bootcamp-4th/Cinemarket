@@ -2,7 +2,6 @@ import 'package:cinemarket/core/network/api_client.dart';
 import 'package:cinemarket/features/goods/model/goods_all_response.dart';
 import 'package:cinemarket/features/goods/model/goods_detail_response.dart';
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 
 class GoodsService {
   final Dio _dio = ApiClient.dio;
@@ -55,8 +54,6 @@ class GoodsService {
     try {
       return await _dio.get('/api/products/$goodsId/reviews');
     } on DioException catch (e) {
-      Logger().e(e.message);
-      Logger().e(e.stackTrace);
 
       rethrow;
     }
@@ -66,8 +63,6 @@ class GoodsService {
     try {
       return await _dio.get('/api/content-product/contents/$goodsId');
     } on DioException catch (e) {
-      Logger().e(e.message);
-      Logger().e(e.stackTrace);
 
       rethrow;
     }

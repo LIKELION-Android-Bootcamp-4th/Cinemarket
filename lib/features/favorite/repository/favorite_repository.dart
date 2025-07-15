@@ -5,7 +5,6 @@ import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/services/goods_service.dart';
 import 'package:cinemarket/features/home/model/tmdb_movie.dart';
 import 'package:cinemarket/features/movies/service/movies_service.dart';
-import 'package:logger/logger.dart';
 
 class FavoriteRepository {
   final FavoriteService _favoriteService;
@@ -52,7 +51,6 @@ class FavoriteRepository {
 
   Future<bool> toggleMovieFavorite({required String contentId}) async {
     final response = await _moviesService.fetchMovieProducts(contentId);
-    Logger().d('${response.data['data']['id']}');
     final contentProductId = response.data['data']['id'];
 
     return _favoriteService.toggleMovieFavorite(

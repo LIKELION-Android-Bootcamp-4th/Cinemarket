@@ -12,10 +12,10 @@ class FavoriteItem {
   }
 }
 
-class FavoriteGoods {  // todo: commonGridview 사용을 위해 결국 Goods 타입 그대로 써야함
+class FavoriteGoods {
   final String id;
   final String name;
-  final int price;  // todo: 기존 이미지 객체 변수 + createdAt 변수 추가
+  final int price;
 
   FavoriteGoods({
     required this.id,

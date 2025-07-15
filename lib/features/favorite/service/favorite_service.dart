@@ -1,12 +1,11 @@
 import 'package:cinemarket/core/network/api_client.dart';
 import 'package:cinemarket/features/favorite/model/favorite_item.dart';
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 
 class FavoriteService {
   final Dio _dio = ApiClient.dio;
 
-  Future<List<FavoriteItem>> getAllFavoriteItems({  // todo: 반환이 결국 List<Goods> 꼴로 가야 CommonGridView에서 사용 가능 !!!
+  Future<List<FavoriteItem>> getAllFavoriteItems({
     int page = 1,
     int limit = 20,
     String sort = 'createdAt',
@@ -25,7 +24,6 @@ class FavoriteService {
 
       final items = response.data['data']['items'] as List;  // response.data에서 success, message를 제외하고 items만 가져오기
 
-      Logger().i('items : $items');
 
       return items.map((e) => FavoriteItem.fromJson(e)).toList();
 
@@ -44,12 +42,9 @@ class FavoriteService {
           '/api/products/$goodsId/toggle-favorites'
       );
 
-      Logger().i('message: ${response.data['message']}');
       return response.data['success'] == true;  // bool? 고려
 
     } on DioException catch (e) {
-      final message = e.response?.data['message'] ?? e.message;
-      Logger().i('굿즈 찜 실패: $message');
       return false;
     }
   }
@@ -62,12 +57,9 @@ class FavoriteService {
         '/api/content-product/$contentProductId/like-toggle',
       );
 
-      Logger().i('message: ${response.data['message']}');
       return response.data['success'] == true;
 
     } on DioException catch (e) {
-      final message = e.response?.data['message'] ?? e.message;
-      Logger().i('😢😢😢 영화 찜 실패: $message');
 
       return false;
     }

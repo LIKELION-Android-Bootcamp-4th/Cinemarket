@@ -1,6 +1,5 @@
 import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:dio/dio.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 class ApiClient {
   static final Dio dio = Dio(
     BaseOptions(
@@ -22,14 +21,5 @@ class ApiClient {
         return handler.next(options);
       },
     ),
-    // PrettyDioLogger(
-    //   requestHeader: true,
-    //   requestBody: true,
-    //   responseBody: true,
-    //   responseHeader: false,
-    //   error: true,
-    //   compact: true,
-    //   maxWidth: 120,
-    // ),
   ]);
 }

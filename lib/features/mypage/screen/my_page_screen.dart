@@ -158,7 +158,6 @@ class _MyPageScreenState extends State<MyPageScreen> {
           title: '회원 정보 수정',
           textStyle: AppTextStyle.body,
           onTap: () {
-            print('회원 정보 수정 클릭');
             context.push('/mypage/detail', extra: 'edit_profile');
           },
         ),
@@ -166,7 +165,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
           title: '배송 조회',
           textStyle: AppTextStyle.body,
           onTap: () {
-            print('배송 조회 클릭');
+            
             context.push('/mypage/detail', extra: 'order_tracking');
           },
         ),
@@ -175,7 +174,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
           title: '주문 내역',
           textStyle: AppTextStyle.body,
           onTap: () {
-            print('주문 내역 클릭');
+            
             context.push('/mypage/detail', extra: 'order_history');
           },
         ),
@@ -183,7 +182,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
           title: '리뷰 목록',
           textStyle: AppTextStyle.body,
           onTap: () {
-            print('나의 리뷰 목록 클릭');
+            
             context.push('/mypage/detail', extra: 'my_review');
           },
         ),
@@ -268,7 +267,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
           title: '로그인하기',
           textStyle: AppTextStyle.headline,
           onTap: () {
-            print('로그인하기 클릭');
+            
             context.push(
               '/login',
               extra: () {

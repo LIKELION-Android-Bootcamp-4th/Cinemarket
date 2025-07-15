@@ -58,14 +58,14 @@ class CommonToast {
   static Color _iconColorFromType(ToastificationType type) {
     switch (type) {
       case ToastificationType.success:
-        return const Color(0xFF4CAF50); // 초록
+        return const Color(0xFF4CAF50);
       case ToastificationType.error:
-        return const Color(0xFFE57373); // 빨강
+        return const Color(0xFFE57373);
       case ToastificationType.warning:
-        return const Color(0xFFFFB74D); // 주황
+        return const Color(0xFFFFB74D);
       case ToastificationType.info:
       default:
-        return const Color(0xFF64B5F6); // 파랑
+        return const Color(0xFF64B5F6);
     }
   }
 

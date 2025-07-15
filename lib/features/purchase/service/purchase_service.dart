@@ -30,9 +30,9 @@ class PurchaseService {
         throw Exception('주문 생성 실패: ${response.statusCode}');
       }
 
-      print('[주문 생성 성공] ${response.data}');
+
     } catch (e) {
-      print('[주문 생성 실패] $e');
+
       rethrow;
     }
   }

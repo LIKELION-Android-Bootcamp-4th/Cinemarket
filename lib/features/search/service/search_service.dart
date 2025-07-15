@@ -25,7 +25,7 @@ class SearchService {
       final List results = response.data['results'];
       return results.map((e) => SearchTmdbModel.fromJson(e)).toList();
     } catch (e) {
-      print('❌ TMDB 검색 오류: $e');
+      
       return [];
     }
   }
@@ -43,9 +43,9 @@ class SearchService {
       return items.map((e) => SearchItem.fromJson(e)).toList();
     } catch (e) {
       if (e is DioError) {
-        print('❌ 키워드 굿즈 검색 실패: ${e.response?.statusCode}');
+        
       } else {
-        print('❌ 알 수 없는 키워드 검색 오류: $e');
+        
       }
       return [];
     }
@@ -59,9 +59,8 @@ class SearchService {
       return items.map((e) => SearchItem.fromJson(e)).toList();
     } catch (e) {
       if (e is DioError) {
-        print('❌ 굿즈 검색 실패 (ID: $contentId) → ${e.response?.statusCode}');
       } else {
-        print('❌ 알 수 없는 굿즈 검색 오류: $e');
+        
       }
       return [];
     }

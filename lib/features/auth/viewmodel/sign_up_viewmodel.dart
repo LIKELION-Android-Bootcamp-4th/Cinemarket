@@ -40,7 +40,7 @@ class SignUpViewModel extends ChangeNotifier {
       }
     } catch (e) {
       _error = '이메일 중복확인 중 오류가 발생했습니다.';
-      print('이메일 중복확인 실패: $e');
+
     }
   }
 
@@ -51,7 +51,7 @@ class SignUpViewModel extends ChangeNotifier {
       if (nickName != null && nickName.isNotEmpty) {
         final response = await _authRepository.checkValidNickName(nickName);
         final data = response.data['data'];
-        print(data.toString());
+
         if (data['available'] == true) {
           _nickName = null;
           _error = null;
@@ -66,7 +66,7 @@ class SignUpViewModel extends ChangeNotifier {
       if (e is DioError) {
         _error = e.response?.data['data']?['message'];
       }
-      print('닉네임 중복확인 실패: $e');
+
     }
   }
 
@@ -83,7 +83,7 @@ class SignUpViewModel extends ChangeNotifier {
       }
     } catch (e) {
       _error = "실패";
-      print('회원가입 실패: $e');
+
     }
   }
 
@@ -100,7 +100,7 @@ class SignUpViewModel extends ChangeNotifier {
       }
     } catch (e) {
       _error = '이메일 인증 중 오류가 발생했습니다.';
-      print('이메일 인증 실패: $e');
+
     }
   }
 }

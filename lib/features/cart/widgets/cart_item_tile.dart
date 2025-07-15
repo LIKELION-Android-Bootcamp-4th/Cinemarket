@@ -23,7 +23,7 @@ class CartItemTile extends StatelessWidget {
     final String formattedPrice = '${totalPrice.toString().replaceAllMapped(
       RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
           (m) => '${m[1]},')}원';
-    print('[CartItemTile] imageUrl: "${item.imageUrl}"');
+
     final bool shouldBreakLine = totalPrice >= 100000;
 
     return Card(

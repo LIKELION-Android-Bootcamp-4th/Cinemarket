@@ -87,7 +87,6 @@ class _ReviewItemState extends State<ReviewItem> {
       children: [
         GestureDetector(
           onTap: () => _showImageDialog(context, widget.productImage!),
-          // 상품 이미지
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
             child:
@@ -281,7 +280,6 @@ class _ReviewItemState extends State<ReviewItem> {
     );
   }
 
-  /// 이미지를 크게 보여주는 다이얼로그
   void _showImageDialog(BuildContext context, String imageUrl) {
     showDialog(
       context: context,

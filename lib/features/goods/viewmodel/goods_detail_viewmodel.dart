@@ -16,17 +16,10 @@ class GoodsDetailViewmodel extends ChangeNotifier {
       _goods = await _goodsRepository.getDetailGoods(goodsId: goodsId);
       notifyListeners();
 
-      // 로그 출력
-      print('😍😍😍');
-      print(goods);// 👍👍👍 toString()이 오버라이드되어 있어 보기 좋게 출력됨
     } catch (e, stackTrace) {
 
-      print("😂😂😂 err");
-      print(e);
-      print('$stackTrace');
-      // 에러 처리
     } finally {
-      print("😎😎😎 통과");
+
     }
 
     return _goods!;

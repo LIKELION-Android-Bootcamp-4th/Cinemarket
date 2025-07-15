@@ -29,18 +29,17 @@ class GoodsAllViewModel extends ChangeNotifier {
       _isLoaded = true;
 
       // 로그 출력
-      print("😍😍😍");
+      
       goodsList.forEach((goods) {
-        print(goods); // 👍👍👍 toString()이 오버라이드되어 있어 보기 좋게 출력됨
       });
     } catch (e, stackTrace) {
-      print(e);
-      print('$stackTrace');
-      print("😂😂😂 err");
+      
+      
+      
       // 에러 처리
     } finally {
       // notifyListeners();
-      print("😎😎😎 통과");
+      
     }
   }
 

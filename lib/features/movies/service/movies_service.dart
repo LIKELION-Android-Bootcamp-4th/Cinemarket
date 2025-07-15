@@ -5,7 +5,6 @@ import 'package:cinemarket/features/movies/model/cast_member.dart';
 import 'package:cinemarket/features/movies/model/tmdb_movie_detail.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logger/logger.dart';
 
 class MoviesService {
   final Dio _tmdbDio = TmdbClient.dio;
@@ -115,13 +114,10 @@ class MoviesService {
   // 영화 관련 굿즈 상품 조회
   Future<Response> fetchMovieProducts(String contentId) async {
     try {
-      Logger().i('contentId : $contentId');
       final response = await _dio.get('/api/content-product/products/$contentId');
-      print('response data : ${response.data}');
+
       return response;
     } catch (e, stackTrace) {
-      Logger().e(e);
-      Logger().e(stackTrace);
       throw Exception('영화 연관 굿즈 불러오기 실패: $e');
     }
   }

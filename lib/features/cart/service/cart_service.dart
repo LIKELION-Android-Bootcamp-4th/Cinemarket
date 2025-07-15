@@ -15,7 +15,7 @@ class CartService {
             ? data['data']['items'] ?? []
             : data;
 
-        print('[장바구니 응답 원본]: $items');
+
 
         final parsedItems = items
             .map((e) => CartItemModel.fromJson(e))
@@ -69,9 +69,9 @@ class CartService {
         '/api/cart',
         data: {'cartIds': cartIds},
       );
-      print('[삭제 성공] $response');
+
     } catch (e) {
-      print('[삭제 실패] $e');
+
       rethrow;
     }
   }
@@ -106,9 +106,9 @@ class CartService {
         throw Exception('수량 수정 실패: ${response.statusCode}');
       }
 
-      print('[수량 수정 성공] cartId: $cartId, quantity: $quantity');
+
     } catch (e) {
-      print('[수량 수정 실패] $e');
+
       rethrow;
     }
   }

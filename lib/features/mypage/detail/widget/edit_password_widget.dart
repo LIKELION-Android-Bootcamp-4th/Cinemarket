@@ -84,7 +84,7 @@ class _EditPasswordWidgetState extends State<EditPasswordWidget> {
             context.go('/home');
           }
         } catch (e) {
-          print(e);
+
         }
       },
       style: ElevatedButton.styleFrom(
