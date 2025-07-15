@@ -1,5 +1,5 @@
+import 'package:cinemarket/widgets/goods_item.dart' show toggleFavorite, updateGoodsFavoriteStatus;
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryImageWidget extends StatefulWidget {
@@ -43,7 +43,6 @@ class _PrimaryImageWidgetState extends State<PrimaryImageWidget> {
             child: Image.network(widget.imageUrl, fit: BoxFit.cover),
           ),
         ),
-
         IconButton(
           icon: Icon(
             isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -57,6 +56,8 @@ class _PrimaryImageWidgetState extends State<PrimaryImageWidget> {
               onStateChanged: (newState) {
                 setState(() => isFavorite = newState);
               },
+              updateFavoriteStatus:
+                  (id) => updateGoodsFavoriteStatus(goodsId: id),
             );
           },
         ),
