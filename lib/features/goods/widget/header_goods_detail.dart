@@ -2,6 +2,7 @@ import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/widget/primary_image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HeaderGoodsDetail extends StatelessWidget {
   final Goods item;
@@ -81,7 +82,7 @@ class HeaderGoodsDetail extends StatelessWidget {
 
                 const Spacer(),
 
-                Text('₩ ${item.price} 원', style: AppTextStyle.body),
+                Text('${NumberFormat('#,###').format(item.price)}원', style: AppTextStyle.body),
               ],
             ),
           ],

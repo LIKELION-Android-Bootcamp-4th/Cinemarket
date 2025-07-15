@@ -5,6 +5,7 @@ import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
 
 class GoodsItem extends StatefulWidget {
@@ -12,7 +13,7 @@ class GoodsItem extends StatefulWidget {
   final String imageUrl;
   final String goodsName;
   final String movieTitle;
-  final String price;
+  final int price;
   final int stock;
   final double rating;
   final int reviewCount;
@@ -140,7 +141,7 @@ class _GoodsItemState extends State<GoodsItem> {
                 ),
                 Spacer(),
                 Text(
-                  widget.price,
+                  '${NumberFormat('#,###').format(widget.price)}원',
                   style: AppTextStyle.body,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
