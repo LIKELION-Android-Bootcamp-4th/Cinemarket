@@ -71,12 +71,12 @@ class OrderDetailWidget extends StatelessWidget {
           }
 
           if (vm.errorMessage != null) {
-            return Center(child: Text('에러: ${vm.errorMessage}'));
+            return Center(child: Text('주문 내역을 받아오지 못했습니다. 다시 시도해주세요.',style: AppTextStyle.bodyLarge));
           }
 
           final order = vm.orderDetail;
           if (order == null) {
-            return const Center(child: Text('주문 정보가 없습니다.'));
+            return const Center(child: Text('주문 정보가 없습니다.',style: AppTextStyle.bodyLarge));
           }
 
           return Column(

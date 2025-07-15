@@ -1,3 +1,4 @@
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/mypage/viewmodel/review_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:cinemarket/widgets/review_item.dart';
@@ -25,9 +26,10 @@ class _MyReviewWidgetState extends State<MyReviewWidget> {
       child: Consumer<ReviewViewModel>(
         builder: (context, vm, child) {
           if (vm.isLoading) return Center(child: CircularProgressIndicator());
-          if (vm.errorMessage != null)
-            return Center(child: Text(vm.errorMessage!));
-          if (vm.reviews.isEmpty) return Center(child: Text('리뷰가 없습니다.'));
+          if (vm.errorMessage != null) {
+            return const Center(child: Text('리뷰를 불러오지 못했습니다. 다시 시도해주세요.',style: AppTextStyle.bodyLarge));
+          }
+          if (vm.reviews.isEmpty) return const Center(child: Text('리뷰가 없습니다.',style: AppTextStyle.bodyLarge));
 
           return ListView.builder(
             itemCount: vm.reviews.length,
@@ -42,7 +44,6 @@ class _MyReviewWidgetState extends State<MyReviewWidget> {
                 initialReviewText: review.comment,
                 photoUrls: review.images.map((e) => e.url).toList(),
                 isEditing: false,
-                //리뷰 수정 페이지로 이동..
                 onClick1: () async {
                   final result = await context.push<bool>(
                     '/mypage/detail',
@@ -55,7 +56,6 @@ class _MyReviewWidgetState extends State<MyReviewWidget> {
                     vm.loadReviews();
                   }
                 },
-                //리뷰 삭제 기능.
                 onClick2: () async {
                   final confirm = await showDialog<bool>(
                     context: context,

@@ -31,7 +31,11 @@ class _OrderTrackingWidgetState extends State<OrderTrackingWidget> {
             }
 
             if (vm.errorMessage != null) {
-              return Center(child: Text(vm.errorMessage!, style: AppTextStyle.body));
+              return Center(child: Text('배송 조회를 불러오지 못했습니다. 다시 시도해주세요.', style: AppTextStyle.body));
+            }
+
+            if(vm.trackingOrders.isEmpty) {
+              return const Text('주문 내역이 없습니다.',style: AppTextStyle.bodyLarge);
             }
 
             final orders = vm.trackingOrders;
