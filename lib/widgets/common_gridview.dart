@@ -1,4 +1,5 @@
 import 'package:cinemarket/core/constants/enums/item_type.dart';
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/goods/model/goods.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_all_viewmodel.dart';
 import 'package:cinemarket/features/home/model/tmdb_movie.dart';
@@ -13,6 +14,8 @@ class CommonGridview<T> extends StatelessWidget {
   final bool isFavoriteScreen;
   final bool isInScrollView;
   final ScrollController? scrollController;
+  final bool? showLoadingIndicator;
+
 
   const CommonGridview({
     super.key,
@@ -21,6 +24,7 @@ class CommonGridview<T> extends StatelessWidget {
     this.isFavoriteScreen = false,
     this.isInScrollView = false,
     this.scrollController,
+    this.showLoadingIndicator = false,
   });
 
   @override
@@ -40,68 +44,79 @@ class CommonGridview<T> extends StatelessWidget {
       ItemType.movie => 16,
     };
 
-    return GridView.builder(
-      controller: scrollController,
-      shrinkWrap: isInScrollView,
-      physics: isInScrollView ? const NeverScrollableScrollPhysics() : null,
-      itemCount: items.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: aspectRatio,
-        crossAxisSpacing: crossAxisSpacing,
-        mainAxisSpacing: mainAxisSpacing,
-      ),
-      itemBuilder: (context, index) {
-        final item = items[index];
+    return Column(
+      children: [
+        Expanded(
+          child: GridView.builder(
+            controller: scrollController,
+            shrinkWrap: isInScrollView,
+            physics: isInScrollView ? const NeverScrollableScrollPhysics() : null,
+            itemCount: items.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: aspectRatio,
+              crossAxisSpacing: crossAxisSpacing,
+              mainAxisSpacing: mainAxisSpacing,
+            ),
+            itemBuilder: (context, index) {
+              final item = items[index];
 
-        if (item is Goods) {
-          return GestureDetector(
-            onTap: () {
-              context.push('/goods/${item.id}');
-            },
-            child: FutureBuilder(
-              future: GoodsAllViewModel().getMovieTitleFromGoodsId(goodsId: item.id),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+              if (item is Goods) {
+                return GestureDetector(
+                  onTap: () {
+                    context.push('/goods/${item.id}');
+                  },
+                  child: FutureBuilder(
+                    future: GoodsAllViewModel().getMovieTitleFromGoodsId(goodsId: item.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                final movieName = snapshot.data ?? '';
+                      final movieName = snapshot.data ?? '';
 
-                return GoodsItem(
-                  goodsId: item.id,
-                  imageUrl: item.images.main,
-                  goodsName: item.name,
-                  movieTitle: movieName,
-                  price: item.price,
-                  stock: item.stock,
-                  rating: item.reviewStats?.averageRating ?? 0.0,
-                  reviewCount: item.reviewCount,
-                  isFavorite: item.isFavorite,
+                      return GoodsItem(
+                        goodsId: item.id,
+                        imageUrl: item.images.main,
+                        goodsName: item.name,
+                        movieTitle: movieName,
+                        price: item.price,
+                        stock: item.stock,
+                        rating: item.reviewStats?.averageRating ?? 0.0,
+                        reviewCount: item.reviewCount,
+                        isFavorite: item.isFavorite,
+                      );
+                    },
+                  ),
                 );
-              },
-            ),
-          );
-        }
+              }
 
-        if (item is TmdbMovie) {
-          return GestureDetector(
-            onTap: () {
-              context.push('/movies/${item.id}');
+              if (item is TmdbMovie) {
+                return GestureDetector(
+                  onTap: () {
+                    context.push('/movies/${item.id}');
+                  },
+                  child: MovieItem(
+                    imageUrl: 'https://image.tmdb.org/t/p/w500${item.posterPath}',
+                    movieName: item.title,
+                    cumulativeSales: item.cumulativeSales,
+                    providers: item.providers,
+                    isFavorite: item.isFavorite,
+                    isFavoriteScreen: isFavoriteScreen,
+                    movieId: item.id,
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
             },
-            child: MovieItem(
-              imageUrl: 'https://image.tmdb.org/t/p/w500${item.posterPath}',
-              movieName: item.title,
-              cumulativeSales: item.cumulativeSales,
-              providers: item.providers,
-              isFavorite: item.isFavorite,
-              isFavoriteScreen: isFavoriteScreen,
-              movieId: item.id,
-            ),
-          );
-        }
-        return const SizedBox.shrink(); // 기본값
-      },
+          ),
+        ),
+        if (showLoadingIndicator == true)
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Center(child: CircularProgressIndicator()),
+          )
+      ],
     );
   }
 }

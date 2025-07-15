@@ -19,6 +19,8 @@ class GoodsItem extends StatefulWidget {
   final double rating;
   final int reviewCount;
   final bool isFavorite;
+  final int? viewCount;
+  final bool showRatingInsteadOfViewCount;
 
   const GoodsItem({
     super.key,
@@ -31,6 +33,8 @@ class GoodsItem extends StatefulWidget {
     required this.rating,
     required this.reviewCount,
     required this.isFavorite,
+    this.viewCount,
+    this.showRatingInsteadOfViewCount = true
   });
 
   @override
@@ -48,6 +52,7 @@ class _GoodsItemState extends State<GoodsItem> {
 
   @override
   Widget build(BuildContext context) {
+    print('>> showRating: ${widget.showRatingInsteadOfViewCount}, viewCount: ${widget.viewCount}');
     return Container(
       padding: const EdgeInsets.all(4),
       child: Column(
@@ -109,13 +114,6 @@ class _GoodsItemState extends State<GoodsItem> {
                             child: AnimatedTextKit(
                               repeatForever: true,
                               animatedTexts: [
-                                // TyperAnimatedText(
-                                //   '품절 임박',
-                                //   textStyle: AppTextStyle.bodySmall.copyWith(
-                                //     fontWeight: FontWeight.bold,
-                                //   ),
-                                //   speed: Duration(milliseconds: 100),
-                                // ),
                               ColorizeAnimatedText(
                                 '품절 임박',
                                 textStyle: const TextStyle(
@@ -188,11 +186,27 @@ class _GoodsItemState extends State<GoodsItem> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Row(
               children: [
-                Icon(Icons.star_rate, size: 15, color: Colors.yellow),
-                Text(
-                  '${widget.rating}(${widget.reviewCount})',
-                  style: AppTextStyle.bodySmall,
-                ),
+                if (widget.showRatingInsteadOfViewCount)
+                  Row(
+                    children: [
+                      const Icon(Icons.star_rate, size: 15, color: Colors.yellow),
+                      Text(
+                        '${widget.rating.toStringAsFixed(1)} (${widget.reviewCount})',
+                        style: AppTextStyle.bodySmall,
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      const Icon(Icons.remove_red_eye, size: 15, color: AppColors.textPrimary),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${widget.viewCount}',
+                        style: AppTextStyle.bodySmall,
+                      ),
+                    ],
+                  ),
                 Spacer(),
                 Text(
                   '${NumberFormat('#,###').format(widget.price)}원',

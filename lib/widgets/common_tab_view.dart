@@ -28,7 +28,7 @@ class CommonTabView extends StatelessWidget {
         child: Column(
           children: [
             Material(
-              color: AppColors.widgetBackground,
+              color: AppColors.background,
               child: TabBar(
                 tabs: tabTitles
                     .map((title) => Tab(
@@ -42,9 +42,9 @@ class CommonTabView extends StatelessWidget {
                     )
                 ))
                     .toList(),
-                labelColor: AppColors.textPoint,
+                labelColor: AppColors.pointAccent,
                 unselectedLabelColor: AppColors.textPrimary,
-                indicatorColor: AppColors.innerWidget,
+                indicatorColor: AppColors.pointAccent,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicatorWeight: 3.5,
               ),

@@ -33,11 +33,11 @@ class OrderHistoryWidget extends StatelessWidget {
           }
 
           if (vm.errorMessage != null) {
-            return Center(child: Text('에러: ${vm.errorMessage}'));
+            return const Center(child: Text('주문 내역을 받아오지 못했습니다.',style: AppTextStyle.bodyLarge));
           }
 
           if (vm.orders.isEmpty) {
-            return const Center(child: Text('주문 내역이 없습니다.'));
+            return const Center(child: Text('주문 내역이 없습니다.',style: AppTextStyle.bodyLarge));
           }
 
           return ListView.separated(

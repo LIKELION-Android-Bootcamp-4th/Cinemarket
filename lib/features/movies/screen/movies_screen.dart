@@ -54,11 +54,11 @@ class MoviesScreenState extends State<MoviesScreen> {
           }
 
           if (vm.errorMessage != null) {
-            return Center(child: Text('에러 발생: ${vm.errorMessage}'));
+            return const Center(child: Text('영화 데이터를 불러오지 못했습니다. 다시 시도해주세요.',style: AppTextStyle.bodyLarge));
           }
 
           if (vm.movies.isEmpty) {
-            return const Center(child: Text('영화 데이터가 없습니다.'));
+            return const Center(child: Text('영화 데이터가 없습니다.',style: AppTextStyle.bodyLarge,));
           }
 
           final movies = vm.movies;
@@ -82,19 +82,9 @@ class MoviesScreenState extends State<MoviesScreen> {
                     itemType: ItemType.movie,
                     items: movies,
                     scrollController: _scrollController,
+                    showLoadingIndicator: vm.isLoading && vm.hasMore,
                   ),
                 ),
-                if (vm.isLoading && vm.hasMore)
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                // 더 이상 불러올 데이터가 없을 때 메시지 표시
-                if (!vm.hasMore && vm.movies.isNotEmpty)
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(child: Text('더 이상 불러올 영화가 없습니다.',style: AppTextStyle.body,)),
-                  ),
               ],
             ),
           );

@@ -22,7 +22,7 @@ class RecommendGoodsWidget extends StatelessWidget {
         if (vm.errorMessage != null) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(vm.errorMessage!, style: AppTextStyle.body),
+            child: Text('상품 정보를 불러오는데 실패했습니다.', style: AppTextStyle.body),
           );
         }
         if (vm.recommendedGoods.isEmpty) {
@@ -52,14 +52,14 @@ class RecommendGoodsWidget extends StatelessWidget {
                           goodsId: item.id,
                           imageUrl: item.images.main,
                           goodsName: item.name,
-                          movieTitle: '없음',
+                          movieTitle: '',
                           price: item.price,
                           stock: item.stock,
-                          // rating: item.reviewStats.averageRating,
+                          viewCount: item.viewCount,
+                          rating: item.reviewStats?.averageRating ?? 0,
                           reviewCount: item.reviewCount,
-                          rating: 0.0,
-                          // reviewCount:10,
                           isFavorite: item.isFavorite,
+                          showRatingInsteadOfViewCount: false,
                         ),
                       ),
                     );

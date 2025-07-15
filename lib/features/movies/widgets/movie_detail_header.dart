@@ -28,9 +28,7 @@ class MovieDetailHeader extends StatelessWidget {
     final thumbnailHeight = posterHeight / 1.5;
     final thumbnailWidth = thumbnailHeight * 2 / 3;
 
-    // 제목/평점/OTT 가로 영역 크기 (화면 너비에서 썸네일 너비 빼고 나머지)
     final infoWidth = screenWidth - 16 * 2 - thumbnailWidth - 16;
-    // 좌우 Padding 16씩 + 썸네일 오른쪽 여백 16
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,6 +45,10 @@ class MovieDetailHeader extends StatelessWidget {
                     child: Image.network(
                       posterUrl,
                       fit: BoxFit.cover,
+                      errorBuilder: (context,error, stackTrace) => Image.asset(
+                        'assets/images/default_poster.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Positioned(
@@ -72,25 +74,29 @@ class MovieDetailHeader extends StatelessWidget {
               ),
             ),
 
-            // 썸네일 + 텍스트 정보를 포스터 아래에 겹치도록 배치
             Positioned(
               left: 16,
               bottom: -thumbnailHeight / 2,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  // 썸네일
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: SizedBox(
                       width: thumbnailWidth,
                       height: thumbnailHeight,
-                      child: Image.network(thumbnailUrl, fit: BoxFit.cover),
+                      child: Image.network(
+                        thumbnailUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context,error, stackTrace) => Image.asset(
+                          'assets/images/default_poster.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
 
-                  // 제목, 평점, OTT 제공 로고 (가로 공간 제한)
                   SizedBox(
                     width: infoWidth,
                     child: Column(
