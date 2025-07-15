@@ -1,6 +1,7 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
+import 'package:cinemarket/features/main/screen/main_screen.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,7 +82,9 @@ class _EditPasswordWidgetState extends State<EditPasswordWidget> {
               type: ToastificationType.success,
             );
             await _myPageViewModel.logout();
-            context.go('/home');
+            MainScreenState.of(context)?.onTabSelected(2);
+            context.pop();
+
           }
         } catch (e) {
           print(e);
