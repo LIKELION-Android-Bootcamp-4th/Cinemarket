@@ -22,14 +22,6 @@ class MainScreenState extends State<MainScreen> {
 
   int _currentIndex = 2; // 홈
 
-  final List<Widget> _screens = const [
-    FavoriteScreen(),
-    GoodsAllScreen(),
-    HomeScreen(),
-    MoviesScreen(),
-    MyPageScreen(),
-  ];
-
   void onTabSelected(int index) {
     if (_currentIndex != index) {
       setState(() {
@@ -42,6 +34,14 @@ class MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final titles = ['찜 목록', '굿즈', '홈', '영화', '마이페이지'];
 
+    final screens = [
+      TickerMode(enabled: _currentIndex == 0, child: const FavoriteScreen()),
+      TickerMode(enabled: _currentIndex == 1, child: const GoodsAllScreen()),
+      TickerMode(enabled: _currentIndex == 2, child: const HomeScreen()),
+      TickerMode(enabled: _currentIndex == 3, child: const MoviesScreen()),
+      TickerMode(enabled: _currentIndex == 4, child: const MyPageScreen()),
+    ];
+
     return Scaffold(
       appBar: MainAppBar(
         title: titles[_currentIndex],
@@ -50,7 +50,7 @@ class MainScreenState extends State<MainScreen> {
       ),
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: screens,
       ),
       backgroundColor: AppColors.background,
       bottomNavigationBar: BottomNavBar(
