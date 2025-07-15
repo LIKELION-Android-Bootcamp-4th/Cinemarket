@@ -14,7 +14,7 @@ class AppColors {
   static const Color widgetBackground = Color(0xFF292929);
   static const Color innerWidget = Color(0xFF404040);
   static const Color toastBackground = Color(0xFF8F8F8F);
-
+  static const Color cardBackground = Color(0xFF161616);
   // ──────────────────────────────────────────────
   // Borders
   // ──────────────────────────────────────────────
