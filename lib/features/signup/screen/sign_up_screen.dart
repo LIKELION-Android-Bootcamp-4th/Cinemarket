@@ -24,15 +24,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailAuthCode = TextEditingController();
   bool _hasSignUp = false;
   bool _hasValidEmail = false;
+  bool _hasValidNickName = false;
+
   final signupViewModel = SignUpViewModel();
 
-  //테스트용 true
-  bool _hasValidNickName = true;
-
   String get email => emailController.text;
-  String get password => passwordController.text;
-  String get nickName => nickNameController.text;
 
+  String get password => passwordController.text;
+
+  String get nickName => nickNameController.text;
 
   @override
   void dispose() {
@@ -211,8 +211,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       message: "이미 사용중인 이메일 입니다.",
                       type: ToastificationType.info,
                     );
+                    setState(() {
+                      _hasValidEmail = false;
+                    });
                   } else {
-                    _hasValidEmail = true;
+                    setState(() {
+                      _hasValidEmail = true;
+                    });
                     CommonToast.show(
                       context: context,
                       message: "사용 가능한 이메일 입니다.",
@@ -311,8 +316,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       message: signupViewModel.error.toString(),
                       type: ToastificationType.info,
                     );
+                    setState(() {
+                      _hasValidNickName = false;
+                    });
                   } else {
-                    _hasValidNickName = true;
+                    setState(() {
+                      _hasValidNickName = true;
+                    });
                     CommonToast.show(
                       context: context,
                       message: signupViewModel.message.toString(),
@@ -343,6 +353,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ElevatedButton(
               onPressed: () async {
                 if (_hasValidEmail && _hasValidNickName) {
+                  //비밀번호 확인 로직
+                  if (passwordController.text != passwordCheckController.text) {
+                    CommonToast.show(
+                      context: context,
+                      message: "비밀번호가 일치하지 않습니다.",
+                      type: ToastificationType.error,
+                    );
+                    return;
+                  } else {
+                    if (!_validatePassword(password)) {
+                      CommonToast.show(
+                        context: context,
+                        message: "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.",
+                        type: ToastificationType.error,
+                      );
+                    }
+                  }
+
+                  //실제 통신 로직
                   await signupViewModel.signUp(email, password, nickName);
                   if (signupViewModel.error != null) {
                     CommonToast.show(
@@ -376,12 +405,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('회원가입', style: AppTextStyle.section),
+              child: Text(
+                '회원가입',
+                style:
+                    (_hasValidEmail && _hasValidNickName)
+                        ? AppTextStyle.section.copyWith(
+                          color: AppColors.textPoint,
+                        )
+                        : AppTextStyle.section.copyWith(color: Colors.black54),
+              ),
             ),
             SizedBox(height: 16),
           ],
         ),
       ],
     );
+  }
+
+  bool _validatePassword(String password) {
+    final RegExp passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$');
+    
+    if (password.isEmpty) {
+      CommonToast.show(
+        context: context,
+        message: "이메일과 닉네임 중복체크를 해주세요.",
+        type: ToastificationType.info,
+      );
+      return false;
+    }
+    
+    if (passwordRegex.hasMatch(password)) {
+      return true;
+    } else return false;
   }
 }

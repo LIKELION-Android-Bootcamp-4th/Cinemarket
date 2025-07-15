@@ -79,23 +79,18 @@ class FavoriteService {
    *   이 id로 tmdb 상세 통신하여 -> 포스터, 타이틀 받아내기
    *   라우터로 이동 <- movie_item에서 이미 처리 완료
    */
-  Future<List<int>> getAllFavoriteMovies({
+  Future<Response> getAllFavoriteMovies({
     int page = 1,
     int limit = 20,
 }) async {
     try {
-      final response = await _dio.get(
+      return  await _dio.get(
         '/api/mypage/contents',
           queryParameters: {
             'page': page,
             'limit': limit,
           },
       );
-
-      final List<dynamic> items = response.data['data']['items'];
-      final tmdbIds = items.map((item) => item['contentId'] as int).toList();
-
-      return tmdbIds;
 
     } on DioException catch (e) {
       final message = e.response?.data['message'] ?? e.message;

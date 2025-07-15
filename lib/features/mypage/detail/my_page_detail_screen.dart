@@ -1,3 +1,4 @@
+import 'package:cinemarket/features/mypage/detail/widget/edit_password_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/edit_profile_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/fix_review_widget.dart';
 import 'package:cinemarket/features/mypage/detail/widget/my_review_widget.dart';
@@ -27,8 +28,6 @@ class MyPageDetailScreen extends StatelessWidget {
       menu = extraData;
     }
 
-
-
     String title = '';
     Widget bodyWidget;
 
@@ -50,13 +49,19 @@ class MyPageDetailScreen extends StatelessWidget {
       case 'my_review':
         title = '나의 리뷰';
         bodyWidget = const MyReviewWidget();
-      case 'fix_review' :
+      case 'fix_review':
         title = '리뷰 수정';
         bodyWidget = FixReviewWidget(review: review!);
         break;
+      case 'edit_password':
+        title = '비밀번호 변경';
+        bodyWidget = const EditPasswordWidget();
+        break;
       default:
         title = '에러';
-        bodyWidget = const Center(child: Text('에러 페이지입니다.', style: TextStyle(color: Colors.white)));
+        bodyWidget = const Center(
+          child: Text('에러 페이지입니다.', style: TextStyle(color: Colors.white)),
+        );
     }
 
     return Scaffold(

@@ -13,7 +13,9 @@ class ReviewItem extends StatefulWidget {
     this.initialReviewText = '',
     this.photoUrls = const [],
     this.onClick1,
+    this.isClicked1 = false,
     this.onClick2,
+    this.isClicked2 = false,
     this.isEditing = false,
     this.likeCount = 0
   });
@@ -26,7 +28,9 @@ class ReviewItem extends StatefulWidget {
   final String initialReviewText;
   final List<String> photoUrls;
   final VoidCallback? onClick1;
+  final bool isClicked1;
   final VoidCallback? onClick2;
+  final bool isClicked2;
   final bool isEditing;
   final int likeCount;
 
@@ -248,7 +252,7 @@ class _ReviewItemState extends State<ReviewItem> {
           child: ElevatedButton(
             onPressed: widget.onClick1,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.widgetBackground,
+              backgroundColor: widget.isClicked1 ? AppColors.textPoint : AppColors.widgetBackground,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 50.0),
               shape: const RoundedRectangleBorder(
@@ -263,7 +267,7 @@ class _ReviewItemState extends State<ReviewItem> {
           child: ElevatedButton(
             onPressed: widget.onClick2,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.widgetBackground,
+              backgroundColor: widget.isClicked2 ? AppColors.pointAccent : AppColors.widgetBackground,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 50.0),
               shape: const RoundedRectangleBorder(
