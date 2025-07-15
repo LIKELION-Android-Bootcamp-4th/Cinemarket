@@ -13,10 +13,13 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<MainScreen> createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
+  static MainScreenState? of(BuildContext context) =>
+      context.findAncestorStateOfType<MainScreenState>();
+
   int _currentIndex = 2; // 홈
 
   final List<Widget> _screens = const [
@@ -27,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     MyPageScreen(),
   ];
 
-  void _onTabSelected(int index) {
+  void onTabSelected(int index) {
     if (_currentIndex != index) {
       setState(() {
         _currentIndex = index;
@@ -52,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: AppColors.background,
       bottomNavigationBar: BottomNavBar(
         currentIndex: _currentIndex,
-        onTabSelected: _onTabSelected,
+        onTabSelected: onTabSelected,
       ),
     );
   }

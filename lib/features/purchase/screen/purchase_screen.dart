@@ -2,6 +2,7 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
+import 'package:cinemarket/features/main/screen/main_screen.dart';
 import 'package:cinemarket/features/purchase/viewmodel/purchase_viewmodel.dart';
 import 'package:cinemarket/features/purchase/widgets/bottom_action_button.dart';
 import 'package:cinemarket/features/purchase/widgets/delivery_info_cart.dart';
@@ -165,7 +166,9 @@ class _PurchaseScreen extends State<PurchaseScreen> {
               type: ToastificationType.success,
             );
             Future.delayed(const Duration(seconds: 1), () {
-              context.go('/home');
+              final mainState = MainScreenState.of(context);
+              mainState?.onTabSelected(2);
+              context.pop();
             });
           } catch (e) {
             CommonToast.show(

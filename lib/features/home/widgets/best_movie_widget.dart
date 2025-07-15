@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/home/viewmodel/best_movie_viewmodel.dart';
+import 'package:cinemarket/features/main/screen/main_screen.dart';
 import 'package:cinemarket/widgets/movie_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,8 @@ class BestMovieWidget extends StatelessWidget {
                     ),
                     TextButton(
                         onPressed: () {
-                          context.push('/movieslist');
+                          final mainState = MainScreenState.of(context);
+                          mainState?.onTabSelected(3);
                         },
                         child: const Text(
                           '영화 더보기',
