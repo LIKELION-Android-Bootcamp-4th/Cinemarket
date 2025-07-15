@@ -1,8 +1,8 @@
-import 'package:cinemarket/core/model/list_response.dart';
 import 'package:cinemarket/features/home/model/best_goods.dart';
 import 'package:cinemarket/features/movies/model/tmdb_movie_detail.dart';
 import 'package:cinemarket/features/movies/model/cast_member.dart';
 import 'package:cinemarket/features/movies/service/movies_service.dart';
+import 'package:logger/logger.dart';
 
 class MovieDetailRepository {
   final MoviesService _service = MoviesService();
@@ -36,5 +36,17 @@ class MovieDetailRepository {
     return _service.fetchProviders(movieId);
   }
 
+  Future<bool> getMovieIsLiked(String contentId) async {
+    final response = await _service.fetchMovieProducts(contentId);
+
+    final data = response.data;
+
+    final success = data['success'] == true;
+    if (!success) throw Exception(data['message'] ?? '영화 좋아요 불러오기 실패');
+
+    Logger().i('isLiked : ${data['data']?['isLiked']}');
+
+    return data['data']?['isLiked'] ?? false;
+  }
 
 }

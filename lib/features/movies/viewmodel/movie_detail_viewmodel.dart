@@ -14,6 +14,8 @@ class MovieDetailViewModel extends ChangeNotifier {
   bool _isMovieLoading = false;
   bool _isGoodsLoading = false;
 
+  bool _isLiked = false;
+
   String? _error;
   bool? _success;
   String? _message;
@@ -23,6 +25,8 @@ class MovieDetailViewModel extends ChangeNotifier {
   List<BestGoods> get goodsList => _goodsList;
 
   bool get isLoading => _isMovieLoading || _isGoodsLoading;
+
+  bool get isLiked => _isLiked;
 
   String? get error => _error;
   bool? get success => _success;
@@ -66,5 +70,8 @@ class MovieDetailViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> getMovieIsLiked(String contentId) async {
+    _isLiked = await _repository.getMovieIsLiked(contentId);
+  }
 }
 

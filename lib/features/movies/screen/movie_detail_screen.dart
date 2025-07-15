@@ -33,7 +33,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           (_) =>
               MovieDetailViewModel()
                 ..loadMovieDetail(int.parse(widget.movieId))
-                ..loadRecommendedGoods(widget.movieId),
+                ..loadRecommendedGoods(widget.movieId)
+                ..getMovieIsLiked(widget.movieId),
       child: Consumer<MovieDetailViewModel>(
         builder: (context, vm, child) {
           if (vm.isLoading) {
@@ -42,6 +43,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
           final movieDetail = vm.movieDetail;
           final castList = vm.castList;
+          isFavorite = vm.isLiked;
 
           return Scaffold(
             appBar: const CommonAppBar(title: '영화 상세'),
