@@ -4,6 +4,7 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
 import 'package:cinemarket/features/auth/viewmodel/sign_up_viewmodel.dart';
+import 'package:cinemarket/features/main/screen/main_screen.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -367,7 +368,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
             message: "수정이 완료 되었습니다.",
             type: ToastificationType.success,
           );
-          context.go('/home');
+          MainScreenState.of(context)?.onTabSelected(2);
+          context.pop();
+
         }
       },
       style: ElevatedButton.styleFrom(

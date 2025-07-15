@@ -265,13 +265,7 @@ class OrderDetailWidget extends StatelessWidget {
 
                     ElevatedButton(
                       onPressed: item.review != null
-                          ? () {
-                            CommonToast.show(
-                              context: context,
-                              message: '이미 리뷰가 작성되었습니다.',
-                              type: ToastificationType.warning,
-                            );
-                          }
+                          ? null
                           : () async {
                         final result = await GoRouter.of(context).push('/mypage/create-review', extra: item);
                         if (result == true) {
@@ -279,16 +273,25 @@ class OrderDetailWidget extends StatelessWidget {
                           await vm.fetchOrderDetail(order.id);
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: item.review != null ? AppColors.widgetBackground : AppColors.widgetBackground,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                              (Set<WidgetState> states) {
+                            if (states.contains(WidgetState.disabled)) {
+                              return Colors.grey.shade800;
+                            }
+                            return AppColors.widgetBackground;
+                          },
+                        ),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
                         ),
                       ),
                       child: Text(
                         item.review != null ? '리뷰 완료' : '리뷰 작성',
                         style: AppTextStyle.body.copyWith(
-                          color: item.review != null ? Colors.white : AppColors.textPoint,
+                          color: item.review != null ? Colors.grey.shade400 : AppColors.textPoint,
                         ),
                       ),
                     ),
