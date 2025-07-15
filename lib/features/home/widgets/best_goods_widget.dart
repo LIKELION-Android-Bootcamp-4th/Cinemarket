@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/home/viewmodel/best_goods_viewmodel.dart';
+import 'package:cinemarket/features/main/screen/main_screen.dart';
 import 'package:cinemarket/widgets/goods_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +38,8 @@ class BestGoodsWidget extends StatelessWidget {
                     ),
                     TextButton(
                         onPressed: () {
-                          context.push('/goods/');
+                          final mainState = MainScreenState.of(context);
+                          mainState?.onTabSelected(1);
                         },
                         child: const Text(
                           '굿즈 더보기',
