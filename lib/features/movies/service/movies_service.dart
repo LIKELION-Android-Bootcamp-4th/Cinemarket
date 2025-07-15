@@ -117,7 +117,7 @@ class MoviesService {
     try {
       Logger().i('contentId : $contentId');
       final response = await _dio.get('/api/content-product/products/$contentId');
-
+      print('response data : ${response.data}');
       return response;
     } catch (e, stackTrace) {
       Logger().e(e);

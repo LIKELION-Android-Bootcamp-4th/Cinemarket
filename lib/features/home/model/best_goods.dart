@@ -8,6 +8,7 @@ class BestGoods {
   final int price;
   final ReviewStats reviewStats;
   final int reviewCount;
+  final int viewCount;
   final bool isFavorite;
   final int stock;
 
@@ -20,6 +21,7 @@ class BestGoods {
     required this.reviewStats,
     required this.reviewCount,
     required this.isFavorite,
+    required this.viewCount,
     required this.stock
   });
 
@@ -33,6 +35,7 @@ class BestGoods {
       reviewStats: ReviewStats.fromJson(json['reviewStats'] ?? {'averageRating': 0.0}),
       reviewCount: json['reviewCount'] is int ? json['reviewCount'] : int.tryParse('${json['reviewCount']}') ?? 0,
       isFavorite: json['isFavorite'] ?? false,
+      viewCount: json['viewCount'] ?? 0,
       stock: json['stock'] is int ? json['stock'] : int.tryParse('${json['stock']}') ?? 0,
     );
   }
