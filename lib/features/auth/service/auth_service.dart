@@ -20,8 +20,7 @@ class AuthService {
 
   Future<Response> getProfile(String accessToken) async {
     try {
-      final response = await _dio.get(
-          '/api/mypage/profile');
+      final response = await _dio.get('/api/mypage/profile');
       return response;
     } catch (e) {
       rethrow;
@@ -30,8 +29,7 @@ class AuthService {
 
   Future<Response> checkValidEmail(String email) async {
     try {
-      final response = await _dio.get(
-          '/api/auth/check-email?email=$email');
+      final response = await _dio.get('/api/auth/check-email?email=$email');
       return response;
     } catch (e) {
       rethrow;
@@ -52,6 +50,7 @@ class AuthService {
   Future<Response> editProfile({
     required String nickName,
     required String phone,
+    required String profileImage,
     required String address1,
     required String address2,
     required String zipCode,
@@ -64,11 +63,33 @@ class AuthService {
       };
       final formData = FormData.fromMap({
         'nickName': nickName,
+        'profileImage': profileImage,
         'phone': phone,
         'address': jsonEncode(addressPayload),
       });
 
       final response = await _dio.patch('/api/mypage/profile', data: formData);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    try {
+      final formData = {
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+        'confirmPassword': confirmPassword,
+      };
+      final response = await _dio.patch(
+        '/api/mypage/change-password',
+        data: formData,
+      );
       return response;
     } catch (e) {
       rethrow;
@@ -88,7 +109,7 @@ class AuthService {
       };
       final response = await _dio.post(
         '/api/auth/register/buyer',
-        data: formData,
+        data: jsonEncode(formData),
       );
       return response;
     } catch (e) {
@@ -98,8 +119,11 @@ class AuthService {
 
   Future<Response> emailAuth(String email, String emailAuthCode) async {
     try {
-      final formData = {'email': email, 'emailAuthCode': emailAuthCode};
-      final response = await _dio.post('/api/auth/email-auth', data: formData);
+      final formData = {'email': email, 'verificationCode': emailAuthCode};
+      final response = await _dio.post(
+        '/api/auth/verify-email',
+        data: jsonEncode(formData),
+      );
       return response;
     } catch (e) {
       rethrow;

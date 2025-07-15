@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/cart/viewmodel/cart_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
@@ -52,9 +53,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   vertical: 32.0,
                 ),
                 child:
-                    _viewModel.hasToken
-                        ? _buildLoggedInView()
-                        : _buildLoggedOutView(),
+                _viewModel.hasToken
+                    ? _buildLoggedInView()
+                    : _buildLoggedOutView(),
               ),
             ),
           ],
@@ -77,58 +78,77 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 color: AppColors.widgetBackground,
               ),
               child:
-                  _viewModel.profileImage != null &&
-                          _viewModel.profileImage!.isNotEmpty
-                      ? ClipOval(
-                        child: Image.network(
-                          _viewModel.profileImage!,
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.widgetBackground,
-                              ),
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 40,
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                      : Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.widgetBackground,
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 40,
-                        ),
+              _viewModel.profileImage != null &&
+                  _viewModel.profileImage!.isNotEmpty
+                  ? ClipOval(
+                child: Image.memory(
+                  base64Decode(_viewModel.profileImage.toString()),
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.widgetBackground,
                       ),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    );
+                  },
+                ),
+              )
+                  : Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.widgetBackground,
+                ),
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
             ),
             const SizedBox(width: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  _viewModel.nickname ?? 'nickName',
-                  style: AppTextStyle.headline,
+                SizedBox(
+                  width: 250,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _viewModel.nickname ?? 'nickName',
+                      style: AppTextStyle.headline,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  _viewModel.email ?? 'user@example.com',
-                  style: AppTextStyle.headline,
+
+                SizedBox(
+                  width: 250,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _viewModel.email ?? 'user@example.com',
+                      style: AppTextStyle.headline,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
+
+
               ],
             ),
           ],
