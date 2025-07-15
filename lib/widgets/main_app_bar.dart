@@ -2,8 +2,11 @@ import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/cart/viewmodel/cart_viewmodel.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:toastification/toastification.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -34,7 +37,18 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.shopping_cart),
-                    onPressed: onCartPressed,
+                    onPressed: () async {
+                      final isLoggedIn = await TokenStorage.isLoggedIn();
+                      if (!isLoggedIn) {
+                        CommonToast.show(
+                          context: context,
+                          message: '로그인이 필요합니다.',
+                          type: ToastificationType.warning,
+                        );
+                        return;
+                      }
+                      context.push('/cart');
+                    },
                   ),
                   if (viewModel.isLoggedIn && viewModel.cartCount > 0)
                     Positioned(
