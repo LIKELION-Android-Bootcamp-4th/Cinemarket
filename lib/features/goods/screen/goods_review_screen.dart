@@ -45,10 +45,7 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel =
-        context
-            .watch<
-              GoodsReviewsViewModel
-            >(); // todo: 성능 고려 <- futureBuilder 또는 consumer
+        context.watch<GoodsReviewsViewModel>();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -79,7 +76,6 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                 title: '리뷰 목록',
                 productName: widget.goodsName,
                 movieTitle: widget.movieTitle,
-                // productImage: review.images.first.url,
                 productImage: widget.goodsImage,
                 photoUrls: review.images.map((item) => item.url).toList(),
                 initialRating: review.rating.toDouble(),

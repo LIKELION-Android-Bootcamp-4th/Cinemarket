@@ -57,7 +57,7 @@ class _GoodsAllScreenState extends State<GoodsAllScreen> {
                       child: SortDropdown(
                         itemType: ItemType.goods,
                         selectedValue: selectedSort,
-                        onSelected: (value) { // todo: enum?
+                        onSelected: (value) {
                           setState(() {
                             selectedSort = value;
                           });
