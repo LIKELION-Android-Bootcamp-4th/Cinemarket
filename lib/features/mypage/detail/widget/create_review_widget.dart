@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
-import 'package:cinemarket/features/mypage/model/order/order_item.dart';
+import 'package:cinemarket/features/mypage/model/orderdetail/order_detail_item.dart';
 import 'package:cinemarket/features/mypage/model/review_request.dart';
 import 'package:cinemarket/features/mypage/viewmodel/review_viewmodel.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 class CreateReviewWidget extends StatefulWidget {
-  final OrderItem orderItem;
+  final OrderDetailItem orderItem;
 
   const CreateReviewWidget({super.key, required this.orderItem});
 

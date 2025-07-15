@@ -215,45 +215,84 @@ class OrderDetailWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(item.productName, style: AppTextStyle.body),
+                          Text(item.productName, style: AppTextStyle.bodyLarge),
                           const SizedBox(height: 8),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('${formatCurrency(item.unitPrice)}', style: AppTextStyle.bodySmall),
-                              SizedBox(width: 10,),
-                              Text('x ${item.quantity}', style: AppTextStyle.bodySmall),
-                            ]
+                              Row(
+                                children: [
+                                  Text('${formatCurrency(item.unitPrice)}', style: AppTextStyle.body),
+                                  const SizedBox(width: 10),
+                                  Text('x ${item.quantity}', style: AppTextStyle.body),
+                                ],
+                              ),
+                              Text('${formatCurrency(item.totalPrice)}', style: AppTextStyle.body),
+                            ],
                           ),
-                          Text('${formatCurrency(item.totalPrice)}', style: AppTextStyle.bodySmall),
                         ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final productId = item.productId ?? '';
-                      if (productId.isNotEmpty) {
-                        GoRouter.of(context).push('/goods/$productId');
-                      } else {
-                        CommonToast.show(
-                          context: context,
-                          message: '상품 정보가 없습니다.',
-                          type: ToastificationType.error,
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.widgetBackground,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // 재구매 버튼
+                    ElevatedButton(
+                      onPressed: () {
+                        final productId = item.id ?? '';
+                        if (productId.isNotEmpty) {
+                          GoRouter.of(context).push('/goods/$productId');
+                        } else {
+                          CommonToast.show(
+                            context: context,
+                            message: '상품 정보가 없습니다.',
+                            type: ToastificationType.error,
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.widgetBackground,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: Text("재구매", style: AppTextStyle.body),
+                    ),
+                    const SizedBox(width: 8),
+
+                    ElevatedButton(
+                      onPressed: item.review != null
+                          ? () {
+                            CommonToast.show(
+                              context: context,
+                              message: '이미 리뷰가 작성되었습니다.',
+                              type: ToastificationType.warning,
+                            );
+                          }
+                          : () async {
+                        final result = await GoRouter.of(context).push('/mypage/create-review', extra: item);
+                        if (result == true) {
+                          final vm = context.read<OrderDetailViewModel>();
+                          await vm.fetchOrderDetail(order.id);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: item.review != null ? AppColors.widgetBackground : AppColors.widgetBackground,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: Text(
+                        item.review != null ? '리뷰 완료' : '리뷰 작성',
+                        style: AppTextStyle.body.copyWith(
+                          color: item.review != null ? Colors.white : AppColors.textPoint,
+                        ),
                       ),
                     ),
-                    child: Text("재구매", style: AppTextStyle.body),
-                  ),
+                  ],
                 ),
               ],
             ),

@@ -70,42 +70,14 @@ class _GoodsItemState extends State<GoodsItem> {
                     color: Colors.red,
                   ),
                   onPressed: () async {
-                    setState(() => isFavorite = !isFavorite);
-
-                    final success = await FavoriteViewModel()
-                        .toggleFavorite(goodsId: widget.goodsId);
-
-                    if (!success) { setState(() => isFavorite = !isFavorite);}
-
-                    final accessToken = await TokenStorage.getAccessToken();
-
-                    if (!mounted) return;  // state의 화면 부착 여부
-
-                    if (accessToken == null) {  // 비회원의 경우
-
-                      final shouldNavigate = await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('로그인이 필요합니다', style: AppTextStyle.section,),
-                            content: const Text('로그인 화면으로 이동하시겠습니까?', style: AppTextStyle.body,),
-                            backgroundColor: AppColors.widgetBackground,
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(false),
-                                child: const Text('취소', style: AppTextStyle.bodyPointRed,),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(true),
-                                child: const Text('이동', style: AppTextStyle.bodyPointBlue,),
-                              ),
-                            ],
-                          ),
-                      );
-
-                      if(shouldNavigate == true && mounted) {
-                        context.push('/login', );
-                      }
-                    }
+                    toggleFavorite(context: context,
+                        id: widget.goodsId,
+                        isFavorite: isFavorite,
+                        onStateChanged: (newState) {
+                          setState(() => isFavorite = newState);
+                        },
+                      updateFavoriteStatus: (id) => updateGoodsFavoriteStatus(goodsId: id),
+                    );
                   },
                 ),
 
@@ -182,19 +154,25 @@ class _GoodsItemState extends State<GoodsItem> {
   }
 }
 
+Future<bool> updateGoodsFavoriteStatus({required String goodsId}) async {
+  return await FavoriteViewModel().toggleFavorite(goodsId: goodsId);
+}
+
 Future<void> toggleFavorite({
   required BuildContext context,
   required String id,
   required bool isFavorite,
   required void Function(bool) onStateChanged,
+  required Future<bool> Function(String) updateFavoriteStatus,
 }) async {
   // 로그인 요청  // 하지 않는다면 바로 action 종료
   if (!await requireLoginBeforeAction(context)) return;
 
-  if (await updateGoodsFavoriteStatus(goodsId: id)) {
+  if (await updateFavoriteStatus(id)) {
     if (!context.mounted) return;
 
-    onStateChanged(isFavorite = !isFavorite);
+    final newState = !isFavorite;
+    onStateChanged(newState);
 
     CommonToast.show(
       context: context,
@@ -208,10 +186,6 @@ Future<void> toggleFavorite({
       type: ToastificationType.error,
     );
   }
-}
-
-Future<bool> updateGoodsFavoriteStatus({required String goodsId}) async {
-  return await FavoriteViewModel().toggleFavorite(goodsId: goodsId);
 }
 
 Future<bool> requireLoginBeforeAction(BuildContext context) async {

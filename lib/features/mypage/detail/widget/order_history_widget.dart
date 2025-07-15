@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/features/mypage/detail/widget/order_card.dart';
 import 'package:cinemarket/features/mypage/model/order/order.dart';
 import 'package:cinemarket/features/mypage/viewmodel/order_viewmodel.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
@@ -44,11 +45,10 @@ class OrderHistoryWidget extends StatelessWidget {
             itemCount: vm.orders.length,
             itemBuilder: (context, index) {
               final order = vm.orders[index];
-              return _buildOrderCard(context, order);
+              return OrderCard(order: order, formatCurrency: formatCurrency);
             },
             separatorBuilder: (context, index) => const Padding(
-              padding: EdgeInsets.symmetric(vertical: 24.0),
-              child: Divider(color: Color(0xFF292929), thickness: 1.5),
+              padding: EdgeInsets.symmetric(vertical: 12.0),
             ),
           );
         },
@@ -56,179 +56,6 @@ class OrderHistoryWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderCard(BuildContext context, Order order) {
-    final dateStr = '${order.createdAt.year}.${order.createdAt.month.toString().padLeft(2, '0')}.${order.createdAt.day.toString().padLeft(2, '0')}';
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(dateStr, style: AppTextStyle.section),
-            const SizedBox(width: 8.0),
-            TextButton(
-              onPressed: () {
-                context.push('/mypage/detail', extra: {
-                  'where': 'order_detail',
-                  'orderId': order.id,
-                });
-              },
-              child: Text("주문상세", style: AppTextStyle.body),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text(
-          _getStatusLabel(order.status),
-          style: AppTextStyle.body.copyWith(
-            color: _getStatusColor(order.status),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text('주문번호: ${order.orderNumber}', style: AppTextStyle.bodySmall),
-
-        const SizedBox(height: 16.0),
-
-        // 각 상품 출력 및 버튼 처리
-        ...order.items.map((item) => Padding(
-          padding: const EdgeInsets.only(bottom: 24.0),
-          child: Column(
-            children: [
-              // 상품 요약 정보
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF292929),
-                      borderRadius: BorderRadius.circular(8),
-                      image: item.productImage != null
-                          ? DecorationImage(
-                        image: NetworkImage(item.productImage),
-                        fit: BoxFit.cover,
-                      )
-                          : null,
-                    ),
-                  ),
-                  const SizedBox(width: 16.0),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(item.productName ?? '상품명 없음', style: AppTextStyle.body),
-                        const SizedBox(height: 8),
-                        Text('${item.quantity}개', style: AppTextStyle.bodySmall),
-                        const SizedBox(height: 4),
-                        Text(formatCurrency(item.totalPrice), style: AppTextStyle.bodySmall),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              // 리뷰/재구매 버튼
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: item.review != null
-                      ? null
-                      : () async {
-                        final result = await context.push('/mypage/create-review', extra: item);
-                        if (result == true) {
-                          final vm = context.read<OrderViewModel>();
-                          await vm.fetchOrders();
-                        }
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                              (Set<WidgetState> states) {
-                            if (states.contains(WidgetState.disabled)) {
-                              return Colors.grey.shade600;
-                            }
-                            return AppColors.textPoint;
-                          },
-                        ),
-                        shape: WidgetStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                      child: Text(item.review != null ? '리뷰 완료' : '리뷰 쓰기'),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        final productId = item.id ?? '';
-                        if (productId.isNotEmpty) {
-                          context.push('/goods/$productId');
-                        } else {
-                          CommonToast.show(
-                            context: context,
-                            message: '상품 정보가 없습니다.',
-                            type: ToastificationType.info,
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.pointAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('재구매'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        )),
-      ],
-    );
-  }
 }
 
-String _getStatusLabel(String status) {
-  switch (status) {
-    case 'pending':
-      return '주문 접수';
-    case 'preparing':
-      return '상품 준비 중';
-    case 'shipped':
-      return '배송 시작';
-    case 'delivered':
-      return '배송 완료';
-    case 'confirmed':
-      return '주문 확정';
-    case 'cancelled':
-      return '주문 취소';
-    case 'refunded':
-      return '환불 완료';
-    default:
-      return status;
-  }
-}
-
-Color _getStatusColor(String status) {
-  switch (status) {
-    case 'preparing':
-    case 'shipped':
-    case 'confirmed':
-      return Colors.green;
-    case 'delivered':
-      return Colors.blue;
-    case 'cancelled':
-    case 'refunded':
-      return Colors.red;
-    default:
-      return Colors.white;
-  }
-}
 

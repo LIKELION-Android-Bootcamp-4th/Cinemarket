@@ -14,6 +14,7 @@ import 'package:cinemarket/features/mypage/detail/widget/create_review_widget.da
 import 'package:cinemarket/features/mypage/detail/widget/fix_review_widget.dart';
 import 'package:cinemarket/features/mypage/detail/my_page_detail_screen.dart';
 import 'package:cinemarket/features/mypage/model/order/order_item.dart';
+import 'package:cinemarket/features/mypage/model/orderdetail/order_detail_item.dart';
 import 'package:cinemarket/features/mypage/model/review.dart';
 import 'package:cinemarket/features/mypage/screen/my_page_screen.dart';
 import 'package:cinemarket/features/purchase/screen/purchase_screen.dart';
@@ -24,34 +25,11 @@ import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
   debugLogDiagnostics: true,
-  initialLocation: '/home',
+  initialLocation: '/',
   routes: [
-    ShellRoute(
-      builder: (context, state, child) {
-        return MainScreen(child: child);
-      },
-      routes: [
-        GoRoute(
-          path: '/wishlist',
-          builder: (context, state) => const FavoriteScreen(),
-        ),
-        GoRoute(
-          path: '/goods',
-          builder: (context, state) => const GoodsAllScreen(),
-        ),
-        GoRoute(
-          path: '/home',
-          builder: (context, state) => const HomeScreen(),
-        ),
-        GoRoute(
-          path: '/movieslist',
-          builder: (context, state) => const MoviesScreen(),
-        ),
-        GoRoute(
-          path: '/mypage',
-          builder: (context, state) => const MyPageScreen(),
-        ),
-      ],
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const MainScreen(),
     ),
     GoRoute(
       path: '/search',
@@ -123,7 +101,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/mypage/create-review',
       builder: (context, state) {
-        final orderItem = state.extra as OrderItem;
+        final orderItem = state.extra as OrderDetailItem;
         return CreateReviewWidget(orderItem: orderItem);
       },
     ),
