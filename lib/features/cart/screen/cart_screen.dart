@@ -52,7 +52,6 @@ class CartScreen extends StatelessWidget {
 
             return Column(
               children: [
-                //전체선택 +삭제 버튼
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
@@ -88,7 +87,6 @@ class CartScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                //장바구니 아이템 목록
                 Expanded(
                   child: ListView.builder(
                     itemCount: cartItems.length,
@@ -104,7 +102,6 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
 
-                //결제
                 CartBottomBarWidgets(
                   items: cartItems,
                   onSelectAll: (selectAll) => viewModel.toggleSelectAll(selectAll),
@@ -119,7 +116,6 @@ class CartScreen extends StatelessWidget {
                       return;
                     }
 
-                    // 선택된 아이템 리스트를 PurchaseScreen으로 전달
                     context.push('/purchase', extra: selectedItems);
                   },
                 ),

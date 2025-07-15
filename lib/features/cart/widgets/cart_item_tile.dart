@@ -35,7 +35,6 @@ class CartItemTile extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 체크박스
             Padding(
               padding: const EdgeInsets.only(top: 4, right: 4),
               child: Checkbox(
@@ -46,7 +45,6 @@ class CartItemTile extends StatelessWidget {
               ),
             ),
 
-            // 이미지
             Container(
               width: 80,
               height: 80,

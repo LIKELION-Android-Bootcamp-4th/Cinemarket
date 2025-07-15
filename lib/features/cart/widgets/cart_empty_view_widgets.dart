@@ -21,7 +21,6 @@ class CartEmptyViewWidgets extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                // 이전 화면으로 이동
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
