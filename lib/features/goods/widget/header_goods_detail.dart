@@ -21,6 +21,7 @@ class HeaderGoodsDetail extends StatelessWidget {
             PrimaryImageWidget(
               goodsId: item.id,
               imageUrl: item.images.main,
+              stock: item.stock,
               isFavorite: item.isFavorite,
               onTap: () => _showImageViewer(context, allImages, 0),
             ),
@@ -58,9 +59,12 @@ class HeaderGoodsDetail extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            Text(item.name, style: AppTextStyle.section,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,),
+            Text(
+              item.name,
+              style: AppTextStyle.section,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
 
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -99,19 +103,33 @@ void _showImageViewer(
       return Dialog(
         insetPadding: const EdgeInsets.all(16),
         backgroundColor: Colors.transparent,
-        child: SizedBox(
-          // height: 500,
-          width: 300,
-          child: PageView.builder(
-            controller: PageController(initialPage: initialIndex),
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              return InteractiveViewer(
-                // pinch-zoom 가능
-                child: Image.network(images[index], fit: BoxFit.contain),
-              );
-            },
-          ),
+        child: Stack(
+          children: [
+            SizedBox(
+              // height: 500,
+              width: double.infinity,
+              child: PageView.builder(
+                controller: PageController(initialPage: initialIndex),
+                itemCount: images.length,
+                itemBuilder: (context, index) {
+                  return InteractiveViewer(
+                    // pinch-zoom 가능
+                    child: Image.network(images[index], fit: BoxFit.contain),
+                  );
+                },
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+          ],
         ),
       );
     },

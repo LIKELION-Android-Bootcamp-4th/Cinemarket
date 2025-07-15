@@ -81,11 +81,7 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                 movieTitle: widget.movieTitle,
                 // productImage: review.images.first.url,
                 productImage: widget.goodsImage,
-                // photoUrls: review.images.map((item) => item.url).toList(),
-                photoUrls: const [
-                  'https://i.ebayimg.com/images/g/I6sAAeSwZFtoY1td/s-l140.webp',
-                  'https://i.ebayimg.com/images/g/kkUAAeSwfRloY1tQ/s-l140.webp',
-                ],
+                photoUrls: review.images.map((item) => item.url).toList(),
                 initialRating: review.rating.toDouble(),
                 initialReviewText: review.comment,
                 likeCount: review.likeCount,
