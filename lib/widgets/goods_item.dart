@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
@@ -80,6 +81,59 @@ class _GoodsItemState extends State<GoodsItem> {
                     );
                   },
                 ),
+
+
+                if (widget.stock < 20 && widget.stock > 0) ...[
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Container(
+                      width:90,
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                          const Icon(Icons.access_alarm, size: 20, color: Colors.white),
+                          const SizedBox(width: 4),
+                          DefaultTextStyle(
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            child: AnimatedTextKit(
+                              repeatForever: true,
+                              animatedTexts: [
+                                // TyperAnimatedText(
+                                //   '품절 임박',
+                                //   textStyle: AppTextStyle.bodySmall.copyWith(
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                //   speed: Duration(milliseconds: 100),
+                                // ),
+                              ColorizeAnimatedText(
+                                '품절 임박',
+                                textStyle: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                colors: [
+                                  Colors.white,
+                                  AppColors.pointAccent
+                                ],
+                              )
+                              ],
+                            ),
+                          )
+                        ]
+                      ),
+                    ),
+                  )
+                ],
 
                 if (widget.stock == 0) ...[
                   Container(
