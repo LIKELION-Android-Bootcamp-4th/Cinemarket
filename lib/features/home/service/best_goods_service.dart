@@ -8,7 +8,7 @@ class BestGoodsService {
     int page = 1,
     int limit = 10,
     String sortBy = 'sales',
-    String sortOrder = 'asc',
+    String sortOrder = 'desc',
   }) {
     return _dio.get('/api/products', queryParameters: {
       'page': page,
