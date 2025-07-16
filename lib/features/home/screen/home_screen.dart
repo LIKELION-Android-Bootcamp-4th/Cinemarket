@@ -6,9 +6,17 @@ import 'package:cinemarket/features/home/widgets/best_movie_widget.dart';
 import 'package:cinemarket/features/home/widgets/box_office_ranking_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cinemarket/features/auth/viewmodel/auth_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool? _prevLogin;
 
   Future<void> _refreshAll(BuildContext context) async {
     final homeVM = context.read<HomeViewModel>();
@@ -23,6 +31,16 @@ class HomeScreen extends StatelessWidget {
       bestGoodsVM.loadBestGoods(force: true),
       bestMovieVM.loadTrendingMovies(force: true),
     ]);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final isLoggedIn = context.watch<AuthProvider>().isLoggedIn;
+    if (_prevLogin != isLoggedIn) {
+      _refreshAll(context);
+      _prevLogin = isLoggedIn;
+    }
   }
 
   @override
@@ -44,5 +62,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
 }

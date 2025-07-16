@@ -6,6 +6,7 @@ import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/widgets/sort_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cinemarket/features/auth/viewmodel/auth_provider.dart';
 
 class GoodsAllScreen extends StatefulWidget {
   const GoodsAllScreen({super.key});
@@ -17,17 +18,22 @@ class GoodsAllScreen extends StatefulWidget {
 class _GoodsAllScreenState extends State<GoodsAllScreen> {
   bool _isFirst = true;
   String selectedSort = '최신순';
+  bool? _prevLogin;
 
   final ScrollController _scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final isLoggedIn = context.watch<AuthProvider>().isLoggedIn;
     if (_isFirst) {
       final vm = context.read<GoodsAllViewModel>();
       vm.getAllGoods();
-
       _isFirst = false;
+    }
+    if (_prevLogin != isLoggedIn) {
+      context.read<GoodsAllViewModel>().getAllGoods(force: true);
+      _prevLogin = isLoggedIn;
     }
   }
 

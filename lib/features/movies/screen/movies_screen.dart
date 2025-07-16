@@ -5,6 +5,7 @@ import 'package:cinemarket/widgets/common_gridview.dart';
 import 'package:cinemarket/widgets/sort_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cinemarket/features/auth/viewmodel/auth_provider.dart';
 
 class MoviesScreen extends StatefulWidget {
   const MoviesScreen({super.key});
@@ -17,6 +18,7 @@ class MoviesScreen extends StatefulWidget {
 class MoviesScreenState extends State<MoviesScreen> {
 
   final ScrollController _scrollController = ScrollController();
+  bool? _prevLogin;
 
   @override
   void initState() {
@@ -35,6 +37,16 @@ class MoviesScreenState extends State<MoviesScreen> {
       }
     });
 
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final isLoggedIn = context.watch<AuthProvider>().isLoggedIn;
+    if (_prevLogin != isLoggedIn) {
+      context.read<MoviesViewModel>().loadMovies(force: true);
+      _prevLogin = isLoggedIn;
+    }
   }
 
   @override

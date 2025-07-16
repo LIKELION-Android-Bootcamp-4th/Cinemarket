@@ -5,6 +5,7 @@ import 'package:cinemarket/core/constants/enums/item_type.dart';
 import 'package:cinemarket/widgets/common_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cinemarket/features/auth/viewmodel/auth_provider.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -15,6 +16,7 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   static const List<String> _tabTitles = ['굿즈', '영화'];
+  bool? _prevLogin;
 
   Future<void> _refreshGoods() async {
     await context.read<FavoriteViewModel>().getAllFavoriteGoods();
@@ -31,6 +33,16 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<FavoriteViewModel>().getAllFavorites();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final isLoggedIn = context.watch<AuthProvider>().isLoggedIn;
+    if (_prevLogin != isLoggedIn) {
+      context.read<FavoriteViewModel>().getAllFavorites();
+      _prevLogin = isLoggedIn;
+    }
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:cinemarket/features/auth/viewmodel/auth_provider.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
 import 'package:cinemarket/features/cart/viewmodel/cart_viewmodel.dart';
 import 'package:cinemarket/features/favorite/viewmodel/favorite_viewmodel.dart';
@@ -38,6 +39,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BestGoodsViewModel()),
         ChangeNotifierProvider(create: (_) => BestMovieViewModel()),
         ChangeNotifierProvider(create: (_) => PurchaseViewModel()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+
       ],
       child: MaterialApp.router(
         title: 'CineMarket',
