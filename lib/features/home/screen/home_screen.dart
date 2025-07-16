@@ -28,6 +28,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
+      backgroundColor: Colors.black,
+      color: Colors.white,
       onRefresh: () => _refreshAll(context),
       child: SingleChildScrollView(
         padding: EdgeInsets.all(16),

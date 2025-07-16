@@ -21,7 +21,10 @@ class BestMovieWidget extends StatelessWidget {
       child: Consumer<BestMovieViewModel>(
         builder: (context, vm, child) {
           if (vm.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(
+              color: Colors.white,
+              backgroundColor: Colors.black,
+            ));
           }
 
           if (vm.errorMessage != null) {
