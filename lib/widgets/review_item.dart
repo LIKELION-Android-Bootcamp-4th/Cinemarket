@@ -1,5 +1,6 @@
 import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
+import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
 
 class ReviewItem extends StatefulWidget {
@@ -17,7 +18,7 @@ class ReviewItem extends StatefulWidget {
     this.onClick2,
     this.isClicked2 = false,
     this.isEditing = false,
-    this.likeCount = 0
+    this.likeCount = 0,
   });
 
   final String title;
@@ -44,12 +45,16 @@ class _ReviewItemState extends State<ReviewItem> {
   late double _currentRating;
   bool _isExpanded = false;
   late int _likeCount;
+  late bool _isClicked1;
+  late bool _isClicked2;
 
   @override
   void initState() {
     super.initState();
     _currentRating = widget.initialRating;
     _likeCount = widget.likeCount;
+    _isClicked1 = widget.isClicked1;
+    _isClicked2 = widget.isClicked2;
   }
 
   @override
@@ -73,7 +78,7 @@ class _ReviewItemState extends State<ReviewItem> {
           const SizedBox(height: 16.0),
           _buildReviewText(),
           const SizedBox(height: 16.0),
-          _buildActionButtons(),
+          _buildActionButtons(context),
           const SizedBox(height: 24.0),
           Divider(thickness: 1,color: AppColors.widgetBackground,)
         ],
@@ -97,7 +102,7 @@ class _ReviewItemState extends State<ReviewItem> {
                       width: 100.0,
                       height: 100.0,
                       fit: BoxFit.cover,
-                      errorBuilder: (context,error,stackTrace) {
+                      errorBuilder: (context, error, stackTrace) {
                         return Container(
                           width: 100.0,
                           height: 100.0,
@@ -232,7 +237,7 @@ class _ReviewItemState extends State<ReviewItem> {
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(BuildContext context) {
     String button1;
     String button2;
 
@@ -240,7 +245,8 @@ class _ReviewItemState extends State<ReviewItem> {
       button1 = '수정';
       button2 = '삭제';
     } else if (widget.title == '리뷰 목록') {
-      button1 = _likeCount == 0 ? '좋아요' : '좋아요 $_likeCount';
+      // button1 = _likeCount == 0 ? '좋아요' : '좋아요 $_likeCount';
+      button1 = '좋아요';
       button2 = '싫어요';
     } else {
       return const SizedBox.shrink();
@@ -250,9 +256,26 @@ class _ReviewItemState extends State<ReviewItem> {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: widget.onClick1,
+            onPressed:
+                _isClicked2
+                    ? null
+                    : () {
+                      if (widget.title == '리뷰 목록') {
+                        setState(() {
+                          _isClicked1 = !_isClicked1;
+
+                          _isClicked1 ? _likeCount += 1 : _likeCount -= 1;
+                        });
+                        _isClicked1 ? CommonToast.show(context: context, message: '리뷰 좋아요 완료 !') : CommonToast.show(context: context, message: '리뷰 좋아요 해제 !');
+                  }
+                      widget.onClick1?.call();
+                    },
             style: ElevatedButton.styleFrom(
-              backgroundColor: widget.isClicked1 ? AppColors.textPoint : AppColors.widgetBackground,
+              backgroundColor:
+                  _isClicked1 && (_isClicked2 == false)
+                      ? AppColors.textPoint
+                      : AppColors.widgetBackground,
+              disabledBackgroundColor: AppColors.widgetBackground,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 50.0),
               shape: const RoundedRectangleBorder(
@@ -265,9 +288,24 @@ class _ReviewItemState extends State<ReviewItem> {
         const SizedBox(width: 16.0),
         Expanded(
           child: ElevatedButton(
-            onPressed: widget.onClick2,
+            onPressed:
+                _isClicked1
+                    ? null
+                    : () {
+                      if (widget.title == '리뷰 목록') {
+                        setState(() {
+                          _isClicked2 = !_isClicked2;
+                        });
+                        _isClicked2 ? CommonToast.show(context: context, message: '리뷰 싫어요 완료 !') : CommonToast.show(context: context, message: '리뷰 싫어요 해제 !');
+                      }
+                      widget.onClick2?.call();
+                    },
             style: ElevatedButton.styleFrom(
-              backgroundColor: widget.isClicked2 ? AppColors.pointAccent : AppColors.widgetBackground,
+              backgroundColor:
+                  _isClicked2 && (_isClicked1 == false)
+                      ? AppColors.pointAccent
+                      : AppColors.widgetBackground,
+              disabledBackgroundColor: AppColors.widgetBackground,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 50.0),
               shape: const RoundedRectangleBorder(
@@ -320,7 +358,11 @@ class _ReviewItemState extends State<ReviewItem> {
                 top: 0,
                 right: 0,
                 child: IconButton(
-                  icon: const Icon(Icons.close, color: AppColors.widgetBackground, size: 30),
+                  icon: const Icon(
+                    Icons.close,
+                    color: AppColors.widgetBackground,
+                    size: 30,
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
