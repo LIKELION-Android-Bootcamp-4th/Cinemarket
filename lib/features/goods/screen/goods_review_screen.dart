@@ -67,11 +67,6 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
             itemBuilder: (context, index) {
               final review = viewModel.reviews[index];
 
-              Logger().i('imageProduct: ${widget.goodsImage}');
-              Logger().i(
-                'imagePhotoFirst: ${review.images.map((item) => item.url).toList().first}',
-              );
-
               return ReviewItem(
                 title: '리뷰 목록',
                 productName: widget.goodsName,
