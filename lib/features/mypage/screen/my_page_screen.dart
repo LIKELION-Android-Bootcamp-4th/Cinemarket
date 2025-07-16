@@ -118,38 +118,26 @@ class _MyPageScreenState extends State<MyPageScreen> {
               ),
             ),
             const SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 250,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      _viewModel.nickname ?? 'nickName',
-                      style: AppTextStyle.headline,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _viewModel.nickname ?? 'nickName',
+                    style: AppTextStyle.headline,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                ),
-                const SizedBox(height: 4),
-
-                SizedBox(
-                  width: 250,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      _viewModel.email ?? 'user@example.com',
-                      style: AppTextStyle.headline,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _viewModel.email ?? 'user@example.com',
+                    style: AppTextStyle.headline,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                ),
-
-
-              ],
+                ],
+              ),
             ),
           ],
         ),
