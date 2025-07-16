@@ -23,7 +23,7 @@ class OrderHistoryWidget extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) {
         final vm = OrderViewModel();
-        vm.fetchOrders();
+        vm.fetchOrders(status: 'delivered');
         return vm;
       },
       child: Consumer<OrderViewModel>(
