@@ -64,7 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             SizedBox(height: 25.0),
 
-            Image.asset('assets/images/Icon.png', width: 120, height: 120),
+            Image.asset('assets/images/ic_app.png', width: 120, height: 120),
             SizedBox(height: 8),
             Text(
               'Cinemarket',
@@ -162,7 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             SizedBox(height: 50.0),
 
-            Image.asset('assets/images/Icon.png', width: 150, height: 150),
+            Image.asset('assets/images/ic_app.png', width: 150, height: 150),
             SizedBox(height: 8),
             Text(
               'Cinemarket',

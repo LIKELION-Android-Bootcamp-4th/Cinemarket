@@ -44,7 +44,15 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(height: 50.0),
-            Image.asset('assets/images/Icon.png', width: 150, height: 150),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset(
+                'assets/images/ic_app.png',
+                width: 150,
+                height: 150,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
             SizedBox(height: 8),
             Text(
               'Cinemarket',
