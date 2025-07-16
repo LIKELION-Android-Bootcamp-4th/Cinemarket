@@ -168,7 +168,7 @@ class _PurchaseScreen extends State<PurchaseScreen> {
             Future.delayed(const Duration(seconds: 1), () {
               final mainState = MainScreenState.of(context);
               mainState?.onTabSelected(2);
-              context.push('/mypage/detail', extra: 'order_tracking');
+              context.push('/');
             });
           } catch (e) {
             CommonToast.show(
