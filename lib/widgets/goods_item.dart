@@ -245,7 +245,7 @@ Future<void> toggleFavorite({
 
     CommonToast.show(
       context: context,
-      message: isFavorite ? '찜 추가 완료 !' : '찜 삭제 완료 !',
+      message: newState ? '찜 추가 완료 !' : '찜 삭제 완료 !',
       type: ToastificationType.success,
     );
   } else {

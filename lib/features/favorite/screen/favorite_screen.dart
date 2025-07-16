@@ -14,7 +14,6 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-
   static const List<String> _tabTitles = ['굿즈', '영화'];
 
   Future<void> _refreshGoods() async {
@@ -48,45 +47,43 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         RefreshIndicator(
           onRefresh: _refreshGoods,
           child:
-          viewModel.favoriteGoods.isEmpty || !viewModel.isLogin
-              ? ListView(
-            children: const [
-              SizedBox(height: 150),
-              Center(
-                child: Text(
-                  '굿즈 찜 목록이 비어있어요..!!',
-                  style: AppTextStyle.headline,
-                ),
-              ),
-            ],
-          )
-              : CommonGridview(
-            itemType: ItemType.goods,
-            // items: dummyGoods,
-            items: viewModel.favoriteGoods,
-          ),
+              viewModel.favoriteGoods.isEmpty || !viewModel.isLogin
+                  ? ListView(
+                    children: const [
+                      SizedBox(height: 150),
+                      Center(
+                        child: Text(
+                          '굿즈 찜 목록이 비어있어요..!!',
+                          style: AppTextStyle.headline,
+                        ),
+                      ),
+                    ],
+                  )
+                  : CommonGridview(
+                    itemType: ItemType.goods,
+                    items: viewModel.favoriteGoods,
+                  ),
         ),
         RefreshIndicator(
           onRefresh: _refreshMovies,
           child:
-          viewModel.favoriteMovies.isEmpty || !viewModel.isLogin
-              ? ListView(
-            children: const [
-              SizedBox(height: 150),
-              Center(
-                child: Text(
-                  '영화 찜 목록이 비어있어요..!!',
-                  style: AppTextStyle.headline,
-                ),
-              ),
-            ],
-          )
-              : CommonGridview(
-            itemType: ItemType.movie,
-            // items: dummyMovies,
-            items: viewModel.favoriteMovies,
-            isFavoriteScreen: true,
-          ),
+              viewModel.favoriteMovies.isEmpty || !viewModel.isLogin
+                  ? ListView(
+                    children: const [
+                      SizedBox(height: 150),
+                      Center(
+                        child: Text(
+                          '영화 찜 목록이 비어있어요..!!',
+                          style: AppTextStyle.headline,
+                        ),
+                      ),
+                    ],
+                  )
+                  : CommonGridview(
+                    itemType: ItemType.movie,
+                    items: viewModel.favoriteMovies,
+                    isFavoriteScreen: true,
+                  ),
         ),
       ],
     );

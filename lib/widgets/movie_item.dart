@@ -86,7 +86,7 @@ class _MovieItemState extends State<MovieItem> {
                         );
                       },
                       icon: Icon(
-                        widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: Colors.red,
                       ),
                     ),

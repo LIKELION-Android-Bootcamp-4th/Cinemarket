@@ -79,6 +79,7 @@ class FavoriteViewModel extends ChangeNotifier {
 
 
   Future<void> getAllFavoriteMovies() async {
+    favoriteMovies.clear();
 
     try {
       favoriteMovies = await _favoriteRepository.getAllFavoriteMovies();
@@ -86,7 +87,7 @@ class FavoriteViewModel extends ChangeNotifier {
 
       logger.i('😎😎😎 영화 찜 목록 조회');
       for (var movie in favoriteMovies) {
-        logger.d('favoriteGoods\n'
+        logger.d('favoriteMovies\n'
             'id: ${movie.id}\n'
             'title: ${movie.title}\n'
         'isFavorite: ${movie.isFavorite}');
@@ -96,6 +97,10 @@ class FavoriteViewModel extends ChangeNotifier {
       logger.i('😂😂😂 영화 찜 목록 조회 실패');
       logger.d(e);
       logger.d(stackTrace);
+
+      favoriteMovies.clear();
+      notifyListeners();
+      logger.i('fav_movies emtpy ? : ${favoriteMovies.isEmpty}');
     }
   }
 
