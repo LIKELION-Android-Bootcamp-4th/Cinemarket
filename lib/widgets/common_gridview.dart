@@ -70,7 +70,10 @@ class CommonGridview<T> extends StatelessWidget {
                     future: GoodsAllViewModel().getMovieTitleFromGoodsId(goodsId: item.id),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator(
+                          color: Colors.white,
+                          backgroundColor: Colors.black,
+                        ));
                       }
 
                       final movieName = snapshot.data ?? '';

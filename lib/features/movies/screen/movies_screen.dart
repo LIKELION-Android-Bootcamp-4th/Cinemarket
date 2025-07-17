@@ -46,11 +46,16 @@ class MoviesScreenState extends State<MoviesScreen> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
+      backgroundColor: Colors.black,
+      color: Colors.white,
       onRefresh: () => context.read<MoviesViewModel>().loadMovies(force: true),
       child: Consumer<MoviesViewModel>(
         builder: (context, vm, child) {
           if (vm.movies.isEmpty && vm.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(
+              color: Colors.white,
+              backgroundColor: Colors.black,
+            ));
           }
 
           if (vm.errorMessage != null) {

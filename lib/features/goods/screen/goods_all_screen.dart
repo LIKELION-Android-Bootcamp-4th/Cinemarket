@@ -79,11 +79,16 @@ class _GoodsAllScreenState extends State<GoodsAllScreen> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
+      backgroundColor: Colors.black,
+      color: Colors.white,
       onRefresh: _refresh,
       child: Consumer<GoodsAllViewModel>(
         builder: (context, vm, _) {
           if (vm.goodsList.isEmpty && vm.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(
+              color: Colors.white,
+              backgroundColor: Colors.black,
+            ));
           }
           if (vm.goodsList.isEmpty) {
             return const Center(child: Text('굿즈 준비 중..',style: AppTextStyle.bodyLarge,));
