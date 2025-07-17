@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
                 try {
                   final loginViewModel = LoginViewModel();
-                  await loginViewModel.login(email, password);
+                  await loginViewModel.login(email, password, context);
                   if (loginViewModel.error != null) {
                     CommonToast.show(
                       context: context,

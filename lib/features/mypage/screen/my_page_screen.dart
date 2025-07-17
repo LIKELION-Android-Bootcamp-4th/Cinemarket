@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 import 'package:cinemarket/features/auth/viewmodel/my_page_viewmodel.dart';
+import 'package:cinemarket/features/auth/viewmodel/auth_provider.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -19,6 +20,7 @@ class MyPageScreen extends StatefulWidget {
 
 class _MyPageScreenState extends State<MyPageScreen> {
   late MyPageViewModel _viewModel;
+  bool? _prevLogin;
 
   @override
   void initState() {
@@ -33,6 +35,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
     _viewModel.removeListener(_onViewModelChanged);
     _viewModel.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final isLoggedIn = context.watch<AuthProvider>().isLoggedIn;
+    if (_prevLogin != isLoggedIn) {
+      _viewModel.initialize();
+      _prevLogin = isLoggedIn;
+    }
   }
 
   void _onViewModelChanged() {
@@ -216,6 +228,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               Navigator.of(dialogContext).pop();
                               try {
                                 await _viewModel.logout();
+                                await context.read<AuthProvider>().logout();
 
                                 if (mounted) {
                                   final cartViewModel = context.read<CartViewModel>();

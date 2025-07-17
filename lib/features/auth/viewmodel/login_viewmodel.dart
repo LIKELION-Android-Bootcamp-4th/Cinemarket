@@ -2,6 +2,8 @@ import 'package:cinemarket/features/auth/model/login_request.dart';
 import 'package:cinemarket/features/auth/repository/auth_repository.dart';
 import 'package:cinemarket/core/storage/token_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cinemarket/features/auth/viewmodel/auth_provider.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -15,7 +17,7 @@ class LoginViewModel extends ChangeNotifier {
   String? get error => _error;
   Map<String, dynamic>? get loginResult => _loginResult;
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(String email, String password, BuildContext context) async {
     _error = null;
     notifyListeners();
 
@@ -27,6 +29,7 @@ class LoginViewModel extends ChangeNotifier {
       if (_loginResult != null && _loginResult!['data'] != null) {
         await TokenStorage.saveAccessToken(_loginResult!['data']['accessToken']);
         await TokenStorage.saveRefreshToken(_loginResult!['data']['refreshToken']);
+        await Provider.of<AuthProvider>(context, listen: false).login();
       }
     } catch (e) {
       _error = '이메일이나 비밀번호가 일치하지 않습니다.';

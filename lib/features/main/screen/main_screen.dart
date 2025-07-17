@@ -8,6 +8,8 @@ import 'package:cinemarket/widgets/bottom_nav_bar.dart';
 import 'package:cinemarket/widgets/main_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:cinemarket/features/auth/viewmodel/auth_provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -32,31 +34,35 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final titles = ['찜 목록', '굿즈', '홈', '영화', '마이페이지'];
+    return Consumer<AuthProvider>(
+      builder: (context, authProvider, child) {
+        final titles = ['찜 목록', '굿즈', '홈', '영화', '마이페이지'];
 
-    final screens = [
-      TickerMode(enabled: _currentIndex == 0, child: const FavoriteScreen()),
-      TickerMode(enabled: _currentIndex == 1, child: const GoodsAllScreen()),
-      TickerMode(enabled: _currentIndex == 2, child: const HomeScreen()),
-      TickerMode(enabled: _currentIndex == 3, child: const MoviesScreen()),
-      TickerMode(enabled: _currentIndex == 4, child: const MyPageScreen()),
-    ];
+        final screens = [
+          TickerMode(enabled: _currentIndex == 0, child: const FavoriteScreen()),
+          TickerMode(enabled: _currentIndex == 1, child: const GoodsAllScreen()),
+          TickerMode(enabled: _currentIndex == 2, child: const HomeScreen()),
+          TickerMode(enabled: _currentIndex == 3, child: const MoviesScreen()),
+          TickerMode(enabled: _currentIndex == 4, child: const MyPageScreen()),
+        ];
 
-    return Scaffold(
-      appBar: MainAppBar(
-        title: titles[_currentIndex],
-        onCartPressed: () => context.push('/cart'),
-        onSearchPressed: () => context.push('/search'),
-      ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
-      backgroundColor: AppColors.background,
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTabSelected: onTabSelected,
-      ),
+        return Scaffold(
+          appBar: MainAppBar(
+            title: titles[_currentIndex],
+            onCartPressed: () => context.push('/cart'),
+            onSearchPressed: () => context.push('/search'),
+          ),
+          body: IndexedStack(
+            index: _currentIndex,
+            children: screens,
+          ),
+          backgroundColor: AppColors.background,
+          bottomNavigationBar: BottomNavBar(
+            currentIndex: _currentIndex,
+            onTabSelected: onTabSelected,
+          ),
+        );
+      },
     );
   }
 }
