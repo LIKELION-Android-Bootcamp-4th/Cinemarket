@@ -1,3 +1,5 @@
+import 'package:cinemarket/core/theme/app_colors.dart';
+import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/cart/widgets/cart_item_widgets.dart';
 import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +71,7 @@ class CartScreen extends StatelessWidget {
                       const Spacer(),
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.white),
-                        onPressed: () {
+                        onPressed: () async {
                           final selectedCartIds = cartItems
                               .where((item) => item.isSelected).map((e) => e.cartId)
                               .toList();
@@ -80,7 +82,41 @@ class CartScreen extends StatelessWidget {
                               type: ToastificationType.warning,
                             );
                           } else {
-                            viewModel.removeSelectedItemsFromCart(selectedCartIds);
+                            final confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                backgroundColor: AppColors.widgetBackground,
+                                title: const Text('삼품 삭제', style: AppTextStyle.section,),
+                                content: const Text('선택한 상품을 삭제하시겠습니까?', style: AppTextStyle.body,),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: const Text('취소', style: AppTextStyle.bodyPointRed,),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(true),
+                                    child: const Text('삭제', style: AppTextStyle.bodyPointBlue,),
+                                  ),
+                                ],
+                              ),
+                            );
+                            if(confirm == true) {
+                              await viewModel.removeSelectedItemsFromCart(selectedCartIds);
+                              await showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  backgroundColor: AppColors.widgetBackground,
+                                  title: const Text('삭제 완료', style: AppTextStyle.section,),
+                                  content: const Text('선택한 상품이 삭제되었습니다.', style: AppTextStyle.body,),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      child: const Text('확인', style: AppTextStyle.bodyPointBlue,),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }
                           }
                         },
                       ),
