@@ -21,6 +21,51 @@ class ApiClient {
         }
         return handler.next(options);
       },
+        onError: (error, handler) async {
+          final response = error.response;
+
+          if (response?.statusCode == 403 &&
+              (response?.data['message'] == 'Invalid or expired token')){
+            final refreshToken = await TokenStorage.getRefreshToken();
+
+            final refreshResponse = await dio.post('/api/auth/refresh', data: {
+              'refreshToken': refreshToken,
+            });
+
+            if (refreshResponse.statusCode == 200) {
+              final newAccessToken = refreshResponse.data['data']['accessToken'];
+              await TokenStorage.saveAccessToken(newAccessToken);
+
+              final retryRequest = error.requestOptions;
+
+              final updatedHeaders = Map<String, dynamic>.from(retryRequest.headers);
+              updatedHeaders['Authorization'] = 'Bearer $newAccessToken';
+
+              final retryResponse = await dio.request(
+                retryRequest.path,
+                data: retryRequest.data,
+                queryParameters: retryRequest.queryParameters,
+                options: Options(
+                  method: retryRequest.method,
+                  headers: updatedHeaders,
+                  extra: {'isRetry': true},
+                ),
+              );
+
+              return handler.resolve(retryResponse);
+            } else {
+              TokenStorage.clearTokens();
+              handler.reject(
+                DioException(
+                  requestOptions: error.requestOptions,
+                  error: Exception(),
+                ),
+              );
+              return;
+            }
+          }
+          return handler.next(error);
+        }
     ),
     // PrettyDioLogger(
     //   requestHeader: true,
