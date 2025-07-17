@@ -3,7 +3,6 @@ import 'package:cinemarket/core/theme/app_colors.dart';
 import 'package:cinemarket/core/theme/app_text_style.dart';
 import 'package:cinemarket/features/goods/viewmodel/goods_review_viewmodel.dart';
 import 'package:cinemarket/widgets/common_app_bar.dart';
-import 'package:cinemarket/widgets/common_toast.dart';
 import 'package:cinemarket/widgets/review_item.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -83,15 +82,6 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                     final response = await ApiClient.dio.post(
                         '/api/reviews/${review.id}/like-toggle');
                     Logger().i('${response.data['message']}');
-
-                    setState(() {
-                      isClicked1 = !isClicked1;
-                    });
-
-                    isClicked1
-                        ? CommonToast.show(context: context, message: '리뷰 좋아요 완료 !')
-                        : CommonToast.show(context: context, message: '리뷰 좋아요 해제 !');
-
                   } on DioException catch(e) {
                     Logger().e('$e');
                     Logger().e('${e.stackTrace}');
@@ -105,14 +95,6 @@ class _GoodsReviewScreenState extends State<GoodsReviewScreen> {
                   Logger().i('review id : ${review.id}');
                   final response = await ApiClient.dio.post('/api/dislikes/review/${review.id}');
                   Logger().i('${response.data['message']}');
-
-                  setState(() {
-                    isClicked2 = !isClicked2;
-                  });
-
-                  isClicked2
-                  ? CommonToast.show(context: context, message: '리뷰 싫어요 완료 !')
-                  : CommonToast.show(context: context, message: '리뷰 싫어요 해제 !');
                 },
                 isClicked2: isClicked2,
               );
