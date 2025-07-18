@@ -96,8 +96,7 @@ lib/
 | **주소 검색**    | kpostal                                                                           |
 | **아이콘 & 폰트** | cupertino_icons, flutter_launcher_icons, Pretendard Font                          |
 | **환경 설정**    | `.env` 파일 기반 설정 (flutter_dotenv)                                                  |
-| **외부 API**   | [TMDB](https://www.themoviedb.org/), [KOBIS](https://www.kobis.or.kr/kobis/)      |
-| **서버/DB**    | 강사 제공 Spring Boot + MongoDB 서버                                                    |
+| **외부 API**   | [TMDB](https://www.themoviedb.org/), [KOBIS](https://www.kobis.or.kr/kobis/)      |                                                 |
 
 ## 📸 시네마켓 주요 화면
 
